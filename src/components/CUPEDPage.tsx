@@ -34,9 +34,18 @@ export function CUPEDPage() {
     return points;
   };
 
-  // --- Distributions ---
+  // --- Distributions for both charts ---
   const baselineDist = generateNormalDistribution(avgValue, baselineStd);
   const cupedDist = generateNormalDistribution(avgValue, cupedStd);
+
+  const controlMean = avgValue;
+  const treatmentMeanBaseline = avgValue * (1 + mdeBaseline / 100 / 2);
+  const treatmentMeanCuped = avgValue * (1 + mdeCuped / 100 / 2);
+
+  const distControlPre = generateNormalDistribution(controlMean, baselineStd);
+  const distTreatmentPre = generateNormalDistribution(treatmentMeanBaseline, baselineStd);
+  const distControlCuped = generateNormalDistribution(controlMean, cupedStd);
+  const distTreatmentCuped = generateNormalDistribution(treatmentMeanCuped, cupedStd);
 
   // --- Axis and path for distribution chart ---
   const distChartWidth = 560;
@@ -72,7 +81,60 @@ export function CUPEDPage() {
     return path;
   };
 
-  const mdeReduction = ((mdeBaseline - mdeCuped) / mdeBaseline * 100);
+  // --- Axis and path for MDE comparison chart ---
+  const mdeChartWidth = 540;
+  const mdeChartHeight = 340;
+  const mdePadding = { left: 60, right: 30, top: 30, bottom: 50 };
+
+  const mdeMinX = avgValue - baselineStd * 1.2;
+  const mdeMaxX = avgValue * 1.08 + baselineStd * 1.2;
+  const mdeXRange = mdeMaxX - mdeMinX;
+
+  const mdeMaxY = Math.max(
+    ...distControlPre.map(p => p.y),
+    ...distTreatmentPre.map(p => p.y),
+    ...distControlCuped.map(p => p.y),
+    ...distTreatmentCuped.map(p => p.y)
+  );
+
+  const xScaleMDE = x =>
+    mdePadding.left +
+    ((x - mdeMinX) / mdeXRange) *
+      (mdeChartWidth - mdePadding.left - mdePadding.right);
+
+  // Trick: vertically separate top/bottom pairs by shifting y coordinate
+  // Multipliers help visually compress the density for stacked displays
+  const shiftY = (dist, offset) => {
+    const maxY = mdeMaxY;
+    return dist.map(p => ({
+      x: p.x,
+      y: p.y * 0.85 + offset,
+    }));
+  };
+
+  const createMdePath = (dist, offsetY = 0) => {
+    if (dist.length === 0) return "";
+    let path = `M ${xScaleMDE(dist[0].x)} ${mdeChartHeight - mdePadding.bottom - (dist[0].y / mdeMaxY) * (mdeChartHeight - mdePadding.top - mdePadding.bottom) * 0.85 - offsetY}`;
+    for (let i = 1; i < dist.length; i++) {
+      const y =
+        mdeChartHeight -
+        mdePadding.bottom -
+        (dist[i].y / mdeMaxY) *
+          (mdeChartHeight - mdePadding.top - mdePadding.bottom) *
+          0.85 -
+        offsetY;
+      path += ` L ${xScaleMDE(dist[i].x)} ${y}`;
+    }
+    return path;
+  };
+
+  // Y positions for each layer
+  const standardOffset = 0;
+  const cupedOffset = -115;
+
+  // --- Arrow positions ---
+  const standardArrowY = 110;
+  const cupedArrowY = 245;
 
   // --------------------------------
   // Render
@@ -124,122 +186,214 @@ export function CUPEDPage() {
           </div>
         </div>
 
-        {/* --- Combined Visualization Section --- */}
+        {/* --- Distribution Chart --- */}
         <div className="bg-gray-800 rounded-lg border border-gray-700 shadow-md mb-6 p-6">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            {/* Left: Variance Reduction Visualization */}
-            <div>
-              <h2 className="text-xl font-semibold text-white mb-2">Variance Reduction</h2>
-              <p className="text-sm text-gray-400 mb-4">
-                CUPED narrows the distribution by removing predictable variance.
-              </p>
-              <svg
-                width="100%"
-                height={distChartHeight}
-                viewBox={`0 0 ${distChartWidth} ${distChartHeight}`}
-                preserveAspectRatio="xMidYMid meet"
-              >
-                <path
-                  d={createDistPath(baselineDist)}
-                  fill="#94a3b8"
-                  fillOpacity="0.3"
-                  stroke="#94a3b8"
-                  strokeWidth="2"
-                />
-                <path
-                  d={createDistPath(cupedDist)}
-                  fill="#10b981"
-                  fillOpacity="0.4"
-                  stroke="#10b981"
-                  strokeWidth="2"
-                />
-                <text
-                  x={distChartWidth / 2}
-                  y={distChartHeight - 4}
-                  textAnchor="middle"
-                  className="text-base fill-gray-300 font-semibold"
-                >
-                  Metric Value
-                </text>
-                <text
-                  x={26}
-                  y={distChartHeight / 2}
-                  textAnchor="middle"
-                  transform={`rotate(-90, 26, ${distChartHeight / 2})`}
-                  className="text-base fill-gray-300 font-semibold"
-                >
-                  Density
-                </text>
-                <rect x={distChartWidth - 180} y={40} width="22" height="12" fill="#94a3b8" fillOpacity="0.3" />
-                <text x={distChartWidth - 150} y={50} className="text-sm fill-gray-200">Standard</text>
-                <rect x={distChartWidth - 180} y={60} width="22" height="12" fill="#10b981" fillOpacity="0.4" />
-                <text x={distChartWidth - 150} y={70} className="text-sm fill-gray-200">CUPED</text>
-              </svg>
-            </div>
-
-            {/* Right: MDE Comparison Bar Chart */}
-            <div>
-              <h2 className="text-xl font-semibold text-white mb-2">Minimum Detectable Effect</h2>
-              <p className="text-sm text-gray-400 mb-4">
-                Lower MDE means you can detect smaller effects with the same sample size.
-              </p>
-              <div className="flex flex-col justify-center h-[260px]">
-                <div className="space-y-6">
-                  {/* Standard MDE Bar */}
-                  <div>
-                    <div className="flex justify-between items-center mb-2">
-                      <span className="text-sm font-medium text-gray-300">Standard A/B</span>
-                      <span className="text-lg font-bold text-gray-300">{mdeBaseline.toFixed(2)}%</span>
-                    </div>
-                    <div className="h-10 bg-gray-700 rounded-lg overflow-hidden relative">
-                      <div
-                        className="h-full bg-gradient-to-r from-gray-500 to-gray-400 rounded-lg transition-all duration-500"
-                        style={{ width: '100%' }}
-                      />
-                    </div>
-                  </div>
-
-                  {/* CUPED MDE Bar */}
-                  <div>
-                    <div className="flex justify-between items-center mb-2">
-                      <span className="text-sm font-medium text-emerald-400">With CUPED</span>
-                      <span className="text-lg font-bold text-emerald-400">{mdeCuped.toFixed(2)}%</span>
-                    </div>
-                    <div className="h-10 bg-gray-700 rounded-lg overflow-hidden relative">
-                      <div
-                        className="h-full bg-gradient-to-r from-emerald-600 to-emerald-400 rounded-lg transition-all duration-500"
-                        style={{ width: `${(mdeCuped / mdeBaseline) * 100}%` }}
-                      />
-                    </div>
-                  </div>
-
-                  {/* MDE Reduction Summary */}
-                  <div className="flex items-center justify-center gap-2 pt-2">
-                    <div className="h-px flex-1 bg-gray-600" />
-                    <span className="text-emerald-400 font-semibold text-sm px-3">
-                      {mdeReduction.toFixed(1)}% smaller MDE
-                    </span>
-                    <div className="h-px flex-1 bg-gray-600" />
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+          <h2 className="text-xl font-semibold text-white mb-4">Variance Reduction Visualization</h2>
+          <p className="text-sm text-gray-300 mb-2">
+            The classic distribution (gray) is wider, while CUPED's (green) is tighter and centered.
+          </p>
+          <svg
+            width={distChartWidth}
+            height={distChartHeight}
+            viewBox={`0 0 ${distChartWidth} ${distChartHeight}`}
+            preserveAspectRatio="xMidYMid meet"
+          >
+            {/* Classic distribution */}
+            <path
+              d={createDistPath(baselineDist)}
+              fill="#94a3b8"
+              fillOpacity="0.3"
+              stroke="#94a3b8"
+              strokeWidth="2"
+            />
+            {/* CUPED distribution */}
+            <path
+              d={createDistPath(cupedDist)}
+              fill="#10b981"
+              fillOpacity="0.4"
+              stroke="#10b981"
+              strokeWidth="2"
+            />
+            {/* Axis labels */}
+            <text
+              x={distChartWidth / 2}
+              y={distChartHeight - 4}
+              textAnchor="middle"
+              className="text-base fill-gray-300 font-semibold"
+            >
+              Metric Value
+            </text>
+            <text
+              x={26}
+              y={distChartHeight / 2}
+              textAnchor="middle"
+              transform={`rotate(-90, 26, ${distChartHeight / 2})`}
+              className="text-base fill-gray-300 font-semibold"
+            >
+              Density
+            </text>
+            {/* Legend */}
+            <rect x={distChartWidth - 180} y={40} width="22" height="12" fill="#94a3b8" fillOpacity="0.3" />
+            <text x={distChartWidth - 150} y={50} className="text-sm fill-gray-200">Classic</text>
+            <rect x={distChartWidth - 180} y={60} width="22" height="12" fill="#10b981" fillOpacity="0.4" />
+            <text x={distChartWidth - 150} y={70} className="text-sm fill-gray-200">CUPED</text>
+          </svg>
         </div>
 
         {/* --- Key Insight --- */}
-        <div className="mb-6 bg-emerald-900/50 border border-emerald-700 rounded-lg p-4">
+        <div className="mb-6 bg-emerald-900 border border-emerald-700 rounded-lg p-4">
           <h3 className="font-semibold text-white mb-2">Key Insight</h3>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
-            <div className="text-emerald-200">
-              <span className="text-emerald-400 font-semibold">Std Dev:</span> {baselineStd.toFixed(0)} → {cupedStd.toFixed(0)} ({((1 - cupedStd / baselineStd) * 100).toFixed(1)}% reduction)
-            </div>
-            <div className="text-emerald-200">
-              <span className="text-emerald-400 font-semibold">Sample Savings:</span> {sampleReductionPercent}% fewer samples needed
-            </div>
-            <div className="text-emerald-200">
-              <span className="text-emerald-400 font-semibold">MDE Improvement:</span> {mdeBaseline.toFixed(2)}% → {mdeCuped.toFixed(2)}%
-            </div>
+          <p className="text-sm text-emerald-200">
+            Standard deviation reduction: {baselineStd.toFixed(0)} → {cupedStd.toFixed(0)} (
+            {((1 - cupedStd / baselineStd) * 100).toFixed(1)}% reduction)
+          </p>
+          <p className="text-sm text-emerald-200 mt-2">
+            You need <strong>{sampleReductionPercent}% fewer samples</strong> to achieve the same statistical power.
+          </p>
+        </div>
+
+        {/* --- MDE Comparison Chart --- */}
+        <div className="bg-gray-800 rounded-lg border border-gray-700 shadow-md mb-6 p-6">
+          <h2 className="text-xl font-semibold text-white mb-4">Minimum Detectable Effect Comparison</h2>
+          <p className="text-sm text-gray-300 mb-2">
+            Top: Standard A/B (wider, larger MDE). Bottom: CUPED (thinner, smaller MDE). Arrows show the MDE.
+          </p>
+          <svg
+            width={mdeChartWidth}
+            height={mdeChartHeight}
+            viewBox={`0 0 ${mdeChartWidth} ${mdeChartHeight}`}
+            preserveAspectRatio="xMidYMid meet"
+          >
+            {/* Classic Pair (top) */}
+            <g>
+              <path
+                d={createMdePath(distControlPre, standardOffset)}
+                fill="none"
+                stroke="#3b82f6"
+                strokeWidth="2"
+              />
+              <path
+                d={createMdePath(distTreatmentPre, standardOffset)}
+                fill="none"
+                stroke="#22c55e"
+                strokeWidth="2"
+              />
+              {/* Classic MDE Arrow */}
+              <defs>
+                <marker id="classicStart" markerWidth="7" markerHeight="7" refX="2" refY="3.5" orient="auto">
+                  <path d="M6 0 L0 3.5 L6 7" fill="#f59e0b" />
+                </marker>
+                <marker id="classicEnd" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto">
+                  <path d="M0 0 L6 3.5 L0 7" fill="#f59e0b" />
+                </marker>
+              </defs>
+              <line
+                x1={xScaleMDE(controlMean)}
+                y1={standardArrowY}
+                x2={xScaleMDE(treatmentMeanBaseline)}
+                y2={standardArrowY}
+                stroke="#f59e0b"
+                strokeWidth="3"
+                markerStart="url(#classicStart)"
+                markerEnd="url(#classicEnd)"
+              />
+              <text
+                x={(xScaleMDE(controlMean) + xScaleMDE(treatmentMeanBaseline)) / 2}
+                y={standardArrowY - 12}
+                textAnchor="middle"
+                className="text-xs fill-amber-400"
+              >
+                MDE = {mdeBaseline.toFixed(2)}%
+              </text>
+              <text
+                x={70}
+                y={70}
+                className="text-xs fill-gray-400"
+              >
+                Standard A/B
+              </text>
+            </g>
+            {/* CUPED Pair (bottom) */}
+            <g>
+              <path
+                d={createMdePath(distControlCuped, cupedOffset)}
+                fill="none"
+                stroke="#94a3b8"
+                strokeDasharray="4,4"
+                strokeWidth="2"
+              />
+              <path
+                d={createMdePath(distTreatmentCuped, cupedOffset)}
+                fill="none"
+                stroke="#10b981"
+                strokeDasharray="4,4"
+                strokeWidth="2"
+              />
+              {/* CUPED MDE Arrow */}
+              <defs>
+                <marker id="cupedStart" markerWidth="7" markerHeight="7" refX="2" refY="3.5" orient="auto">
+                  <path d="M6 0 L0 3.5 L6 7" fill="#10b981" />
+                </marker>
+                <marker id="cupedEnd" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto">
+                  <path d="M0 0 L6 3.5 L0 7" fill="#10b981" />
+                </marker>
+              </defs>
+              <line
+                x1={xScaleMDE(controlMean)}
+                y1={cupedArrowY}
+                x2={xScaleMDE(treatmentMeanCuped)}
+                y2={cupedArrowY}
+                stroke="#10b981"
+                strokeWidth="3"
+                markerStart="url(#cupedStart)"
+                markerEnd="url(#cupedEnd)"
+              />
+              <text
+                x={(xScaleMDE(controlMean) + xScaleMDE(treatmentMeanCuped)) / 2}
+                y={cupedArrowY - 12}
+                textAnchor="middle"
+                className="text-xs fill-emerald-300"
+              >
+                MDE = {mdeCuped.toFixed(2)}%
+              </text>
+              <text
+                x={70}
+                y={215}
+                className="text-xs fill-gray-400"
+              >
+                CUPED A/B
+              </text>
+            </g>
+            {/* Axis labels */}
+            <text
+              x={mdeChartWidth / 2}
+              y={mdeChartHeight - 4}
+              textAnchor="middle"
+              className="text-base fill-gray-300 font-semibold"
+            >
+              Metric Value
+            </text>
+            <text
+              x={32}
+              y={188}
+              textAnchor="middle"
+              transform={`rotate(-90, 32, 188)`}
+              className="text-base fill-gray-300 font-semibold"
+            >
+              Density
+            </text>
+          </svg>
+        </div>
+
+        {/* --- Value cards --- */}
+        <div className="grid grid-cols-2 gap-4 mb-6">
+          <div className="bg-blue-900 border border-blue-700 rounded-lg p-3">
+            <p className="text-sm font-semibold text-white">MDE Without CUPED</p>
+            <p className="text-2xl font-bold text-blue-400">{mdeBaseline.toFixed(2)}%</p>
+          </div>
+          <div className="bg-emerald-900 border border-emerald-700 rounded-lg p-3">
+            <p className="text-sm font-semibold text-white">MDE With CUPED</p>
+            <p className="text-2xl font-bold text-emerald-400">{mdeCuped.toFixed(2)}%</p>
           </div>
         </div>
 
