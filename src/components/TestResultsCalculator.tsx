@@ -33,7 +33,8 @@ export function TestResultsCalculator({ onBack }: TestResultsCalculatorProps) {
       const se = pooledStd * Math.sqrt(1 / sampleSizeControl + 1 / sampleSizeTreatment);
       const tStat = diff / se;
 
-      const criticalValue = testType === 'two-sided' ? 1.96 : 1.645;
+      const alphaTwoSided = testType === 'two-sided' ? alpha / 2 : alpha;
+      const criticalValue = Math.abs(normalInverse(1 - alphaTwoSided));
       const pValue =
         testType === 'two-sided'
           ? 2 * (1 - normalCDF(Math.abs(tStat)))
@@ -68,7 +69,8 @@ export function TestResultsCalculator({ onBack }: TestResultsCalculatorProps) {
       );
 
       const zStat = pDiff / se;
-      const criticalValue = testType === 'two-sided' ? 1.96 : 1.645;
+      const alphaTwoSided = testType === 'two-sided' ? alpha / 2 : alpha;
+      const criticalValue = Math.abs(normalInverse(1 - alphaTwoSided));
       const pValue =
         testType === 'two-sided'
           ? 2 * (1 - normalCDF(Math.abs(zStat)))
@@ -114,6 +116,19 @@ export function TestResultsCalculator({ onBack }: TestResultsCalculatorProps) {
       1 -
       (a5 * t5 + a4 * t4 + a3 * t3 + a2 * t2 + a1 * t) * Math.exp(-absZ * absZ);
     return 0.5 * (1 + sign * y);
+  };
+
+  const normalInverse = (p: number) => {
+    if (p <= 0 || p >= 1) return 0;
+    if (Math.abs(p - 0.5) < 1e-10) return 0;
+
+    const q = p < 0.5 ? p : 1 - p;
+    const r = Math.sqrt(Math.log(1 / (q * q)));
+    const a = 2.506628277459 + 24.06141414949 * r + 0.001707092 * Math.pow(r, 3);
+    const b = 1.825329 * r + 29.7 + 0.001707092 * r;
+    const t = r - (2.784944 * r + 2.06 - 0.5641 * r) / b;
+
+    return p < 0.5 ? -t : t;
   };
 
   const result = calculateResults();
@@ -352,7 +367,7 @@ export function TestResultsCalculator({ onBack }: TestResultsCalculatorProps) {
                     </div>
 
                     <div className="border-t border-gray-600 pt-4">
-                      <p className="text-gray-300 text-sm mb-1">95% Confidence Interval</p>
+                      <p className="text-gray-300 text-sm mb-1">{(100 * (1 - alpha)).toFixed(0)}% Confidence Interval</p>
                       <p className="text-lg font-semibold text-gray-300 mb-2">Absolute</p>
                       <p className="text-lg font-bold text-blue-400 mb-2">
                         {result.type === 'continuous' ? `[${result.ciLower.toFixed(2)}, ${result.ciUpper.toFixed(2)}]` : 'N/A'}
@@ -386,7 +401,7 @@ export function TestResultsCalculator({ onBack }: TestResultsCalculatorProps) {
                     </div>
 
                     <div className="border-t border-gray-600 pt-4">
-                      <p className="text-gray-300 text-sm mb-1">95% Confidence Interval</p>
+                      <p className="text-gray-300 text-sm mb-1">{(100 * (1 - alpha)).toFixed(0)}% Confidence Interval</p>
                       <p className="text-lg font-semibold text-gray-300 mb-2">Absolute</p>
                       <p className="text-lg font-bold text-blue-400 mb-2">
                         {result.type === 'binary' ? `[${(result.ciLower * 100).toFixed(2)}pp, ${(result.ciUpper * 100).toFixed(2)}pp]` : 'N/A'}
