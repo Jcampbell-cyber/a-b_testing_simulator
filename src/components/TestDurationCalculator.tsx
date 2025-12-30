@@ -24,22 +24,25 @@ export function TestDurationCalculator({ onBack }: TestDurationCalculatorProps) 
     const zAlpha = testType === 'two-sided' ? 1.96 : 1.645;
     const zBeta = 0.84;
 
-    let effectSize = mdeValue / 100;
+    let effectSize = 0;
     let variance = 1;
+    let absoluteMde = 0;
 
     if (metricType === 'continuous') {
       if (mdeType === 'absolute') {
-        effectSize = mdeValue / stdev;
+        absoluteMde = mdeValue;
       } else {
-        effectSize = mdeValue / 100;
+        absoluteMde = (mdeValue / 100) * mean;
       }
+      effectSize = absoluteMde / stdev;
       variance = 2;
     } else {
       if (mdeType === 'absolute') {
-        effectSize = Math.abs(mdeValue) / Math.sqrt(proportion * (1 - proportion));
+        absoluteMde = mdeValue / 100;
       } else {
-        effectSize = (mdeValue / 100) / Math.sqrt(proportion * (1 - proportion));
+        absoluteMde = (mdeValue / 100) * proportion;
       }
+      effectSize = absoluteMde / Math.sqrt(proportion * (1 - proportion));
       variance = 2 * proportion * (1 - proportion);
     }
 
@@ -50,10 +53,6 @@ export function TestDurationCalculator({ onBack }: TestDurationCalculatorProps) 
     const totalSamples = samplesPerGroup * numFlights;
     const samplesPerDay = trafficSplit === 'both' ? dailyUnits : (dailyUnits * numFlights) / 2;
     const daysNeeded = Math.ceil(totalSamples / samplesPerDay);
-
-    const absoluteMde = mdeType === 'relative'
-      ? (mdeValue / 100) * (metricType === 'continuous' ? mean : (proportion * 100))
-      : mdeValue;
 
     return { daysNeeded, totalSamples, samplesPerDay, absoluteMde, effectSize };
   };

@@ -22,29 +22,51 @@ export function EffectDetectionCalculator({ onBack }: EffectDetectionCalculatorP
     const zBeta = 0.84;
 
     let variance = 1;
+    let effectSizeCohen = 0;
+
     if (metricType === 'continuous') {
       variance = 2;
+      effectSizeCohen = Math.sqrt(
+        (variance * Math.pow(zAlpha + zBeta, 2)) / (sampleSizePerGroup * numFlights / 2)
+      );
     } else {
       variance = 2 * proportion * (1 - proportion);
+      effectSizeCohen = Math.sqrt(
+        (variance * Math.pow(zAlpha + zBeta, 2)) / (sampleSizePerGroup * numFlights / 2)
+      );
     }
 
-    const mde = Math.sqrt(
-      (variance * Math.pow(zAlpha + zBeta, 2)) / (sampleSizePerGroup * numFlights / 2)
-    );
+    const absoluteMde = metricType === 'continuous'
+      ? effectSizeCohen * stdev
+      : effectSizeCohen * Math.sqrt(proportion * (1 - proportion));
 
-    const mdeHalf = mde * Math.sqrt(2);
-    const mdeDouble = mde / Math.sqrt(2);
+    const relativeMde = metricType === 'continuous'
+      ? (absoluteMde / mean) * 100
+      : (absoluteMde / proportion) * 100;
 
-    const absoluteMde = mde * (metricType === 'continuous' ? stdev : (proportion * 100));
-    const absoluteMdeHalf = mdeHalf * (metricType === 'continuous' ? stdev : (proportion * 100));
-    const absoluteMdeDouble = mdeDouble * (metricType === 'continuous' ? stdev : (proportion * 100));
+    const mdeHalf = effectSizeCohen * Math.sqrt(2);
+    const mdeDouble = effectSizeCohen / Math.sqrt(2);
+
+    const absoluteMdeHalf = metricType === 'continuous'
+      ? mdeHalf * stdev
+      : mdeHalf * Math.sqrt(proportion * (1 - proportion));
+    const relativeMdeHalf = metricType === 'continuous'
+      ? (absoluteMdeHalf / mean) * 100
+      : (absoluteMdeHalf / proportion) * 100;
+
+    const absoluteMdeDouble = metricType === 'continuous'
+      ? mdeDouble * stdev
+      : mdeDouble * Math.sqrt(proportion * (1 - proportion));
+    const relativeMdeDouble = metricType === 'continuous'
+      ? (absoluteMdeDouble / mean) * 100
+      : (absoluteMdeDouble / proportion) * 100;
 
     return {
-      mde,
-      mdeHalf,
-      mdeDouble,
+      relativeMde,
       absoluteMde,
+      relativeMdeHalf,
       absoluteMdeHalf,
+      relativeMdeDouble,
       absoluteMdeDouble,
     };
   };
@@ -246,7 +268,7 @@ export function EffectDetectionCalculator({ onBack }: EffectDetectionCalculatorP
                 <div className="bg-gray-600 rounded p-4">
                   <p className="text-gray-300 text-xs mb-2 font-semibold">Current Configuration</p>
                   <p className="text-2xl font-bold text-blue-400">
-                    ±{(result.mde * 100).toFixed(2)}%
+                    ±{result.relativeMde.toFixed(2)}%
                   </p>
                   <p className="text-xs text-gray-200 mt-1">
                     ±{result.absoluteMde.toFixed(2)} absolute
@@ -259,7 +281,7 @@ export function EffectDetectionCalculator({ onBack }: EffectDetectionCalculatorP
                 <div className="border-t border-gray-600 pt-4">
                   <p className="text-gray-300 text-xs mb-2 font-semibold">Half Sample Size</p>
                   <p className="text-2xl font-bold text-gray-300">
-                    ±{(result.mdeHalf * 100).toFixed(2)}%
+                    ±{result.relativeMdeHalf.toFixed(2)}%
                   </p>
                   <p className="text-xs text-gray-200 mt-1">
                     ±{result.absoluteMdeHalf.toFixed(2)} absolute
@@ -272,7 +294,7 @@ export function EffectDetectionCalculator({ onBack }: EffectDetectionCalculatorP
                 <div className="border-t border-gray-600 pt-4">
                   <p className="text-gray-300 text-xs mb-2 font-semibold">Double Sample Size</p>
                   <p className="text-2xl font-bold text-green-400">
-                    ±{(result.mdeDouble * 100).toFixed(2)}%
+                    ±{result.relativeMdeDouble.toFixed(2)}%
                   </p>
                   <p className="text-xs text-gray-200 mt-1">
                     ±{result.absoluteMdeDouble.toFixed(2)} absolute
