@@ -293,20 +293,33 @@ export function EffectDetectionCalculator({ onBack }: EffectDetectionCalculatorP
               <div className="space-y-4">
                 <div className="bg-gray-600 rounded p-4">
                   <p className="text-gray-300 text-xs mb-2 font-semibold">Current Configuration</p>
-                  <p className="text-2xl font-bold text-blue-400">
-                    ±{result.relativeMde.toFixed(2)}%
-                  </p>
-                  <p className="text-xs text-gray-200 mt-1">
-                    ±{result.absoluteMde.toFixed(2)} absolute
-                  </p>
-                  <p className="text-xs text-gray-200 mt-2 font-semibold">Target Metric:</p>
-                  <p className="text-sm text-blue-300">
-                    {metricType === 'continuous'
-                      ? `${(mean + result.absoluteMde).toFixed(2)} (mean: ${mean})`
-                      : `${((proportion + result.absoluteMde) * 100).toFixed(2)}% (baseline: ${(proportion * 100).toFixed(2)}%)`
-                    }
-                  </p>
-                  <p className="text-xs text-gray-400 mt-2">
+                  <div className="flex items-baseline justify-between gap-4">
+                    <div>
+                      <p className="text-xs text-gray-400 mb-1">Relative MDE</p>
+                      <p className="text-2xl font-bold text-blue-400">
+                        ±{result.relativeMde.toFixed(2)}%
+                      </p>
+                      <p className="text-xs text-gray-200 mt-1">
+                        ±{result.absoluteMde.toFixed(2)} absolute
+                      </p>
+                    </div>
+                    <div className="text-right">
+                      <p className="text-xs text-gray-400 mb-1">Target Metric</p>
+                      <p className="text-lg font-bold text-blue-300">
+                        {metricType === 'continuous'
+                          ? `${(mean + result.absoluteMde).toFixed(2)}`
+                          : `${((proportion + result.absoluteMde) * 100).toFixed(2)}%`
+                        }
+                      </p>
+                      <p className="text-xs text-gray-300 mt-1">
+                        {metricType === 'continuous'
+                          ? `(from ${mean})`
+                          : `(from ${(proportion * 100).toFixed(2)}%)`
+                        }
+                      </p>
+                    </div>
+                  </div>
+                  <p className="text-xs text-gray-400 mt-3">
                     {sampleSizeMode === 'per-group'
                       ? `${sampleSizePerGroup.toLocaleString()} per group`
                       : `${sampleSizePerGroup.toLocaleString()} total`
@@ -316,20 +329,33 @@ export function EffectDetectionCalculator({ onBack }: EffectDetectionCalculatorP
 
                 <div className="border-t border-gray-600 pt-4">
                   <p className="text-gray-300 text-xs mb-2 font-semibold">Half Sample Size</p>
-                  <p className="text-2xl font-bold text-gray-300">
-                    ±{result.relativeMdeHalf.toFixed(2)}%
-                  </p>
-                  <p className="text-xs text-gray-200 mt-1">
-                    ±{result.absoluteMdeHalf.toFixed(2)} absolute
-                  </p>
-                  <p className="text-xs text-gray-200 mt-2 font-semibold">Target Metric:</p>
-                  <p className="text-sm text-gray-300">
-                    {metricType === 'continuous'
-                      ? `${(mean + result.absoluteMdeHalf).toFixed(2)}`
-                      : `${((proportion + result.absoluteMdeHalf) * 100).toFixed(2)}%`
-                    }
-                  </p>
-                  <p className="text-xs text-gray-400 mt-2">
+                  <div className="flex items-baseline justify-between gap-4">
+                    <div>
+                      <p className="text-xs text-gray-400 mb-1">Relative MDE</p>
+                      <p className="text-2xl font-bold text-gray-300">
+                        ±{result.relativeMdeHalf.toFixed(2)}%
+                      </p>
+                      <p className="text-xs text-gray-200 mt-1">
+                        ±{result.absoluteMdeHalf.toFixed(2)} absolute
+                      </p>
+                    </div>
+                    <div className="text-right">
+                      <p className="text-xs text-gray-400 mb-1">Target Metric</p>
+                      <p className="text-lg font-bold text-gray-200">
+                        {metricType === 'continuous'
+                          ? `${(mean + result.absoluteMdeHalf).toFixed(2)}`
+                          : `${((proportion + result.absoluteMdeHalf) * 100).toFixed(2)}%`
+                        }
+                      </p>
+                      <p className="text-xs text-gray-400 mt-1">
+                        {metricType === 'continuous'
+                          ? `(from ${mean})`
+                          : `(from ${(proportion * 100).toFixed(2)}%)`
+                        }
+                      </p>
+                    </div>
+                  </div>
+                  <p className="text-xs text-gray-400 mt-3">
                     {sampleSizeMode === 'per-group'
                       ? `${Math.round(sampleSizePerGroup / 2).toLocaleString()} per group`
                       : `${Math.round(sampleSizePerGroup / 2).toLocaleString()} total`
@@ -339,20 +365,33 @@ export function EffectDetectionCalculator({ onBack }: EffectDetectionCalculatorP
 
                 <div className="border-t border-gray-600 pt-4">
                   <p className="text-gray-300 text-xs mb-2 font-semibold">Double Sample Size</p>
-                  <p className="text-2xl font-bold text-green-400">
-                    ±{result.relativeMdeDouble.toFixed(2)}%
-                  </p>
-                  <p className="text-xs text-gray-200 mt-1">
-                    ±{result.absoluteMdeDouble.toFixed(2)} absolute
-                  </p>
-                  <p className="text-xs text-gray-200 mt-2 font-semibold">Target Metric:</p>
-                  <p className="text-sm text-green-300">
-                    {metricType === 'continuous'
-                      ? `${(mean + result.absoluteMdeDouble).toFixed(2)}`
-                      : `${((proportion + result.absoluteMdeDouble) * 100).toFixed(2)}%`
-                    }
-                  </p>
-                  <p className="text-xs text-gray-400 mt-2">
+                  <div className="flex items-baseline justify-between gap-4">
+                    <div>
+                      <p className="text-xs text-gray-400 mb-1">Relative MDE</p>
+                      <p className="text-2xl font-bold text-green-400">
+                        ±{result.relativeMdeDouble.toFixed(2)}%
+                      </p>
+                      <p className="text-xs text-gray-200 mt-1">
+                        ±{result.absoluteMdeDouble.toFixed(2)} absolute
+                      </p>
+                    </div>
+                    <div className="text-right">
+                      <p className="text-xs text-gray-400 mb-1">Target Metric</p>
+                      <p className="text-lg font-bold text-green-300">
+                        {metricType === 'continuous'
+                          ? `${(mean + result.absoluteMdeDouble).toFixed(2)}`
+                          : `${((proportion + result.absoluteMdeDouble) * 100).toFixed(2)}%`
+                        }
+                      </p>
+                      <p className="text-xs text-gray-400 mt-1">
+                        {metricType === 'continuous'
+                          ? `(from ${mean})`
+                          : `(from ${(proportion * 100).toFixed(2)}%)`
+                        }
+                      </p>
+                    </div>
+                  </div>
+                  <p className="text-xs text-gray-400 mt-3">
                     {sampleSizeMode === 'per-group'
                       ? `${(sampleSizePerGroup * 2).toLocaleString()} per group`
                       : `${(sampleSizePerGroup * 2).toLocaleString()} total`
