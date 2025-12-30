@@ -353,8 +353,13 @@ export function TestResultsCalculator({ onBack }: TestResultsCalculatorProps) {
 
                     <div className="border-t border-gray-600 pt-4">
                       <p className="text-gray-300 text-sm mb-1">95% Confidence Interval</p>
-                      <p className="text-2xl font-bold text-blue-400">
+                      <p className="text-lg font-semibold text-gray-300 mb-2">Absolute</p>
+                      <p className="text-lg font-bold text-blue-400 mb-2">
                         {result.type === 'continuous' ? `[${result.ciLower.toFixed(2)}, ${result.ciUpper.toFixed(2)}]` : 'N/A'}
+                      </p>
+                      <p className="text-lg font-semibold text-gray-300 mb-2">Relative</p>
+                      <p className="text-lg font-bold text-blue-300">
+                        {result.type === 'continuous' ? `[${((result.ciLower / controlMean) * 100).toFixed(2)}%, ${((result.ciUpper / controlMean) * 100).toFixed(2)}%]` : 'N/A'}
                       </p>
                     </div>
                   </>
@@ -382,8 +387,13 @@ export function TestResultsCalculator({ onBack }: TestResultsCalculatorProps) {
 
                     <div className="border-t border-gray-600 pt-4">
                       <p className="text-gray-300 text-sm mb-1">95% Confidence Interval</p>
-                      <p className="text-2xl font-bold text-blue-400">
-                        {result.type === 'binary' ? `[${(result.ciLower * 100).toFixed(2)}%, ${(result.ciUpper * 100).toFixed(2)}%]` : 'N/A'}
+                      <p className="text-lg font-semibold text-gray-300 mb-2">Absolute</p>
+                      <p className="text-lg font-bold text-blue-400 mb-2">
+                        {result.type === 'binary' ? `[${(result.ciLower * 100).toFixed(2)}pp, ${(result.ciUpper * 100).toFixed(2)}pp]` : 'N/A'}
+                      </p>
+                      <p className="text-lg font-semibold text-gray-300 mb-2">Relative</p>
+                      <p className="text-lg font-bold text-blue-300">
+                        {result.type === 'binary' ? `[${((result.ciLower / controlProportion) * 100).toFixed(2)}%, ${((result.ciUpper / controlProportion) * 100).toFixed(2)}%]` : 'N/A'}
                       </p>
                     </div>
                   </>
