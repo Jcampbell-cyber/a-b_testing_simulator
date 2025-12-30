@@ -113,8 +113,8 @@ export function LandingPage({ onGetStarted }: LandingPageProps) {
           </p>
         </div>
 
-        <CardSection title="Understanding & Simulators" cards={understandingCards} />
         <CardSection title="Calculators" cards={calculatorCards} />
+        <CardSection title="Understanding & Simulators" cards={understandingCards} />
 
         <div className="mt-12 text-center text-gray-400 text-sm">
           <p>

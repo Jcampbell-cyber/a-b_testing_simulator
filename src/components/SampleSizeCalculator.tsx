@@ -10,19 +10,35 @@ export function SampleSizeCalculator({ onBack }: SampleSizeCalculatorProps) {
   const [testType, setTestType] = useState<'two-sided' | 'one-sided'>('two-sided');
   const [alpha, setAlpha] = useState(0.05);
   const [power, setPower] = useState(0.8);
-  const [effectSize, setEffectSize] = useState(0.2);
+  const [mdeType, setMdeType] = useState<'relative' | 'absolute'>('relative');
+  const [mdeValue, setMdeValue] = useState(5);
   const [numFlights, setNumFlights] = useState(2);
 
+  const [mean, setMean] = useState(100);
+  const [stdev, setStdev] = useState(20);
+  const [proportion, setProportion] = useState(0.5);
+
   const calculateSampleSize = () => {
-    const zAlpha = testType === 'two-sided'
-      ? 1.96
-      : 1.645;
+    const zAlpha = testType === 'two-sided' ? 1.96 : 1.645;
     const zBeta = 0.84;
 
+    let effectSize = mdeValue / 100;
     let variance = 1;
-    if (metricType === 'binary') {
-      const p = 0.5;
-      variance = 2 * p * (1 - p);
+
+    if (metricType === 'continuous') {
+      if (mdeType === 'absolute') {
+        effectSize = mdeValue / stdev;
+      } else {
+        effectSize = mdeValue / 100;
+      }
+      variance = 2;
+    } else {
+      if (mdeType === 'absolute') {
+        effectSize = Math.abs(mdeValue) / Math.sqrt(proportion * (1 - proportion));
+      } else {
+        effectSize = (mdeValue / 100) / Math.sqrt(proportion * (1 - proportion));
+      }
+      variance = 2 * proportion * (1 - proportion);
     }
 
     const samplesPerGroup = Math.ceil(
@@ -31,14 +47,18 @@ export function SampleSizeCalculator({ onBack }: SampleSizeCalculatorProps) {
 
     const totalSamples = samplesPerGroup * numFlights;
 
-    return { samplesPerGroup, totalSamples };
+    const absoluteMde = mdeType === 'relative'
+      ? (mdeValue / 100) * (metricType === 'continuous' ? mean : (proportion * 100))
+      : mdeValue;
+
+    return { samplesPerGroup, totalSamples, absoluteMde, effectSize };
   };
 
   const result = calculateSampleSize();
 
   return (
     <div className="min-h-screen bg-gray-900">
-      <div className="max-w-4xl mx-auto px-4 py-8">
+      <div className="max-w-5xl mx-auto px-4 py-8">
         <button
           onClick={onBack}
           className="flex items-center gap-2 text-blue-400 hover:text-white mb-8 transition-colors"
@@ -53,99 +73,174 @@ export function SampleSizeCalculator({ onBack }: SampleSizeCalculatorProps) {
             Calculate the required sample size for your A/B test
           </p>
 
-          <div className="grid md:grid-cols-2 gap-8">
-            <div className="space-y-6">
-              <div>
-                <label className="block text-white font-semibold mb-3">Metric Type</label>
-                <div className="space-y-2">
-                  <label className="flex items-center gap-3 cursor-pointer">
-                    <input
-                      type="radio"
-                      checked={metricType === 'continuous'}
-                      onChange={() => setMetricType('continuous')}
-                      className="w-4 h-4"
-                    />
-                    <span className="text-gray-300">Continuous (e.g., revenue, time)</span>
-                  </label>
-                  <label className="flex items-center gap-3 cursor-pointer">
-                    <input
-                      type="radio"
-                      checked={metricType === 'binary'}
-                      onChange={() => setMetricType('binary')}
-                      className="w-4 h-4"
-                    />
-                    <span className="text-gray-300">Binary (e.g., click, conversion)</span>
-                  </label>
+          <div className="grid lg:grid-cols-3 gap-8">
+            <div className="lg:col-span-2 space-y-6">
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-white font-semibold mb-3">Metric Type</label>
+                  <div className="space-y-2">
+                    <label className="flex items-center gap-3 cursor-pointer">
+                      <input
+                        type="radio"
+                        checked={metricType === 'continuous'}
+                        onChange={() => setMetricType('continuous')}
+                        className="w-4 h-4"
+                      />
+                      <span className="text-gray-300">Continuous</span>
+                    </label>
+                    <label className="flex items-center gap-3 cursor-pointer">
+                      <input
+                        type="radio"
+                        checked={metricType === 'binary'}
+                        onChange={() => setMetricType('binary')}
+                        className="w-4 h-4"
+                      />
+                      <span className="text-gray-300">Binary</span>
+                    </label>
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block text-white font-semibold mb-3">Test Type</label>
+                  <div className="space-y-2">
+                    <label className="flex items-center gap-3 cursor-pointer">
+                      <input
+                        type="radio"
+                        checked={testType === 'two-sided'}
+                        onChange={() => setTestType('two-sided')}
+                        className="w-4 h-4"
+                      />
+                      <span className="text-gray-300">Two-sided</span>
+                    </label>
+                    <label className="flex items-center gap-3 cursor-pointer">
+                      <input
+                        type="radio"
+                        checked={testType === 'one-sided'}
+                        onChange={() => setTestType('one-sided')}
+                        className="w-4 h-4"
+                      />
+                      <span className="text-gray-300">One-sided</span>
+                    </label>
+                  </div>
                 </div>
               </div>
 
-              <div>
-                <label className="block text-white font-semibold mb-3">Test Type</label>
-                <div className="space-y-2">
-                  <label className="flex items-center gap-3 cursor-pointer">
-                    <input
-                      type="radio"
-                      checked={testType === 'two-sided'}
-                      onChange={() => setTestType('two-sided')}
-                      className="w-4 h-4"
-                    />
-                    <span className="text-gray-300">Two-sided</span>
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-white font-semibold mb-3">
+                    Significance Level (α): {alpha.toFixed(3)}
                   </label>
-                  <label className="flex items-center gap-3 cursor-pointer">
-                    <input
-                      type="radio"
-                      checked={testType === 'one-sided'}
-                      onChange={() => setTestType('one-sided')}
-                      className="w-4 h-4"
-                    />
-                    <span className="text-gray-300">One-sided</span>
+                  <input
+                    type="range"
+                    min="0.01"
+                    max="0.2"
+                    step="0.01"
+                    value={alpha}
+                    onChange={(e) => setAlpha(parseFloat(e.target.value))}
+                    className="w-full"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-white font-semibold mb-3">
+                    Power (1 - β): {power.toFixed(2)}
                   </label>
+                  <input
+                    type="range"
+                    min="0.5"
+                    max="0.99"
+                    step="0.01"
+                    value={power}
+                    onChange={(e) => setPower(parseFloat(e.target.value))}
+                    className="w-full"
+                  />
                 </div>
               </div>
 
-              <div>
-                <label className="block text-white font-semibold mb-3">
-                  Significance Level (α): {alpha.toFixed(3)}
-                </label>
-                <input
-                  type="range"
-                  min="0.01"
-                  max="0.2"
-                  step="0.01"
-                  value={alpha}
-                  onChange={(e) => setAlpha(parseFloat(e.target.value))}
-                  className="w-full"
-                />
-              </div>
+              {metricType === 'continuous' && (
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-white font-semibold mb-2">
+                      Control Mean
+                    </label>
+                    <input
+                      type="number"
+                      value={mean}
+                      onChange={(e) => setMean(parseFloat(e.target.value) || 0)}
+                      className="w-full bg-gray-700 text-white px-3 py-2 rounded"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-white font-semibold mb-2">
+                      Standard Deviation
+                    </label>
+                    <input
+                      type="number"
+                      min="0.01"
+                      value={stdev}
+                      onChange={(e) => setStdev(Math.max(0.01, parseFloat(e.target.value) || 1))}
+                      className="w-full bg-gray-700 text-white px-3 py-2 rounded"
+                    />
+                  </div>
+                </div>
+              )}
 
-              <div>
-                <label className="block text-white font-semibold mb-3">
-                  Power (1 - β): {power.toFixed(2)}
-                </label>
-                <input
-                  type="range"
-                  min="0.5"
-                  max="0.99"
-                  step="0.01"
-                  value={power}
-                  onChange={(e) => setPower(parseFloat(e.target.value))}
-                  className="w-full"
-                />
-              </div>
+              {metricType === 'binary' && (
+                <div>
+                  <label className="block text-white font-semibold mb-2">
+                    Control Proportion: {(proportion * 100).toFixed(2)}%
+                  </label>
+                  <input
+                    type="range"
+                    min="0.01"
+                    max="0.99"
+                    step="0.01"
+                    value={proportion}
+                    onChange={(e) => setProportion(parseFloat(e.target.value))}
+                    className="w-full"
+                  />
+                </div>
+              )}
 
-              <div>
-                <label className="block text-white font-semibold mb-3">
-                  Minimum Detectable Effect Size (MDE): {effectSize.toFixed(3)}
-                </label>
-                <input
-                  type="range"
-                  min="0.01"
-                  max="1"
-                  step="0.01"
-                  value={effectSize}
-                  onChange={(e) => setEffectSize(parseFloat(e.target.value))}
-                  className="w-full"
-                />
+              <div className="border-t border-gray-700 pt-6">
+                <label className="block text-white font-semibold mb-3">Minimum Detectable Effect (MDE)</label>
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-gray-300 text-sm mb-2">Type</label>
+                    <div className="space-y-2">
+                      <label className="flex items-center gap-3 cursor-pointer">
+                        <input
+                          type="radio"
+                          checked={mdeType === 'relative'}
+                          onChange={() => setMdeType('relative')}
+                          className="w-4 h-4"
+                        />
+                        <span className="text-gray-300 text-sm">Relative (%)</span>
+                      </label>
+                      <label className="flex items-center gap-3 cursor-pointer">
+                        <input
+                          type="radio"
+                          checked={mdeType === 'absolute'}
+                          onChange={() => setMdeType('absolute')}
+                          className="w-4 h-4"
+                        />
+                        <span className="text-gray-300 text-sm">Absolute</span>
+                      </label>
+                    </div>
+                  </div>
+                  <div>
+                    <label className="block text-gray-300 text-sm mb-2">
+                      Value {mdeType === 'relative' ? '(%)' : metricType === 'continuous' ? '' : '(%)'}
+                    </label>
+                    <input
+                      type="number"
+                      min="0.01"
+                      value={mdeValue}
+                      onChange={(e) => setMdeValue(parseFloat(e.target.value) || 0)}
+                      className="w-full bg-gray-700 text-white px-3 py-2 rounded"
+                    />
+                  </div>
+                </div>
               </div>
 
               <div>
@@ -176,12 +271,12 @@ export function SampleSizeCalculator({ onBack }: SampleSizeCalculatorProps) {
               </div>
             </div>
 
-            <div className="bg-gray-700 rounded-lg p-6 flex flex-col justify-center">
+            <div className="bg-gray-700 rounded-lg p-6 flex flex-col justify-start h-fit sticky top-8">
               <h2 className="text-2xl font-bold text-white mb-6">Results</h2>
               <div className="space-y-6">
                 <div>
                   <p className="text-gray-300 text-sm mb-1">Per Flight Group</p>
-                  <p className="text-4xl font-bold text-blue-400">
+                  <p className="text-3xl font-bold text-blue-400">
                     {result.samplesPerGroup.toLocaleString()}
                   </p>
                   <p className="text-gray-400 text-xs mt-1">samples per group</p>
@@ -189,20 +284,25 @@ export function SampleSizeCalculator({ onBack }: SampleSizeCalculatorProps) {
 
                 <div className="border-t border-gray-600 pt-6">
                   <p className="text-gray-300 text-sm mb-1">Total Samples</p>
-                  <p className="text-4xl font-bold text-blue-400">
+                  <p className="text-3xl font-bold text-blue-400">
                     {result.totalSamples.toLocaleString()}
                   </p>
                   <p className="text-gray-400 text-xs mt-1">across all {numFlights} flights</p>
                 </div>
 
-                <div className="bg-gray-600 rounded p-4 text-sm text-gray-200">
-                  <p className="font-semibold mb-2">Summary</p>
-                  <ul className="space-y-1 text-xs">
-                    <li>Metric: {metricType}</li>
-                    <li>Test: {testType}</li>
-                    <li>α = {alpha.toFixed(3)}, Power = {power.toFixed(2)}</li>
-                    <li>MDE = {effectSize.toFixed(3)}</li>
-                  </ul>
+                <div className="border-t border-gray-600 pt-6 bg-gray-600 rounded p-4">
+                  <p className="text-gray-300 text-xs mb-1">MDE Details</p>
+                  <p className="text-sm text-gray-200 mb-2">
+                    <strong>{mdeValue.toFixed(2)}{mdeType === 'relative' ? '%' : ''}</strong> relative
+                  </p>
+                  <p className="text-sm text-gray-200">
+                    <strong>{result.absoluteMde.toFixed(2)}</strong> absolute
+                  </p>
+                  {metricType === 'continuous' && (
+                    <p className="text-xs text-gray-400 mt-2">
+                      Effect size (Cohen's d): {result.effectSize.toFixed(3)}
+                    </p>
+                  )}
                 </div>
               </div>
             </div>
