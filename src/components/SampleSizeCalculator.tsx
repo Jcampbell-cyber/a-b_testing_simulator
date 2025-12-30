@@ -25,6 +25,7 @@ export function SampleSizeCalculator({ onBack }: SampleSizeCalculatorProps) {
     let effectSize = 0;
     let variance = 1;
     let absoluteMde = 0;
+    let targetedProportion = 0;
 
     if (metricType === 'continuous') {
       if (mdeType === 'absolute') {
@@ -40,8 +41,9 @@ export function SampleSizeCalculator({ onBack }: SampleSizeCalculatorProps) {
       } else {
         absoluteMde = (mdeValue / 100) * proportion;
       }
-      effectSize = absoluteMde / Math.sqrt(proportion * (1 - proportion));
+      effectSize = absoluteMde;
       variance = 2 * proportion * (1 - proportion);
+      targetedProportion = Math.min(1, proportion + absoluteMde);
     }
 
     const samplesPerGroup = Math.ceil(
@@ -50,7 +52,7 @@ export function SampleSizeCalculator({ onBack }: SampleSizeCalculatorProps) {
 
     const totalSamples = samplesPerGroup * numFlights;
 
-    return { samplesPerGroup, totalSamples, absoluteMde, effectSize };
+    return { samplesPerGroup, totalSamples, absoluteMde, effectSize, targetedProportion };
   };
 
   const result = calculateSampleSize();
@@ -294,9 +296,14 @@ export function SampleSizeCalculator({ onBack }: SampleSizeCalculatorProps) {
                   <p className="text-sm text-gray-200 mb-2">
                     <strong>{mdeValue.toFixed(2)}{mdeType === 'relative' ? '%' : metricType === 'binary' ? '%' : ''}</strong>
                   </p>
-                  <p className="text-sm text-gray-200">
+                  <p className="text-sm text-gray-200 mb-2">
                     <strong>{result.absoluteMde.toFixed(2)}{metricType === 'binary' ? '%' : ''}</strong> absolute
                   </p>
+                  {metricType === 'binary' && result.targetedProportion > 0 && (
+                    <p className="text-sm text-gray-200 mb-2">
+                      Targeted: <strong>{(result.targetedProportion * 100).toFixed(2)}%</strong>
+                    </p>
+                  )}
                   {metricType === 'continuous' && (
                     <p className="text-xs text-gray-400 mt-2">
                       Effect size (Cohen's d): {result.effectSize.toFixed(3)}
