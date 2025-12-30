@@ -18,9 +18,23 @@ export function EffectDetectionCalculator({ onBack }: EffectDetectionCalculatorP
   const [stdev, setStdev] = useState(20);
   const [proportion, setProportion] = useState(0.5);
 
+  const normalInverse = (p: number) => {
+    if (p <= 0 || p >= 1) return 0;
+    if (Math.abs(p - 0.5) < 1e-10) return 0;
+
+    const q = p < 0.5 ? p : 1 - p;
+    const r = Math.sqrt(Math.log(1 / (q * q)));
+    const a = 2.506628277459 + 24.06141414949 * r + 0.001707092 * Math.pow(r, 3);
+    const b = 1.825329 * r + 29.7 + 0.001707092 * r;
+    const t = r - (2.784944 * r + 2.06 - 0.5641 * r) / b;
+
+    return p < 0.5 ? -t : t;
+  };
+
   const calculateMDE = () => {
-    const zAlpha = testType === 'two-sided' ? 1.96 : 1.645;
-    const zBeta = 0.84;
+    const alphaTwoSided = testType === 'two-sided' ? alpha / 2 : alpha;
+    const zAlpha = normalInverse(1 - alphaTwoSided);
+    const zBeta = normalInverse(power);
 
     let variance = 1;
     let effectSizeCohen = 0;
@@ -301,7 +315,7 @@ export function EffectDetectionCalculator({ onBack }: EffectDetectionCalculatorP
                       </p>
                       <p className="text-xs text-gray-400 mt-2">MDE Absolute</p>
                       <p className="text-lg font-bold text-blue-300 mt-1">
-                        ±{result.absoluteMde.toFixed(2)}
+                        ±{metricType === 'continuous' ? result.absoluteMde.toFixed(2) : (result.absoluteMde * 100).toFixed(2)}%
                       </p>
                     </div>
                     <div className="text-right">
@@ -342,7 +356,7 @@ export function EffectDetectionCalculator({ onBack }: EffectDetectionCalculatorP
                       </p>
                       <p className="text-xs text-gray-400 mt-2">MDE Absolute</p>
                       <p className="text-lg font-bold text-gray-300 mt-1">
-                        ±{result.absoluteMdeHalf.toFixed(2)}
+                        ±{metricType === 'continuous' ? result.absoluteMdeHalf.toFixed(2) : (result.absoluteMdeHalf * 100).toFixed(2)}%
                       </p>
                     </div>
                     <div className="text-right">
@@ -383,7 +397,7 @@ export function EffectDetectionCalculator({ onBack }: EffectDetectionCalculatorP
                       </p>
                       <p className="text-xs text-gray-400 mt-2">MDE Absolute</p>
                       <p className="text-lg font-bold text-green-300 mt-1">
-                        ±{result.absoluteMdeDouble.toFixed(2)}
+                        ±{metricType === 'continuous' ? result.absoluteMdeDouble.toFixed(2) : (result.absoluteMdeDouble * 100).toFixed(2)}%
                       </p>
                     </div>
                     <div className="text-right">
