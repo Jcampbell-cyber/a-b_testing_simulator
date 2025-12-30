@@ -11,7 +11,7 @@ export function GuardrailsPage() {
   const [expectedUplift, setExpectedUplift] = useState(5);
   const [stdev, setStdev] = useState(400);
   const [sampleSize, setSampleSize] = useState(1000);
-  const [testDuration, setTestDuration] = useState(14);
+  const [testDuration, setTestDuration] = useState(28);
   const [numSimulations, setNumSimulations] = useState(100);
   const [guardrailType, setGuardrailType] = useState<GuardrailType>('statistical');
   const [manualGuardrail, setManualGuardrail] = useState(-5);

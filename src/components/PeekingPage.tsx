@@ -11,7 +11,7 @@ export function PeekingPage() {
   const [expectedUplift, setExpectedUplift] = useState(5);
   const [stdev, setStdev] = useState(400);
   const [sampleSize, setSampleSize] = useState(1000);
-  const [testDuration, setTestDuration] = useState(14);
+  const [testDuration, setTestDuration] = useState(28);
   const [numSimulations, setNumSimulations] = useState(100);
   const [confidenceLevel, setConfidenceLevel] = useState(95);
   const [peekingMode, setPeekingMode] = useState<PeekingMode>('daily');

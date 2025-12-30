@@ -8,6 +8,9 @@ import { FeedbackPage } from './components/FeedbackPage';
 import { Navigation } from './components/Navigation';
 import { FWERPage } from './components/FWERPage';
 import NHSTPage from './components/NHSTPage';
+import { Breadcrumb } from './components/Breadcrumb';
+import { BottomNavigation } from './components/BottomNavigation';
+import { GlossaryPage } from './components/GlossaryPage';
 
 type PageMode =
   | 'nhst'
@@ -17,10 +20,11 @@ type PageMode =
   | 'imbalanced'
   | 'cuped'
   | 'fwer'
-  | 'feedback';
+  | 'feedback'
+  | 'glossary';
 
 function App() {
-  const [currentPage, setCurrentPage] = useState<PageMode>('nhst');
+  const [currentPage, setCurrentPage] = useState<PageMode>('landing');
 
   const handleNavigate = (page: string) => {
     setCurrentPage(page as PageMode);
@@ -50,6 +54,8 @@ function App() {
         return <FWERPage />;
       case 'feedback':
         return <FeedbackPage />;
+      case 'glossary':
+        return <GlossaryPage />;
       default:
         return <NHSTPage />;
     }
@@ -60,7 +66,11 @@ function App() {
       {currentPage !== 'landing' && (
         <Navigation currentPage={currentPage} onNavigate={handleNavigate} />
       )}
-      {renderPage()}
+      <Breadcrumb currentPage={currentPage} />
+      <div className="pb-16 lg:pb-0">
+        {renderPage()}
+      </div>
+      <BottomNavigation currentPage={currentPage} onNavigate={handleNavigate} />
     </>
   );
 }

@@ -17,6 +17,7 @@ export function Navigation({ currentPage, onNavigate }: NavigationProps) {
     { id: 'fwer', label: 'Family-Wise Error Rate' },
     { id: 'imbalanced', label: 'Imbalanced Flights' },
     { id: 'cuped', label: 'CUPED Variance Reduction' },
+    { id: 'glossary', label: 'Glossary' },
     { id: 'feedback', label: 'Feedback & Enquiries' },
   ];
 
