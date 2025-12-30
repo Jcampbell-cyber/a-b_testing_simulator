@@ -10,6 +10,10 @@ import { FWERPage } from './components/FWERPage';
 import NHSTPage from './components/NHSTPage';
 import { Breadcrumb } from './components/Breadcrumb';
 import { GlossaryPage } from './components/GlossaryPage';
+import { SampleSizeCalculator } from './components/SampleSizeCalculator';
+import { TestDurationCalculator } from './components/TestDurationCalculator';
+import { EffectDetectionCalculator } from './components/EffectDetectionCalculator';
+import { TestResultsCalculator } from './components/TestResultsCalculator';
 
 type PageMode =
   | 'nhst'
@@ -20,7 +24,11 @@ type PageMode =
   | 'cuped'
   | 'fwer'
   | 'feedback'
-  | 'glossary';
+  | 'glossary'
+  | 'sample-size-calc'
+  | 'test-duration-calc'
+  | 'effect-detection-calc'
+  | 'test-results-calc';
 
 function App() {
   const [currentPage, setCurrentPage] = useState<PageMode>('landing');
@@ -55,6 +63,14 @@ function App() {
         return <FeedbackPage />;
       case 'glossary':
         return <GlossaryPage />;
+      case 'sample-size-calc':
+        return <SampleSizeCalculator onBack={() => setCurrentPage('landing')} />;
+      case 'test-duration-calc':
+        return <TestDurationCalculator onBack={() => setCurrentPage('landing')} />;
+      case 'effect-detection-calc':
+        return <EffectDetectionCalculator onBack={() => setCurrentPage('landing')} />;
+      case 'test-results-calc':
+        return <TestResultsCalculator onBack={() => setCurrentPage('landing')} />;
       default:
         return <NHSTPage />;
     }
