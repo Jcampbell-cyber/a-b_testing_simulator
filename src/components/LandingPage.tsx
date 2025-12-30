@@ -9,7 +9,7 @@ interface LandingPageProps {
 function CardSection({ title, cards }: { title: string; cards: React.ReactNode[] }) {
   return (
     <div className="mb-16">
-      <h2 className="text-3xl font-bold text-white mb-8">{title}</h2>
+      <h2 className="text-3xl font-bold text-white mb-8 text-center">{title}</h2>
       <div className="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto">
         {cards}
       </div>
@@ -20,7 +20,7 @@ function CardSection({ title, cards }: { title: string; cards: React.ReactNode[]
 function Card({ title, description, onClick }: { title: string; description: string; onClick: () => void }) {
   return (
     <div className="bg-gray-800 border-2 border-[#0017D2] rounded-lg shadow-lg p-8 hover:border-white transition-colors">
-      <h3 className="text-2xl font-bold mb-3 text-white">{title}</h3>
+      <h3 className="text-2xl font-bold mb-3 text-white text-center">{title}</h3>
       <p className="text-gray-300 mb-6 text-sm">
         {description}
       </p>

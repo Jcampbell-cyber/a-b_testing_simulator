@@ -68,13 +68,53 @@ export function FWERPage() {
             </div>
 
             <div>
+              <h3 className="text-lg font-semibold text-emerald-400 mb-2">Understanding Pairwise Comparisons</h3>
+              {comparisonType === 'pairwise' ? (
+                <div>
+                  <p>
+                    With {numFlights} flights (including control), pairwise comparisons test every possible combination:
+                  </p>
+                  <div className="mt-3 bg-gray-900 rounded p-4">
+                    <p className="font-semibold text-white mb-2">Example with {numFlights} flights:</p>
+                    <ul className="list-disc list-inside space-y-1 ml-4 text-sm">
+                      {numFlights === 3 && (
+                        <>
+                          <li>A vs B</li>
+                          <li>A vs C</li>
+                          <li>B vs C</li>
+                        </>
+                      )}
+                      {numFlights === 4 && (
+                        <>
+                          <li>A vs B, A vs C, A vs D</li>
+                          <li>B vs C, B vs D</li>
+                          <li>C vs D</li>
+                        </>
+                      )}
+                      {numFlights > 4 && (
+                        <li className="text-gray-400">({numComparisons} total pairwise comparisons)</li>
+                      )}
+                    </ul>
+                    <p className="mt-3 text-sm font-semibold text-emerald-400">
+                      Total comparisons: n × (n-1) / 2 = {numFlights} × {numFlights - 1} / 2 = {numComparisons}
+                    </p>
+                  </div>
+                  <p className="mt-3">
+                    <strong>This grows quickly:</strong> 3 flights = 3 comparisons, 4 flights = 6 comparisons, 5 flights = 10 comparisons, 6 flights = 15 comparisons. The number of comparisons grows quadratically with the number of flights!
+                  </p>
+                </div>
+              ) : (
+                <p>
+                  With control comparisons, you only test each variant against the control: {numFlights - 1} comparisons total (each treatment vs. control).
+                </p>
+              )}
+            </div>
+
+            <div>
               <h3 className="text-lg font-semibold text-emerald-400 mb-2">The Math Behind It</h3>
               <p>
-                If you test {numFlights} flights with {comparisonType === 'pairwise' ? 'pairwise comparisons' : 'control comparisons'},
-                you're making <span className="font-semibold text-white">{numComparisons} independent comparisons</span>.
-              </p>
-              <p className="mt-2">
-                The probability of making <span className="font-semibold text-red-400">at least one false positive</span> (Family-Wise Error Rate) without correction is:
+                With <span className="font-semibold text-white">{numComparisons} independent comparisons</span>,
+                the probability of making <span className="font-semibold text-red-400">at least one false positive</span> (Family-Wise Error Rate) without correction is:
               </p>
               <p className="mt-2 text-center bg-gray-900 rounded p-3 font-mono">
                 FWER = 1 - (1 - α)ⁿ = 1 - (1 - {alpha})^{numComparisons} = {((1 - Math.pow(1 - alpha, numComparisons)) * 100).toFixed(1)}%
@@ -125,6 +165,17 @@ export function FWERPage() {
           isRunning={isRunning}
         />
 
+        <div className="mt-8">
+          <FWERErrorRateChart
+            comparisonType={comparisonType}
+            baselineMean={baselineMean}
+            stdev={stdev}
+            sampleSize={sampleSize}
+            alpha={alpha}
+            trueUplift={trueUplift}
+          />
+        </div>
+
         {results && (
           <div className="mt-8 space-y-6">
             <FWERResultsDisplay
@@ -138,15 +189,6 @@ export function FWERPage() {
               alpha={alpha}
               numFlights={numFlights}
               comparisonType={comparisonType}
-            />
-
-            <FWERErrorRateChart
-              comparisonType={comparisonType}
-              baselineMean={baselineMean}
-              stdev={stdev}
-              sampleSize={sampleSize}
-              alpha={alpha}
-              trueUplift={trueUplift}
             />
           </div>
         )}

@@ -124,6 +124,11 @@ export function FWERErrorRateChart({ comparisonType, baselineMean, stdev, sample
               <Tooltip
                 contentStyle={{ backgroundColor: '#1F2937', border: '1px solid #374151', borderRadius: '0.5rem' }}
                 labelStyle={{ color: '#F3F4F6' }}
+                formatter={(value: number) => `${value.toFixed(2)}%`}
+                labelFormatter={(label) => {
+                  const point = data.find(d => d.numComparisons === label);
+                  return point ? `${label} comparisons (${point.numGroups} flights incl. control)` : label;
+                }}
               />
               <Legend />
               <Line
@@ -175,6 +180,11 @@ export function FWERErrorRateChart({ comparisonType, baselineMean, stdev, sample
               <Tooltip
                 contentStyle={{ backgroundColor: '#1F2937', border: '1px solid #374151', borderRadius: '0.5rem' }}
                 labelStyle={{ color: '#F3F4F6' }}
+                formatter={(value: number) => `${value.toFixed(2)}%`}
+                labelFormatter={(label) => {
+                  const point = data.find(d => d.numComparisons === label);
+                  return point ? `${label} comparisons (${point.numGroups} flights incl. control)` : label;
+                }}
               />
               <Legend />
               <Line

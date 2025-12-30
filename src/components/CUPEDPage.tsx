@@ -265,6 +265,35 @@ export function CUPEDPage() {
             </div>
           </div>
         </div>
+
+        {/* --- Benefits of CUPED --- */}
+        <div className="mt-6 bg-gray-800 rounded-lg shadow-md border border-gray-700 p-6">
+          <h2 className="text-xl font-semibold text-white mb-4">Why Use CUPED?</h2>
+          <div className="text-gray-300 space-y-3">
+            <p>
+              CUPED's effectiveness depends entirely on <strong>how well your pre-experiment data correlates with in-experiment behavior</strong>. When R² is high (strong correlation), CUPED delivers substantial benefits:
+            </p>
+            <ul className="list-disc ml-6 space-y-2">
+              <li>
+                <strong>Faster Test Results:</strong> With reduced variance, you reach statistical significance sooner—potentially cutting test duration in half or more when R² is high.
+              </li>
+              <li>
+                <strong>Smaller Sample Requirements:</strong> Achieve the same statistical power with fewer samples. For example, R² = 0.7 means you need ~70% fewer samples to detect the same effect size.
+              </li>
+              <li>
+                <strong>Detect Smaller Effects:</strong> Lower variance means you can reliably detect more subtle changes in user behavior, making tests more sensitive.
+              </li>
+              <li>
+                <strong>Better ROI on Experimentation:</strong> Run more tests with the same traffic, iterate faster, and make data-driven decisions with greater confidence.
+              </li>
+            </ul>
+            <div className="bg-emerald-900/30 border border-emerald-700 rounded p-4 mt-4">
+              <p className="text-sm">
+                <strong>Key Principle:</strong> The stronger the relationship between past and present behavior (higher R²), the more predictive power CUPED provides. Metrics like revenue, engagement time, or conversion rates often show strong correlations, making them ideal candidates for CUPED. However, even moderate correlations (R² = 0.3-0.5) can meaningfully accelerate your testing program.
+              </p>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );

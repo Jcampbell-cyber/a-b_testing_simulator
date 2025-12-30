@@ -115,6 +115,37 @@ export function GuardrailsPage() {
             />
           )}
         </div>
+
+        <div className="mt-8 bg-gray-800 rounded-lg p-6">
+          <h2 className="text-2xl font-bold text-white mb-4">Understanding Guardrails</h2>
+          <div className="text-gray-300 space-y-4">
+            <div>
+              <h3 className="text-xl font-semibold text-white mb-2">Manual Guardrails</h3>
+              <p>
+                Manual guardrails use fixed thresholds (e.g., stop if metric drops below -5%) to protect against severe negative impacts. While simple and intuitive, they have a significant drawback: <strong>high variance early in the test can easily trigger false alarms</strong>.
+              </p>
+              <p className="mt-2">
+                With limited early data, natural statistical fluctuations can cause metrics to temporarily breach your manual threshold even when no real harm is occurring. This leads to prematurely stopping potentially neutral or positive experiments.
+              </p>
+            </div>
+
+            <div>
+              <h3 className="text-xl font-semibold text-white mb-2">Statistical Guardrails</h3>
+              <p>
+                Statistical guardrails account for variance by requiring <strong>statistical significance</strong> of the negative effect before triggering. They use confidence intervals (e.g., 99% confidence) to determine if the observed drop is likely real or just noise.
+              </p>
+              <p className="mt-2">
+                This approach is far more robust: it's extremely unlikely for a metric to show a statistically significant -99% effect and then recover to become significantly positive. Statistical guardrails adapt to sample size—requiring stronger evidence when data is limited—making them ideal for continuous monitoring throughout your test.
+              </p>
+            </div>
+
+            <div className="bg-gray-700 rounded p-4 mt-4">
+              <p className="text-sm">
+                <strong>Recommendation:</strong> Use statistical guardrails for ongoing monitoring, as they balance safety with statistical rigor. Reserve manual guardrails only for absolute red-line thresholds where any breach—regardless of statistical significance—requires immediate action.
+              </p>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );
