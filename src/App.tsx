@@ -9,7 +9,6 @@ import { Navigation } from './components/Navigation';
 import { FWERPage } from './components/FWERPage';
 import NHSTPage from './components/NHSTPage';
 import { Breadcrumb } from './components/Breadcrumb';
-import { BottomNavigation } from './components/BottomNavigation';
 import { GlossaryPage } from './components/GlossaryPage';
 
 type PageMode =
@@ -67,10 +66,7 @@ function App() {
         <Navigation currentPage={currentPage} onNavigate={handleNavigate} />
       )}
       <Breadcrumb currentPage={currentPage} />
-      <div className="pb-16 lg:pb-0">
-        {renderPage()}
-      </div>
-      <BottomNavigation currentPage={currentPage} onNavigate={handleNavigate} />
+      {renderPage()}
     </>
   );
 }
