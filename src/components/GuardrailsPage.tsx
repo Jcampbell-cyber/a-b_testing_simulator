@@ -16,7 +16,7 @@ export function GuardrailsPage() {
   const [guardrailType, setGuardrailType] = useState<GuardrailType>('statistical');
   const [manualGuardrail, setManualGuardrail] = useState(-5);
   const [statisticalConfidence, setStatisticalConfidence] = useState(99);
-  const [peekingMode, setPeekingMode] = useState<PeekingMode>('weekly');
+  const [peekingMode, setPeekingMode] = useState<PeekingMode>('daily');
   const [peekingFrequency, setPeekingFrequency] = useState(5);
   const [results, setResults] = useState<GuardrailsSimulationResults | null>(null);
   const [isRunning, setIsRunning] = useState(false);
