@@ -299,6 +299,13 @@ export function EffectDetectionCalculator({ onBack }: EffectDetectionCalculatorP
                   <p className="text-xs text-gray-200 mt-1">
                     ±{result.absoluteMde.toFixed(2)} absolute
                   </p>
+                  <p className="text-xs text-gray-200 mt-2 font-semibold">Target Metric:</p>
+                  <p className="text-sm text-blue-300">
+                    {metricType === 'continuous'
+                      ? `${(mean + result.absoluteMde).toFixed(2)} (mean: ${mean})`
+                      : `${((proportion + result.absoluteMde) * 100).toFixed(2)}% (baseline: ${(proportion * 100).toFixed(2)}%)`
+                    }
+                  </p>
                   <p className="text-xs text-gray-400 mt-2">
                     {sampleSizeMode === 'per-group'
                       ? `${sampleSizePerGroup.toLocaleString()} per group`
@@ -315,6 +322,13 @@ export function EffectDetectionCalculator({ onBack }: EffectDetectionCalculatorP
                   <p className="text-xs text-gray-200 mt-1">
                     ±{result.absoluteMdeHalf.toFixed(2)} absolute
                   </p>
+                  <p className="text-xs text-gray-200 mt-2 font-semibold">Target Metric:</p>
+                  <p className="text-sm text-gray-300">
+                    {metricType === 'continuous'
+                      ? `${(mean + result.absoluteMdeHalf).toFixed(2)}`
+                      : `${((proportion + result.absoluteMdeHalf) * 100).toFixed(2)}%`
+                    }
+                  </p>
                   <p className="text-xs text-gray-400 mt-2">
                     {sampleSizeMode === 'per-group'
                       ? `${Math.round(sampleSizePerGroup / 2).toLocaleString()} per group`
@@ -330,6 +344,13 @@ export function EffectDetectionCalculator({ onBack }: EffectDetectionCalculatorP
                   </p>
                   <p className="text-xs text-gray-200 mt-1">
                     ±{result.absoluteMdeDouble.toFixed(2)} absolute
+                  </p>
+                  <p className="text-xs text-gray-200 mt-2 font-semibold">Target Metric:</p>
+                  <p className="text-sm text-green-300">
+                    {metricType === 'continuous'
+                      ? `${(mean + result.absoluteMdeDouble).toFixed(2)}`
+                      : `${((proportion + result.absoluteMdeDouble) * 100).toFixed(2)}%`
+                    }
                   </p>
                   <p className="text-xs text-gray-400 mt-2">
                     {sampleSizeMode === 'per-group'
