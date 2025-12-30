@@ -12,6 +12,7 @@ export function EffectDetectionCalculator({ onBack }: EffectDetectionCalculatorP
   const [power, setPower] = useState(0.8);
   const [sampleSizePerGroup, setSampleSizePerGroup] = useState(10000);
   const [numFlights, setNumFlights] = useState(2);
+  const [sampleSizeMode, setSampleSizeMode] = useState<'per-group' | 'both'>('per-group');
 
   const [mean, setMean] = useState(100);
   const [stdev, setStdev] = useState(20);
@@ -23,16 +24,17 @@ export function EffectDetectionCalculator({ onBack }: EffectDetectionCalculatorP
 
     let variance = 1;
     let effectSizeCohen = 0;
+    const totalN = sampleSizeMode === 'per-group' ? sampleSizePerGroup * numFlights / 2 : sampleSizePerGroup / 2;
 
     if (metricType === 'continuous') {
       variance = 2;
       effectSizeCohen = Math.sqrt(
-        (variance * Math.pow(zAlpha + zBeta, 2)) / (sampleSizePerGroup * numFlights / 2)
+        (variance * Math.pow(zAlpha + zBeta, 2)) / totalN
       );
     } else {
       variance = 2 * proportion * (1 - proportion);
       effectSizeCohen = Math.sqrt(
-        (variance * Math.pow(zAlpha + zBeta, 2)) / (sampleSizePerGroup * numFlights / 2)
+        (variance * Math.pow(zAlpha + zBeta, 2)) / totalN
       );
     }
 
@@ -221,14 +223,38 @@ export function EffectDetectionCalculator({ onBack }: EffectDetectionCalculatorP
 
               <div className="grid grid-cols-2 gap-4">
                 <div>
+                  <label className="block text-white font-semibold mb-3">Sample Size Mode</label>
+                  <div className="space-y-2">
+                    <label className="flex items-center gap-3 cursor-pointer">
+                      <input
+                        type="radio"
+                        checked={sampleSizeMode === 'per-group'}
+                        onChange={() => setSampleSizeMode('per-group')}
+                        className="w-4 h-4"
+                      />
+                      <span className="text-gray-300">Per Group</span>
+                    </label>
+                    <label className="flex items-center gap-3 cursor-pointer">
+                      <input
+                        type="radio"
+                        checked={sampleSizeMode === 'both'}
+                        onChange={() => setSampleSizeMode('both')}
+                        className="w-4 h-4"
+                      />
+                      <span className="text-gray-300">Across Both Groups</span>
+                    </label>
+                  </div>
+                </div>
+
+                <div>
                   <label className="block text-white font-semibold mb-2">
-                    Sample Size Per Group: {sampleSizePerGroup.toLocaleString()}
+                    {sampleSizeMode === 'per-group' ? 'Sample Size Per Group' : 'Total Sample Size'}: {sampleSizePerGroup.toLocaleString()}
                   </label>
                   <input
                     type="number"
-                    min="100"
+                    min="1"
                     value={sampleSizePerGroup}
-                    onChange={(e) => setSampleSizePerGroup(Math.max(100, parseInt(e.target.value) || 100))}
+                    onChange={(e) => setSampleSizePerGroup(Math.max(1, parseInt(e.target.value) || 1))}
                     className="w-full bg-gray-700 text-white px-3 py-2 rounded"
                   />
                 </div>
@@ -274,7 +300,10 @@ export function EffectDetectionCalculator({ onBack }: EffectDetectionCalculatorP
                     ±{result.absoluteMde.toFixed(2)} absolute
                   </p>
                   <p className="text-xs text-gray-400 mt-2">
-                    {sampleSizePerGroup.toLocaleString()} per group
+                    {sampleSizeMode === 'per-group'
+                      ? `${sampleSizePerGroup.toLocaleString()} per group`
+                      : `${sampleSizePerGroup.toLocaleString()} total`
+                    }
                   </p>
                 </div>
 
@@ -287,7 +316,10 @@ export function EffectDetectionCalculator({ onBack }: EffectDetectionCalculatorP
                     ±{result.absoluteMdeHalf.toFixed(2)} absolute
                   </p>
                   <p className="text-xs text-gray-400 mt-2">
-                    {Math.round(sampleSizePerGroup / 2).toLocaleString()} per group
+                    {sampleSizeMode === 'per-group'
+                      ? `${Math.round(sampleSizePerGroup / 2).toLocaleString()} per group`
+                      : `${Math.round(sampleSizePerGroup / 2).toLocaleString()} total`
+                    }
                   </p>
                 </div>
 
@@ -300,7 +332,10 @@ export function EffectDetectionCalculator({ onBack }: EffectDetectionCalculatorP
                     ±{result.absoluteMdeDouble.toFixed(2)} absolute
                   </p>
                   <p className="text-xs text-gray-400 mt-2">
-                    {(sampleSizePerGroup * 2).toLocaleString()} per group
+                    {sampleSizeMode === 'per-group'
+                      ? `${(sampleSizePerGroup * 2).toLocaleString()} per group`
+                      : `${(sampleSizePerGroup * 2).toLocaleString()} total`
+                    }
                   </p>
                 </div>
 
