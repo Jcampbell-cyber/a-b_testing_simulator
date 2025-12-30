@@ -187,7 +187,7 @@ export function SampleSizeCalculator({ onBack }: SampleSizeCalculatorProps) {
               {metricType === 'binary' && (
                 <div>
                   <label className="block text-white font-semibold mb-2">
-                    Control Proportion: {(proportion * 100).toFixed(2)}%
+                    Success Rate: {(proportion * 100).toFixed(2)}%
                   </label>
                   <input
                     type="range"
@@ -292,10 +292,10 @@ export function SampleSizeCalculator({ onBack }: SampleSizeCalculatorProps) {
                 <div className="border-t border-gray-600 pt-6 bg-gray-600 rounded p-4">
                   <p className="text-gray-300 text-xs mb-1">MDE Details</p>
                   <p className="text-sm text-gray-200 mb-2">
-                    <strong>{mdeValue.toFixed(2)}{mdeType === 'relative' ? '%' : ''}</strong> relative
+                    <strong>{mdeValue.toFixed(2)}{mdeType === 'relative' ? '%' : metricType === 'binary' ? '%' : ''}</strong>
                   </p>
                   <p className="text-sm text-gray-200">
-                    <strong>{result.absoluteMde.toFixed(2)}</strong> absolute
+                    <strong>{result.absoluteMde.toFixed(2)}{metricType === 'binary' ? '%' : ''}</strong> absolute
                   </p>
                   {metricType === 'continuous' && (
                     <p className="text-xs text-gray-400 mt-2">
