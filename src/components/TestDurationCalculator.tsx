@@ -15,6 +15,7 @@ export function TestDurationCalculator({ onBack }: TestDurationCalculatorProps) 
   const [dailyUnits, setDailyUnits] = useState(10000);
   const [trafficSplit, setTrafficSplit] = useState<'both' | 'one'>('both');
   const [numFlights, setNumFlights] = useState(2);
+  const [numComparisons, setNumComparisons] = useState(1);
 
   const [mean, setMean] = useState(100);
   const [stdev, setStdev] = useState(20);
@@ -34,7 +35,8 @@ export function TestDurationCalculator({ onBack }: TestDurationCalculatorProps) 
   };
 
   const calculateDuration = () => {
-    const alphaTwoSided = testType === 'two-sided' ? alpha / 2 : alpha;
+    const adjustedAlpha = alpha / numComparisons;
+    const alphaTwoSided = testType === 'two-sided' ? adjustedAlpha / 2 : adjustedAlpha;
     const zAlpha = normalInverse(1 - alphaTwoSided);
     const zBeta = normalInverse(power);
 
@@ -68,7 +70,7 @@ export function TestDurationCalculator({ onBack }: TestDurationCalculatorProps) 
     const samplesPerDay = trafficSplit === 'both' ? dailyUnits : (dailyUnits * numFlights) / 2;
     const daysNeeded = Math.ceil(totalSamples / samplesPerDay);
 
-    return { daysNeeded, totalSamples, samplesPerDay, absoluteMde, effectSize };
+    return { daysNeeded, totalSamples, samplesPerDay, absoluteMde, effectSize, adjustedAlpha };
   };
 
   const result = calculateDuration();
@@ -172,6 +174,22 @@ export function TestDurationCalculator({ onBack }: TestDurationCalculatorProps) 
                     className="w-full"
                   />
                 </div>
+              </div>
+
+              <div>
+                <label className="block text-white font-semibold mb-2">
+                  Number of Comparisons: {numComparisons}
+                </label>
+                <input
+                  type="number"
+                  min="1"
+                  value={numComparisons}
+                  onChange={(e) => setNumComparisons(Math.max(1, parseInt(e.target.value) || 1))}
+                  className="w-full bg-gray-700 text-white px-3 py-2 rounded"
+                />
+                <p className="text-xs text-gray-400 mt-1">
+                  {numComparisons > 1 ? `Bonferroni adjusted α: ${(alpha / numComparisons).toFixed(4)}` : 'No adjustment'}
+                </p>
               </div>
 
               {metricType === 'continuous' && (
@@ -362,6 +380,12 @@ export function TestDurationCalculator({ onBack }: TestDurationCalculatorProps) 
                   <p className="text-sm text-gray-200">
                     <strong>{result.absoluteMde.toFixed(2)}</strong> absolute
                   </p>
+                  {numComparisons > 1 && (
+                    <div className="text-xs text-gray-400 mt-3 pt-2 border-t border-gray-500">
+                      <p>Bonferroni correction applied</p>
+                      <p>Adjusted α: {result.adjustedAlpha.toFixed(4)}</p>
+                    </div>
+                  )}
                 </div>
               </div>
             </div>

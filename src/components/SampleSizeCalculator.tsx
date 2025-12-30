@@ -13,6 +13,7 @@ export function SampleSizeCalculator({ onBack }: SampleSizeCalculatorProps) {
   const [mdeType, setMdeType] = useState<'relative' | 'absolute'>('relative');
   const [mdeValue, setMdeValue] = useState(5);
   const [numFlights, setNumFlights] = useState(2);
+  const [numComparisons, setNumComparisons] = useState(1);
 
   const [mean, setMean] = useState(100);
   const [stdev, setStdev] = useState(20);
@@ -32,7 +33,8 @@ export function SampleSizeCalculator({ onBack }: SampleSizeCalculatorProps) {
   };
 
   const calculateSampleSize = () => {
-    const alphaTwoSided = testType === 'two-sided' ? alpha / 2 : alpha;
+    const adjustedAlpha = alpha / numComparisons;
+    const alphaTwoSided = testType === 'two-sided' ? adjustedAlpha / 2 : adjustedAlpha;
     const zAlpha = normalInverse(1 - alphaTwoSided);
     const zBeta = normalInverse(power);
 
@@ -68,7 +70,7 @@ export function SampleSizeCalculator({ onBack }: SampleSizeCalculatorProps) {
 
     const totalSamples = samplesPerGroup * numFlights;
 
-    return { samplesPerGroup, totalSamples, absoluteMde, effectSize, targetedProportion, targetedMean };
+    return { samplesPerGroup, totalSamples, absoluteMde, effectSize, targetedProportion, targetedMean, adjustedAlpha };
   };
 
   const result = calculateSampleSize();
@@ -172,6 +174,22 @@ export function SampleSizeCalculator({ onBack }: SampleSizeCalculatorProps) {
                     className="w-full"
                   />
                 </div>
+              </div>
+
+              <div>
+                <label className="block text-white font-semibold mb-2">
+                  Number of Comparisons: {numComparisons}
+                </label>
+                <input
+                  type="number"
+                  min="1"
+                  value={numComparisons}
+                  onChange={(e) => setNumComparisons(Math.max(1, parseInt(e.target.value) || 1))}
+                  className="w-full bg-gray-700 text-white px-3 py-2 rounded"
+                />
+                <p className="text-xs text-gray-400 mt-1">
+                  {numComparisons > 1 ? `Bonferroni adjusted α: ${(alpha / numComparisons).toFixed(4)}` : 'No adjustment'}
+                </p>
               </div>
 
               {metricType === 'continuous' && (
@@ -329,6 +347,12 @@ export function SampleSizeCalculator({ onBack }: SampleSizeCalculatorProps) {
                     <p className="text-xs text-gray-400 mt-2">
                       Effect size (Cohen's d): {result.effectSize.toFixed(3)}
                     </p>
+                  )}
+                  {numComparisons > 1 && (
+                    <div className="text-xs text-gray-400 mt-3 pt-2 border-t border-gray-500">
+                      <p>Bonferroni correction applied</p>
+                      <p>Adjusted α: {result.adjustedAlpha.toFixed(4)}</p>
+                    </div>
                   )}
                 </div>
               </div>

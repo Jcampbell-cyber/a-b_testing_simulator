@@ -9,6 +9,7 @@ export function TestResultsCalculator({ onBack }: TestResultsCalculatorProps) {
   const [metricType, setMetricType] = useState<'continuous' | 'binary'>('continuous');
   const [testType, setTestType] = useState<'two-sided' | 'one-sided'>('two-sided');
   const [alpha, setAlpha] = useState(0.05);
+  const [numComparisons, setNumComparisons] = useState(1);
 
   const [controlMean, setControlMean] = useState(100);
   const [treatmentMean, setTreatmentMean] = useState(105);
@@ -22,6 +23,8 @@ export function TestResultsCalculator({ onBack }: TestResultsCalculatorProps) {
   const [sampleSizeTreatmentBinary, setSampleSizeTreatmentBinary] = useState(5000);
 
   const calculateResults = () => {
+    const adjustedAlpha = alpha / numComparisons;
+
     if (metricType === 'continuous') {
       const diff = treatmentMean - controlMean;
       const pooledStd = Math.sqrt(
@@ -33,14 +36,14 @@ export function TestResultsCalculator({ onBack }: TestResultsCalculatorProps) {
       const se = pooledStd * Math.sqrt(1 / sampleSizeControl + 1 / sampleSizeTreatment);
       const tStat = diff / se;
 
-      const alphaTwoSided = testType === 'two-sided' ? alpha / 2 : alpha;
+      const alphaTwoSided = testType === 'two-sided' ? adjustedAlpha / 2 : adjustedAlpha;
       const criticalValue = Math.abs(normalInverse(1 - alphaTwoSided));
       const pValue =
         testType === 'two-sided'
           ? 2 * (1 - normalCDF(Math.abs(tStat)))
           : 1 - normalCDF(tStat);
 
-      const isSignificant = pValue < alpha;
+      const isSignificant = pValue < adjustedAlpha;
       const ciLower = diff - criticalValue * se;
       const ciUpper = diff + criticalValue * se;
 
@@ -54,6 +57,7 @@ export function TestResultsCalculator({ onBack }: TestResultsCalculatorProps) {
         ciLower,
         ciUpper,
         percentDiff: (diff / controlMean) * 100,
+        adjustedAlpha,
       };
     } else {
       const controlSuccesses = Math.round(controlProportion * sampleSizeControlBinary);
@@ -69,14 +73,14 @@ export function TestResultsCalculator({ onBack }: TestResultsCalculatorProps) {
       );
 
       const zStat = pDiff / se;
-      const alphaTwoSided = testType === 'two-sided' ? alpha / 2 : alpha;
+      const alphaTwoSided = testType === 'two-sided' ? adjustedAlpha / 2 : adjustedAlpha;
       const criticalValue = Math.abs(normalInverse(1 - alphaTwoSided));
       const pValue =
         testType === 'two-sided'
           ? 2 * (1 - normalCDF(Math.abs(zStat)))
           : 1 - normalCDF(zStat);
 
-      const isSignificant = pValue < alpha;
+      const isSignificant = pValue < adjustedAlpha;
       const ciLower = pDiff - criticalValue * se;
       const ciUpper = pDiff + criticalValue * se;
 
@@ -91,6 +95,7 @@ export function TestResultsCalculator({ onBack }: TestResultsCalculatorProps) {
         treatmentProp: treatmentProportion,
         percentDiff: (pDiff / controlProportion) * 100,
         zStat,
+        adjustedAlpha,
       };
     }
   };
@@ -202,19 +207,37 @@ export function TestResultsCalculator({ onBack }: TestResultsCalculatorProps) {
                 </div>
               </div>
 
-              <div>
-                <label className="block text-white font-semibold mb-3">
-                  Significance Level (α): {alpha.toFixed(3)}
-                </label>
-                <input
-                  type="range"
-                  min="0.01"
-                  max="0.2"
-                  step="0.01"
-                  value={alpha}
-                  onChange={(e) => setAlpha(parseFloat(e.target.value))}
-                  className="w-full"
-                />
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-white font-semibold mb-3">
+                    Significance Level (α): {alpha.toFixed(3)}
+                  </label>
+                  <input
+                    type="range"
+                    min="0.01"
+                    max="0.2"
+                    step="0.01"
+                    value={alpha}
+                    onChange={(e) => setAlpha(parseFloat(e.target.value))}
+                    className="w-full"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-white font-semibold mb-2">
+                    Number of Comparisons: {numComparisons}
+                  </label>
+                  <input
+                    type="number"
+                    min="1"
+                    value={numComparisons}
+                    onChange={(e) => setNumComparisons(Math.max(1, parseInt(e.target.value) || 1))}
+                    className="w-full bg-gray-700 text-white px-3 py-2 rounded"
+                  />
+                  <p className="text-xs text-gray-400 mt-1">
+                    {numComparisons > 1 ? `Bonferroni adjusted α: ${(alpha / numComparisons).toFixed(4)}` : 'No adjustment'}
+                  </p>
+                </div>
               </div>
 
               {metricType === 'continuous' && (
@@ -425,7 +448,14 @@ export function TestResultsCalculator({ onBack }: TestResultsCalculatorProps) {
                   <p className={`text-lg font-bold ${result.isSignificant ? 'text-green-400' : 'text-red-400'}`}>
                     {result.isSignificant ? '✓ Significant' : '✗ Not Significant'}
                   </p>
-                  <p className="text-gray-400 text-xs mt-1">at α = {alpha.toFixed(3)}</p>
+                  {numComparisons > 1 ? (
+                    <div className="text-gray-400 text-xs mt-1">
+                      <p>at α = {alpha.toFixed(3)} (original)</p>
+                      <p>Bonferroni adjusted: {result.adjustedAlpha.toFixed(4)}</p>
+                    </div>
+                  ) : (
+                    <p className="text-gray-400 text-xs mt-1">at α = {alpha.toFixed(3)}</p>
+                  )}
                 </div>
               </div>
             </div>

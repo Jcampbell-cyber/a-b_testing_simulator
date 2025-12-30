@@ -13,6 +13,7 @@ export function EffectDetectionCalculator({ onBack }: EffectDetectionCalculatorP
   const [sampleSizePerGroup, setSampleSizePerGroup] = useState(10000);
   const [numFlights, setNumFlights] = useState(2);
   const [sampleSizeMode, setSampleSizeMode] = useState<'per-group' | 'both'>('per-group');
+  const [numComparisons, setNumComparisons] = useState(1);
 
   const [mean, setMean] = useState(100);
   const [stdev, setStdev] = useState(20);
@@ -32,7 +33,8 @@ export function EffectDetectionCalculator({ onBack }: EffectDetectionCalculatorP
   };
 
   const calculateMDE = () => {
-    const alphaTwoSided = testType === 'two-sided' ? alpha / 2 : alpha;
+    const adjustedAlpha = alpha / numComparisons;
+    const alphaTwoSided = testType === 'two-sided' ? adjustedAlpha / 2 : adjustedAlpha;
     const zAlpha = normalInverse(1 - alphaTwoSided);
     const zBeta = normalInverse(power);
 
@@ -84,6 +86,7 @@ export function EffectDetectionCalculator({ onBack }: EffectDetectionCalculatorP
       absoluteMdeHalf,
       relativeMdeDouble,
       absoluteMdeDouble,
+      adjustedAlpha,
     };
   };
 
@@ -188,6 +191,22 @@ export function EffectDetectionCalculator({ onBack }: EffectDetectionCalculatorP
                     className="w-full"
                   />
                 </div>
+              </div>
+
+              <div>
+                <label className="block text-white font-semibold mb-2">
+                  Number of Comparisons: {numComparisons}
+                </label>
+                <input
+                  type="number"
+                  min="1"
+                  value={numComparisons}
+                  onChange={(e) => setNumComparisons(Math.max(1, parseInt(e.target.value) || 1))}
+                  className="w-full bg-gray-700 text-white px-3 py-2 rounded"
+                />
+                <p className="text-xs text-gray-400 mt-1">
+                  {numComparisons > 1 ? `Bonferroni adjusted α: ${(alpha / numComparisons).toFixed(4)}` : 'No adjustment'}
+                </p>
               </div>
 
               {metricType === 'continuous' && (
@@ -433,8 +452,9 @@ export function EffectDetectionCalculator({ onBack }: EffectDetectionCalculatorP
                   <ul className="space-y-1 text-xs">
                     <li>Metric: {metricType}</li>
                     <li>Test: {testType}</li>
-                    <li>α = {alpha.toFixed(3)}, Power = {power.toFixed(2)}</li>
+                    <li>α = {alpha.toFixed(3)}{numComparisons > 1 ? ` (adjusted: ${result.adjustedAlpha.toFixed(4)})` : ''}, Power = {power.toFixed(2)}</li>
                     <li>Flights: {numFlights}</li>
+                    {numComparisons > 1 && <li>Comparisons: {numComparisons} (Bonferroni)</li>}
                   </ul>
                 </div>
               </div>
