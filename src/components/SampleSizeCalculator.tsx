@@ -26,6 +26,7 @@ export function SampleSizeCalculator({ onBack }: SampleSizeCalculatorProps) {
     let variance = 1;
     let absoluteMde = 0;
     let targetedProportion = 0;
+    let targetedMean = 0;
 
     if (metricType === 'continuous') {
       if (mdeType === 'absolute') {
@@ -35,6 +36,7 @@ export function SampleSizeCalculator({ onBack }: SampleSizeCalculatorProps) {
       }
       effectSize = absoluteMde / stdev;
       variance = 2;
+      targetedMean = mean + absoluteMde;
     } else {
       if (mdeType === 'absolute') {
         absoluteMde = mdeValue / 100;
@@ -52,7 +54,7 @@ export function SampleSizeCalculator({ onBack }: SampleSizeCalculatorProps) {
 
     const totalSamples = samplesPerGroup * numFlights;
 
-    return { samplesPerGroup, totalSamples, absoluteMde, effectSize, targetedProportion };
+    return { samplesPerGroup, totalSamples, absoluteMde, effectSize, targetedProportion, targetedMean };
   };
 
   const result = calculateSampleSize();
@@ -302,6 +304,11 @@ export function SampleSizeCalculator({ onBack }: SampleSizeCalculatorProps) {
                   {metricType === 'binary' && result.targetedProportion > 0 && (
                     <p className="text-sm text-gray-200 mb-2">
                       Targeted: <strong>{(result.targetedProportion * 100).toFixed(2)}%</strong>
+                    </p>
+                  )}
+                  {metricType === 'continuous' && result.targetedMean > 0 && (
+                    <p className="text-sm text-gray-200 mb-2">
+                      Targeted: <strong>{result.targetedMean.toFixed(2)}</strong>
                     </p>
                   )}
                   {metricType === 'continuous' && (
