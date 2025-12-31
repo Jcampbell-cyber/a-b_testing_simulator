@@ -11,7 +11,7 @@ export function WinsorizingPage() {
   const [baselineMean, setBaselineMean] = useState(1000);
   const [baselineStd, setBaselineStd] = useState(300);
   const [upperPercentile, setUpperPercentile] = useState(99);
-  const [treatmentUplift, setTreatmentUplift] = useState(5);
+  const [treatmentUplift, setTreatmentUplift] = useState(3);
   const [results, setResults] = useState<WinsorizingResults | null>(null);
   const [abTestResults, setAbTestResults] = useState<ABTestResults | null>(null);
   const [isRunning, setIsRunning] = useState(false);
@@ -99,6 +99,20 @@ export function WinsorizingPage() {
                 <li>Metrics that are already normally distributed without extreme tails</li>
                 <li>When the treatment specifically targets high-value users or edge cases</li>
               </ul>
+              <p className="mt-3">
+                <strong>Choosing the Right Threshold:</strong>
+              </p>
+              <p>
+                A lower percentile threshold (e.g., 95th vs 99th) caps more values and produces greater variance reduction:
+              </p>
+              <ul className="list-disc list-inside space-y-1 ml-4 mt-2">
+                <li><strong>Lower threshold (90-95%):</strong> Stronger CI reduction, but risks introducing bias by modifying too much data</li>
+                <li><strong>Higher threshold (99%):</strong> More conservative, only addresses extreme outliers with minimal bias risk</li>
+                <li><strong>Common practice:</strong> 95th-99th percentile is typical; start conservative and justify more aggressive thresholds</li>
+              </ul>
+              <p className="mt-3">
+                <strong>Effect on A/B Tests:</strong> Winsorizing will not always change the observed uplift (since it affects both control and treatment equally), but it should consistently reduce confidence interval width. This means tests become more sensitive to detecting true effects without systematically biasing the point estimate.
+              </p>
               <p className="mt-3 text-amber-300 bg-amber-900/30 p-2 rounded border border-amber-800">
                 <strong>Important:</strong> Winsorizing should be pre-specified in your analysis plan, not applied
                 post-hoc to achieve desired results. Document your winsorizing strategy before analyzing results.

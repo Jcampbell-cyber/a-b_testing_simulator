@@ -1,5 +1,3 @@
-import { Tooltip } from './Tooltip';
-
 export type SimulationMode = 'single' | 'abtest';
 
 interface WinsorizingControlsProps {
@@ -68,9 +66,8 @@ export function WinsorizingControls({
 
         <div className="grid grid-cols-2 gap-4">
           <div>
-            <label className="flex items-center gap-2 text-sm font-medium text-gray-200 mb-2">
+            <label className="text-sm font-medium text-gray-200 mb-2 block">
               Sample Size
-              <Tooltip content="Number of observations in the sample" />
             </label>
             <input
               type="number"
@@ -84,9 +81,8 @@ export function WinsorizingControls({
           </div>
 
           <div>
-            <label className="flex items-center gap-2 text-sm font-medium text-gray-200 mb-2">
+            <label className="text-sm font-medium text-gray-200 mb-2 block">
               Baseline Mean
-              <Tooltip content="Average value of the metric" />
             </label>
             <input
               type="number"
@@ -99,9 +95,8 @@ export function WinsorizingControls({
           </div>
 
           <div>
-            <label className="flex items-center gap-2 text-sm font-medium text-gray-200 mb-2">
+            <label className="text-sm font-medium text-gray-200 mb-2 block">
               Standard Deviation
-              <Tooltip content="Measure of variability in the data" />
             </label>
             <input
               type="number"
@@ -115,9 +110,8 @@ export function WinsorizingControls({
 
           {mode === 'abtest' && treatmentUplift !== undefined && setTreatmentUplift && (
             <div>
-              <label className="flex items-center gap-2 text-sm font-medium text-gray-200 mb-2">
+              <label className="text-sm font-medium text-gray-200 mb-2 block">
                 Treatment Uplift (%)
-                <Tooltip content="Expected percentage increase in treatment group" />
               </label>
               <input
                 type="number"
@@ -135,9 +129,8 @@ export function WinsorizingControls({
         <div className="border-t border-gray-700 pt-6">
           <h3 className="text-sm font-semibold text-gray-200 mb-4">Winsorizing Parameters</h3>
           <div>
-            <label className="flex items-center gap-2 text-sm font-medium text-gray-200 mb-2">
+            <label className="text-sm font-medium text-gray-200 mb-2 block">
               Upper Percentile (%)
-              <Tooltip content="Values above this percentile will be capped to the percentile value" />
             </label>
             <input
               type="number"
