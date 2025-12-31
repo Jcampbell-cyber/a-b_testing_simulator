@@ -81,7 +81,10 @@ export function NormalisationPage({ onBack }: Props) {
           <div className="bg-gray-900 rounded-xl border border-gray-800 p-5">
             <h3 className="text-lg font-semibold text-green-400 mb-3">The Solution</h3>
             <p className="text-sm text-gray-300 mb-3">
-              Z-score normalisation transforms each region's data to have mean 0 and standard deviation 1. This:
+              Ideally, you would run separate experiments within each region and randomise within region to ensure balanced allocation. However, this isn't always practical - you may lack sufficient sample size per region, or operational constraints may prevent stratified randomisation.
+            </p>
+            <p className="text-sm text-gray-300 mb-3">
+              When you must pool across regions, Z-score normalisation transforms each region's data to have mean 0 and standard deviation 1. This:
             </p>
             <ul className="space-y-1.5 text-sm text-gray-300">
               <li>Removes the scale differences between regions</li>
@@ -105,6 +108,12 @@ export function NormalisationPage({ onBack }: Props) {
                 </tr>
               </thead>
               <tbody>
+                <tr className="border-b border-gray-800 bg-blue-900/20">
+                  <td className="py-2 px-3 text-blue-400 font-medium">Z-score (Standardisation)</td>
+                  <td className="py-2 px-3 text-gray-300 font-mono text-xs">x' = (x - mean) / std</td>
+                  <td className="py-2 px-3 text-gray-300">Aggregation across regions</td>
+                  <td className="py-2 px-3 text-gray-400">Widely used; centers and scales distribution</td>
+                </tr>
                 <tr className="border-b border-gray-800">
                   <td className="py-2 px-3 text-white font-medium">Min-Max Scaling</td>
                   <td className="py-2 px-3 text-gray-300 font-mono text-xs">x' = (x - min) / (max - min)</td>
@@ -116,12 +125,6 @@ export function NormalisationPage({ onBack }: Props) {
                   <td className="py-2 px-3 text-gray-300 font-mono text-xs">x' = x / max</td>
                   <td className="py-2 px-3 text-gray-300">Quick comparison, values greater than or equal to 0</td>
                   <td className="py-2 px-3 text-gray-400">Simpler; depends on max stability</td>
-                </tr>
-                <tr className="border-b border-gray-800 bg-blue-900/20">
-                  <td className="py-2 px-3 text-blue-400 font-medium">Z-score (Standardisation)</td>
-                  <td className="py-2 px-3 text-gray-300 font-mono text-xs">x' = (x - mean) / std</td>
-                  <td className="py-2 px-3 text-gray-300">Aggregation across regions</td>
-                  <td className="py-2 px-3 text-gray-400">Widely used; centers and scales distribution</td>
                 </tr>
                 <tr className="border-b border-gray-800">
                   <td className="py-2 px-3 text-white font-medium">Percent-of-Mean</td>

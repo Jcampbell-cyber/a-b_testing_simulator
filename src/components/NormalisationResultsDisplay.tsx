@@ -97,9 +97,15 @@ export function NormalisationResultsDisplay({ results }: Props) {
 
           <div className="space-y-3">
             <div className="flex justify-between">
-              <span className="text-gray-400">Lift</span>
+              <span className="text-gray-400">Lift (absolute)</span>
               <span className={`font-mono font-medium ${aggregatedRaw.lift >= 0 ? 'text-green-400' : 'text-red-400'}`}>
                 {aggregatedRaw.lift >= 0 ? '+' : ''}{aggregatedRaw.lift.toFixed(2)}
+              </span>
+            </div>
+            <div className="flex justify-between">
+              <span className="text-gray-400">Lift (%)</span>
+              <span className={`font-mono font-medium ${aggregatedRaw.liftPercent >= 0 ? 'text-green-400' : 'text-red-400'}`}>
+                {aggregatedRaw.liftPercent >= 0 ? '+' : ''}{aggregatedRaw.liftPercent.toFixed(2)}%
               </span>
             </div>
             <div className="flex justify-between">
