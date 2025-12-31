@@ -1,5 +1,5 @@
 import { NormalisationResults } from '../utils/normalisationSimulation';
-import { CheckCircle, XCircle, TrendingDown } from 'lucide-react';
+import { CheckCircle, XCircle } from 'lucide-react';
 
 interface Props {
   results: NormalisationResults;
@@ -8,7 +8,6 @@ interface Props {
 export function NormalisationResultsDisplay({ results }: Props) {
   const { groups, aggregatedRaw, aggregatedNorm, trueEffectPercent } = results;
 
-  const varianceReduction = ((1 - aggregatedNorm.pooledStd / aggregatedRaw.pooledStd) * 100);
   const ciWidthRaw = aggregatedRaw.ci95[1] - aggregatedRaw.ci95[0];
   const ciWidthNorm = aggregatedNorm.ci95[1] - aggregatedNorm.ci95[0];
 
@@ -27,6 +26,9 @@ export function NormalisationResultsDisplay({ results }: Props) {
                 <th className="text-right py-2 px-3 text-gray-400 font-medium">Treatment</th>
                 <th className="text-right py-2 px-3 text-gray-400 font-medium">Raw Lift</th>
                 <th className="text-right py-2 px-3 text-gray-400 font-medium">% Lift</th>
+                <th className="text-right py-2 px-3 text-gray-400 font-medium">Z-Score Ctrl</th>
+                <th className="text-right py-2 px-3 text-gray-400 font-medium">Z-Score Trt</th>
+                <th className="text-right py-2 px-3 text-gray-400 font-medium">Z Lift</th>
               </tr>
             </thead>
             <tbody>
@@ -42,6 +44,11 @@ export function NormalisationResultsDisplay({ results }: Props) {
                   <td className={`py-2 px-3 text-right font-medium ${group.rawLiftPercent >= 0 ? 'text-green-400' : 'text-red-400'}`}>
                     {group.rawLiftPercent >= 0 ? '+' : ''}{group.rawLiftPercent.toFixed(1)}%
                   </td>
+                  <td className="py-2 px-3 text-right text-blue-300">{group.normControlMean.toFixed(3)}</td>
+                  <td className="py-2 px-3 text-right text-blue-300">{group.normTreatmentMean.toFixed(3)}</td>
+                  <td className={`py-2 px-3 text-right font-medium ${group.normLift >= 0 ? 'text-green-400' : 'text-red-400'}`}>
+                    {group.normLift >= 0 ? '+' : ''}{group.normLift.toFixed(3)}
+                  </td>
                 </tr>
               ))}
             </tbody>
@@ -49,43 +56,8 @@ export function NormalisationResultsDisplay({ results }: Props) {
         </div>
 
         <p className="text-xs text-gray-500 mt-3">
-          Notice how the absolute lift varies greatly between regions due to different price levels, even though the relative effect ({trueEffectPercent}%) is the same.
+          Z-scores standardize each region's values using that region's mean and std dev, putting all regions on a comparable scale before pooling.
         </p>
-      </div>
-
-      <div className="bg-gradient-to-r from-green-900/30 to-blue-900/30 rounded-xl border border-green-800/50 p-5">
-        <div className="flex items-center gap-3 mb-4">
-          <div className="w-10 h-10 rounded-full bg-green-600/30 flex items-center justify-center">
-            <TrendingDown className="w-5 h-5 text-green-400" />
-          </div>
-          <div>
-            <h3 className="text-lg font-semibold text-green-400">Variance Reduction</h3>
-            <p className="text-sm text-gray-400">The key benefit of normalisation</p>
-          </div>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <div className="bg-gray-900/50 rounded-lg p-4 text-center">
-            <div className="text-3xl font-bold text-white mb-1">
-              {aggregatedRaw.pooledStd.toFixed(1)}
-            </div>
-            <div className="text-sm text-gray-400">Raw Pooled Std Dev</div>
-          </div>
-
-          <div className="bg-gray-900/50 rounded-lg p-4 text-center">
-            <div className="text-3xl font-bold text-green-400 mb-1">
-              {aggregatedNorm.pooledStd.toFixed(3)}
-            </div>
-            <div className="text-sm text-gray-400">Normalised Pooled Std Dev</div>
-          </div>
-
-          <div className="bg-gray-900/50 rounded-lg p-4 text-center">
-            <div className="text-3xl font-bold text-green-400 mb-1">
-              {varianceReduction.toFixed(0)}%
-            </div>
-            <div className="text-sm text-gray-400">Reduction in Std Dev</div>
-          </div>
-        </div>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -149,9 +121,21 @@ export function NormalisationResultsDisplay({ results }: Props) {
               </span>
             </div>
             <div className="flex justify-between">
-              <span className="text-gray-400">95% CI</span>
+              <span className="text-gray-400">Lift (%)</span>
+              <span className={`font-mono font-medium ${aggregatedNorm.liftPercent >= 0 ? 'text-green-400' : 'text-red-400'}`}>
+                {aggregatedNorm.liftPercent >= 0 ? '+' : ''}{aggregatedNorm.liftPercent.toFixed(2)}%
+              </span>
+            </div>
+            <div className="flex justify-between">
+              <span className="text-gray-400">95% CI (Z-score)</span>
               <span className="text-white font-mono text-sm">
                 [{aggregatedNorm.ci95[0].toFixed(4)}, {aggregatedNorm.ci95[1].toFixed(4)}]
+              </span>
+            </div>
+            <div className="flex justify-between">
+              <span className="text-gray-400">95% CI (%)</span>
+              <span className="text-white font-mono text-sm">
+                [{aggregatedNorm.ci95Percent[0].toFixed(2)}%, {aggregatedNorm.ci95Percent[1].toFixed(2)}%]
               </span>
             </div>
             <div className="flex justify-between">

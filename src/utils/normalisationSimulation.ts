@@ -31,10 +31,12 @@ export interface NormalisationResults {
     controlMean: number;
     treatmentMean: number;
     lift: number;
+    liftPercent: number;
     pValue: number;
     significant: boolean;
     pooledStd: number;
     ci95: [number, number];
+    ci95Percent: [number, number];
   };
   trueEffectPercent: number;
   allControlRaw: number[];
@@ -229,6 +231,13 @@ export function runNormalisationSimulation(
   const normSE = normPooledStd * Math.sqrt(1/allControlNorm.length + 1/allTreatmentNorm.length);
   const normCI95: [number, number] = [normLift - 1.96 * normSE, normLift + 1.96 * normSE];
 
+  const normLiftPercent = rawLiftPercent;
+  const percentSE = (rawSE / rawControlMean) * 100;
+  const normCI95Percent: [number, number] = [
+    rawLiftPercent - 1.96 * percentSE,
+    rawLiftPercent + 1.96 * percentSE
+  ];
+
   return {
     groups,
     aggregatedRaw: {
@@ -245,10 +254,12 @@ export function runNormalisationSimulation(
       controlMean: normControlMean,
       treatmentMean: normTreatmentMean,
       lift: normLift,
+      liftPercent: normLiftPercent,
       pValue: normPValue,
       significant: normPValue < 0.05,
       pooledStd: normPooledStd,
-      ci95: normCI95
+      ci95: normCI95,
+      ci95Percent: normCI95Percent
     },
     trueEffectPercent,
     allControlRaw,
