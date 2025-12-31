@@ -28,6 +28,7 @@ export interface NormalisationResults {
     pooledStd: number;
     ci95: [number, number];
     ci95Percent: [number, number];
+    tStatistic: number;
   };
   aggregatedNorm: {
     controlMean: number;
@@ -39,7 +40,9 @@ export interface NormalisationResults {
     pooledStd: number;
     ci95: [number, number];
     ci95Percent: [number, number];
+    tStatistic: number;
   };
+  varianceReductionRatio: number;
   trueEffectPercent: number;
   allControlRaw: number[];
   allTreatmentRaw: number[];
@@ -224,9 +227,14 @@ export function runNormalisationSimulation(
   const rawLiftPercent = (rawLift / rawControlMean) * 100;
   const rawPValue = welchTTest(allTreatmentRaw, allControlRaw);
   const rawPooledStd = std([...allControlRaw, ...allTreatmentRaw]);
-  const rawSE = rawPooledStd * Math.sqrt(1/allControlRaw.length + 1/allTreatmentRaw.length);
-  const rawCI95: [number, number] = [rawLift - 1.96 * rawSE, rawLift + 1.96 * rawSE];
-  const rawPercentSE = (rawSE / rawControlMean) * 100;
+
+  const rawControlVar = allControlRaw.reduce((sum, x) => sum + (x - rawControlMean) ** 2, 0) / (allControlRaw.length - 1);
+  const rawTreatmentVar = allTreatmentRaw.reduce((sum, x) => sum + (x - rawTreatmentMean) ** 2, 0) / (allTreatmentRaw.length - 1);
+  const rawWelchSE = Math.sqrt(rawControlVar / allControlRaw.length + rawTreatmentVar / allTreatmentRaw.length);
+  const rawTStatistic = rawLift / rawWelchSE;
+
+  const rawCI95: [number, number] = [rawLift - 1.96 * rawWelchSE, rawLift + 1.96 * rawWelchSE];
+  const rawPercentSE = (rawWelchSE / rawControlMean) * 100;
   const rawCI95Percent: [number, number] = [
     rawLiftPercent - 1.96 * rawPercentSE,
     rawLiftPercent + 1.96 * rawPercentSE
@@ -237,12 +245,18 @@ export function runNormalisationSimulation(
   const normLift = normTreatmentMean - normControlMean;
   const normPValue = welchTTest(allTreatmentNorm, allControlNorm);
   const normPooledStd = std([...allControlNorm, ...allTreatmentNorm]);
-  const normSE = normPooledStd * Math.sqrt(1/allControlNorm.length + 1/allTreatmentNorm.length);
-  const normCI95: [number, number] = [normLift - 1.96 * normSE, normLift + 1.96 * normSE];
+
+  const normControlVar = allControlNorm.reduce((sum, x) => sum + (x - normControlMean) ** 2, 0) / (allControlNorm.length - 1);
+  const normTreatmentVar = allTreatmentNorm.reduce((sum, x) => sum + (x - normTreatmentMean) ** 2, 0) / (allTreatmentNorm.length - 1);
+  const normWelchSE = Math.sqrt(normControlVar / allControlNorm.length + normTreatmentVar / allTreatmentNorm.length);
+  const normTStatistic = normLift / normWelchSE;
+
+  const normCI95: [number, number] = [normLift - 1.96 * normWelchSE, normLift + 1.96 * normWelchSE];
+
+  const varianceReductionRatio = (rawControlVar + rawTreatmentVar) / 2 / ((normControlVar + normTreatmentVar) / 2);
 
   const normLiftPercent = rawLiftPercent;
-  const seRatio = normSE / rawSE;
-  const normPercentSE = rawPercentSE * seRatio;
+  const normPercentSE = rawPercentSE / Math.sqrt(varianceReductionRatio);
   const normCI95Percent: [number, number] = [
     rawLiftPercent - 1.96 * normPercentSE,
     rawLiftPercent + 1.96 * normPercentSE
@@ -259,7 +273,8 @@ export function runNormalisationSimulation(
       significant: rawPValue < 0.05,
       pooledStd: rawPooledStd,
       ci95: rawCI95,
-      ci95Percent: rawCI95Percent
+      ci95Percent: rawCI95Percent,
+      tStatistic: rawTStatistic
     },
     aggregatedNorm: {
       controlMean: normControlMean,
@@ -270,8 +285,10 @@ export function runNormalisationSimulation(
       significant: normPValue < 0.05,
       pooledStd: normPooledStd,
       ci95: normCI95,
-      ci95Percent: normCI95Percent
+      ci95Percent: normCI95Percent,
+      tStatistic: normTStatistic
     },
+    varianceReductionRatio,
     trueEffectPercent,
     allControlRaw,
     allTreatmentRaw,

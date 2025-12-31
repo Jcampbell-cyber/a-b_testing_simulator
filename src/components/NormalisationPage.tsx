@@ -4,6 +4,7 @@ import { Breadcrumb } from './Breadcrumb';
 import { NormalisationControls } from './NormalisationControls';
 import { NormalisationResultsDisplay } from './NormalisationResultsDisplay';
 import { NormalisationHistogram } from './NormalisationHistogram';
+import { NormalisationImbalanceChart } from './NormalisationImbalanceChart';
 import { runNormalisationSimulation, NormalisationResults, GroupConfig } from '../utils/normalisationSimulation';
 
 interface Props {
@@ -169,7 +170,11 @@ export function NormalisationPage({ onBack }: Props) {
           </div>
         </div>
 
-        <div className="mt-8 bg-amber-900/30 rounded-xl border border-amber-700 p-5">
+        <div className="mt-6">
+          <NormalisationImbalanceChart groupConfigs={groupConfigs} />
+        </div>
+
+        <div className="mt-6 bg-amber-900/30 rounded-xl border border-amber-700 p-5">
           <h3 className="text-lg font-semibold text-amber-300 mb-2">When to Use Normalisation</h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
