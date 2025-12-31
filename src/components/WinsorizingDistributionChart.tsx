@@ -113,67 +113,125 @@ export function WinsorizingDistributionChart({
       <div className="bg-gray-800 rounded-lg shadow-sm border border-gray-700 p-6">
         <h3 className="text-lg font-semibold text-white mb-4">Histogram Comparison</h3>
         <div className="grid grid-cols-2 gap-4">
-          <HistogramChart data={originalData} title="Original Distribution" color="#3b82f6" domain={[Math.min(...originalData), Math.max(...originalData)]} />
-          <HistogramChart data={winsorizedData} title="Winsorized Distribution" color="#3b82f6" domain={[Math.min(...originalData), Math.max(...originalData)]} thresholdValue={upperThreshold} />
+          <HistogramChart
+            data={originalData}
+            title="Original Distribution"
+            color="#3b82f6"
+            domain={[Math.min(...originalData), Math.max(...originalData)]}
+          />
+          <HistogramChart
+            data={winsorizedData}
+            originalData={originalData}
+            title="Winsorized Distribution"
+            color="#3b82f6"
+            domain={[Math.min(...originalData), Math.max(...originalData)]}
+            thresholdValue={upperThreshold}
+            showWinsorized={true}
+          />
         </div>
       </div>
     </div>
   );
 }
 
-function HistogramChart({ data, title, color, domain, thresholdValue }: { data: number[], title: string, color: string, domain: [number, number], thresholdValue?: number }) {
-  const histogramData = useMemo(() => {
+interface HistogramChartProps {
+  data: number[];
+  originalData?: number[];
+  title: string;
+  color: string;
+  domain: [number, number];
+  thresholdValue?: number;
+  showWinsorized?: boolean;
+}
+
+function HistogramChart({ data, originalData, title, color, domain, thresholdValue, showWinsorized }: HistogramChartProps) {
+  const dotData = useMemo(() => {
     const [min, max] = domain;
-    const binCount = 30;
+    const binCount = 40;
     const binWidth = (max - min) / binCount;
 
-    const bins = Array.from({ length: binCount }, (_, i) => ({
-      start: min + i * binWidth,
-      end: min + (i + 1) * binWidth,
-      count: 0,
-      midpoint: min + (i + 0.5) * binWidth,
-      hasCappedValues: false
-    }));
+    const bins: { [key: number]: { normal: number; capped: number } } = {};
 
-    data.forEach(val => {
+    data.forEach((val, idx) => {
       const binIndex = Math.min(Math.max(Math.floor((val - min) / binWidth), 0), binCount - 1);
-      bins[binIndex].count++;
+      if (!bins[binIndex]) {
+        bins[binIndex] = { normal: 0, capped: 0 };
+      }
+
+      if (showWinsorized && originalData && thresholdValue !== undefined) {
+        const wasWinsorized = originalData[idx] > thresholdValue;
+        if (wasWinsorized) {
+          bins[binIndex].capped++;
+        } else {
+          bins[binIndex].normal++;
+        }
+      } else {
+        bins[binIndex].normal++;
+      }
     });
 
-    // Mark bins that contain the threshold value (where capped values end up)
-    if (thresholdValue !== undefined) {
-      const thresholdBinIndex = Math.min(Math.max(Math.floor((thresholdValue - min) / binWidth), 0), binCount - 1);
-      bins[thresholdBinIndex].hasCappedValues = true;
-    }
+    const dots: { x: number; y: number; isCapped: boolean }[] = [];
 
-    return bins;
-  }, [data, domain, thresholdValue]);
+    Object.entries(bins).forEach(([binIndexStr, counts]) => {
+      const binIndex = parseInt(binIndexStr);
+      const xPos = min + (binIndex + 0.5) * binWidth;
+
+      for (let i = 0; i < counts.normal; i++) {
+        dots.push({ x: xPos, y: i + 1, isCapped: false });
+      }
+      for (let i = 0; i < counts.capped; i++) {
+        dots.push({ x: xPos, y: counts.normal + i + 1, isCapped: true });
+      }
+    });
+
+    return dots;
+  }, [data, originalData, domain, thresholdValue, showWinsorized]);
+
+  const maxY = Math.max(...dotData.map(d => d.y), 1);
 
   return (
     <div>
       <h4 className="text-sm font-medium text-gray-300 mb-2 text-center">{title}</h4>
       <ResponsiveContainer width="100%" height={200}>
         <ScatterChart margin={{ top: 10, right: 10, left: 10, bottom: 20 }}>
-          <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
+          <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
           <XAxis
             type="number"
-            dataKey="midpoint"
+            dataKey="x"
             domain={domain}
             tickFormatter={(val) => val.toFixed(0)}
-            tick={{ fontSize: 11 }}
+            tick={{ fontSize: 11, fill: '#9ca3af' }}
+            stroke="#4b5563"
           />
           <YAxis
             type="number"
-            dataKey="count"
-            tick={{ fontSize: 11 }}
+            dataKey="y"
+            domain={[0, maxY + 2]}
+            tick={{ fontSize: 11, fill: '#9ca3af' }}
+            stroke="#4b5563"
           />
-          <Scatter data={histogramData} fill={color}>
-            {histogramData.map((entry, index) => (
-              <Cell key={`cell-${index}`} fill={entry.hasCappedValues ? '#ef4444' : color} />
+          <Scatter data={dotData} fill={color}>
+            {dotData.map((entry, index) => (
+              <Cell
+                key={`cell-${index}`}
+                fill={entry.isCapped ? '#ef4444' : color}
+              />
             ))}
           </Scatter>
         </ScatterChart>
       </ResponsiveContainer>
+      {showWinsorized && (
+        <div className="mt-2 flex items-center justify-center gap-4 text-xs">
+          <div className="flex items-center gap-1">
+            <div className="w-2 h-2 rounded-full bg-blue-500"></div>
+            <span className="text-gray-400">Unchanged</span>
+          </div>
+          <div className="flex items-center gap-1">
+            <div className="w-2 h-2 rounded-full bg-red-500"></div>
+            <span className="text-gray-400">Winsorized</span>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
