@@ -15,6 +15,7 @@ import { TestDurationCalculator } from './components/TestDurationCalculator';
 import { EffectDetectionCalculator } from './components/EffectDetectionCalculator';
 import { TestResultsCalculator } from './components/TestResultsCalculator';
 import { WinsorizingPage } from './components/WinsorizingPage';
+import { NormalisationPage } from './components/NormalisationPage';
 
 type PageMode =
   | 'nhst'
@@ -25,6 +26,7 @@ type PageMode =
   | 'cuped'
   | 'fwer'
   | 'winsorizing'
+  | 'normalisation'
   | 'feedback'
   | 'glossary'
   | 'sample-size-calc'
@@ -63,6 +65,8 @@ function App() {
         return <FWERPage />;
       case 'winsorizing':
         return <WinsorizingPage />;
+      case 'normalisation':
+        return <NormalisationPage onBack={() => setCurrentPage('landing')} />;
       case 'feedback':
         return <FeedbackPage />;
       case 'glossary':

@@ -2,7 +2,7 @@ import { Eye, Shield, Scale, Clock, GitMerge, TrendingUp } from 'lucide-react';
 
 interface LandingPageProps {
   onGetStarted: (
-    mode: 'nhst' | 'peeking' | 'guardrails' | 'imbalanced' | 'cuped' | 'fwer' | 'winsorizing' | 'sample-size-calc' | 'test-duration-calc' | 'effect-detection-calc' | 'test-results-calc'
+    mode: 'nhst' | 'peeking' | 'guardrails' | 'imbalanced' | 'cuped' | 'fwer' | 'winsorizing' | 'normalisation' | 'sample-size-calc' | 'test-duration-calc' | 'effect-detection-calc' | 'test-results-calc'
   ) => void;
 }
 
@@ -77,6 +77,12 @@ export function LandingPage({ onGetStarted }: LandingPageProps) {
       title="Winsorizing Simulator"
       description="Explore how winsorizing handles outliers by capping extreme values to reduce variance and improve statistical precision."
       onClick={() => onGetStarted('winsorizing')}
+    />,
+    <Card
+      key="normalisation"
+      title="Normalisation Simulator"
+      description="Learn how to normalise metrics across segments with different baselines to ensure comparable aggregation in experiments."
+      onClick={() => onGetStarted('normalisation')}
     />,
   ];
 

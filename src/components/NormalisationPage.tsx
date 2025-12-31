@@ -1,0 +1,213 @@
+import { useState, useEffect } from 'react';
+import { ArrowLeft } from 'lucide-react';
+import { Breadcrumb } from './Breadcrumb';
+import { NormalisationControls } from './NormalisationControls';
+import { NormalisationResultsDisplay } from './NormalisationResultsDisplay';
+import { NormalisationChart } from './NormalisationChart';
+import { runNormalisationSimulation, NormalisationResults, GroupConfig } from '../utils/normalisationSimulation';
+
+interface Props {
+  onBack: () => void;
+}
+
+const DEFAULT_GROUPS: GroupConfig[] = [
+  { name: 'Budget Segment', baselineMean: 25, baselineStd: 8 },
+  { name: 'Mid-tier Segment', baselineMean: 75, baselineStd: 20 },
+  { name: 'Premium Segment', baselineMean: 200, baselineStd: 50 }
+];
+
+export function NormalisationPage({ onBack }: Props) {
+  const [groupConfigs, setGroupConfigs] = useState<GroupConfig[]>(DEFAULT_GROUPS);
+  const [sampleSizePerGroup, setSampleSizePerGroup] = useState(1000);
+  const [trueEffectPercent, setTrueEffectPercent] = useState(5);
+  const [results, setResults] = useState<NormalisationResults | null>(null);
+  const [isRunning, setIsRunning] = useState(false);
+  const [viewMode, setViewMode] = useState<'raw' | 'normalised'>('raw');
+
+  const handleGroupConfigChange = (index: number, field: 'baselineMean' | 'baselineStd', value: number) => {
+    const newConfigs = [...groupConfigs];
+    newConfigs[index] = { ...newConfigs[index], [field]: value };
+    setGroupConfigs(newConfigs);
+  };
+
+  const runSimulation = () => {
+    setIsRunning(true);
+    setTimeout(() => {
+      const newResults = runNormalisationSimulation(groupConfigs, sampleSizePerGroup, trueEffectPercent);
+      setResults(newResults);
+      setIsRunning(false);
+    }, 100);
+  };
+
+  useEffect(() => {
+    runSimulation();
+  }, []);
+
+  return (
+    <div className="min-h-screen bg-gray-950 text-white">
+      <div className="max-w-7xl mx-auto px-4 py-6">
+        <Breadcrumb
+          items={[
+            { label: 'Simulators', onClick: onBack },
+            { label: 'Normalisation' }
+          ]}
+        />
+
+        <button
+          onClick={onBack}
+          className="flex items-center gap-2 text-gray-400 hover:text-white transition-colors mb-6"
+        >
+          <ArrowLeft className="w-4 h-4" />
+          Back to Simulators
+        </button>
+
+        <div className="mb-8">
+          <h1 className="text-3xl font-bold text-white mb-3">Metric Normalisation</h1>
+          <p className="text-gray-400 max-w-3xl">
+            When running experiments across segments with different underlying distributions, raw metrics may not be directly comparable. Normalisation transforms metrics to an equivalent scale so aggregated results reflect the treatment effect rather than baseline differences.
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+          <div className="bg-gray-900 rounded-xl border border-gray-800 p-5">
+            <h3 className="text-lg font-semibold text-blue-400 mb-3">The Problem</h3>
+            <p className="text-sm text-gray-300 mb-3">
+              Consider an experiment measuring order value across different customer segments. Budget customers might average $25, while premium customers average $200.
+            </p>
+            <p className="text-sm text-gray-300">
+              If we aggregate raw values, the premium segment dominates the overall mean simply because its values are larger, not because the effect is stronger. A 5% lift means $1.25 for budget but $10 for premium.
+            </p>
+          </div>
+
+          <div className="bg-gray-900 rounded-xl border border-gray-800 p-5">
+            <h3 className="text-lg font-semibold text-green-400 mb-3">The Solution</h3>
+            <p className="text-sm text-gray-300 mb-3">
+              Z-score normalisation transforms each segment's data to have mean 0 and standard deviation 1. This ensures:
+            </p>
+            <ul className="space-y-1.5 text-sm text-gray-300">
+              <li>Each segment contributes equally to the aggregate</li>
+              <li>Effects are measured in comparable units (std devs)</li>
+              <li>High-baseline segments don't dominate results</li>
+            </ul>
+          </div>
+        </div>
+
+        <div className="bg-gray-900 rounded-xl border border-gray-800 p-5 mb-6">
+          <h3 className="text-lg font-semibold text-white mb-4">Normalisation Methods</h3>
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm">
+              <thead>
+                <tr className="border-b border-gray-700">
+                  <th className="text-left py-2 px-3 text-gray-400 font-medium">Method</th>
+                  <th className="text-left py-2 px-3 text-gray-400 font-medium">Formula</th>
+                  <th className="text-left py-2 px-3 text-gray-400 font-medium">When to Use</th>
+                  <th className="text-left py-2 px-3 text-gray-400 font-medium">Notes</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr className="border-b border-gray-800">
+                  <td className="py-2 px-3 text-white font-medium">Min-Max Scaling</td>
+                  <td className="py-2 px-3 text-gray-300 font-mono text-xs">x' = (x - min) / (max - min)</td>
+                  <td className="py-2 px-3 text-gray-300">Fixed, bounded range</td>
+                  <td className="py-2 px-3 text-gray-400">Fast and intuitive; sensitive to outliers</td>
+                </tr>
+                <tr className="border-b border-gray-800">
+                  <td className="py-2 px-3 text-white font-medium">Divide by Max</td>
+                  <td className="py-2 px-3 text-gray-300 font-mono text-xs">x' = x / max</td>
+                  <td className="py-2 px-3 text-gray-300">Quick comparison, values greater than or equal to 0</td>
+                  <td className="py-2 px-3 text-gray-400">Simpler; depends on max stability</td>
+                </tr>
+                <tr className="border-b border-gray-800 bg-blue-900/20">
+                  <td className="py-2 px-3 text-blue-400 font-medium">Z-score (Standardisation)</td>
+                  <td className="py-2 px-3 text-gray-300 font-mono text-xs">x' = (x - mean) / std</td>
+                  <td className="py-2 px-3 text-gray-300">Aggregation across segments</td>
+                  <td className="py-2 px-3 text-gray-400">Widely used; centers and scales distribution</td>
+                </tr>
+                <tr className="border-b border-gray-800">
+                  <td className="py-2 px-3 text-white font-medium">Percent-of-Mean</td>
+                  <td className="py-2 px-3 text-gray-300 font-mono text-xs">x' = x / mean</td>
+                  <td className="py-2 px-3 text-gray-300">Relative effect matters more</td>
+                  <td className="py-2 px-3 text-gray-400">More interpretable in business settings</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <p className="text-xs text-gray-500 mt-3">
+            This simulator uses Z-score standardisation, highlighted above.
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <div className="lg:col-span-1">
+            <NormalisationControls
+              groupConfigs={groupConfigs}
+              sampleSizePerGroup={sampleSizePerGroup}
+              trueEffectPercent={trueEffectPercent}
+              onGroupConfigChange={handleGroupConfigChange}
+              onSampleSizeChange={setSampleSizePerGroup}
+              onTrueEffectChange={setTrueEffectPercent}
+              onRunSimulation={runSimulation}
+              isRunning={isRunning}
+            />
+          </div>
+
+          <div className="lg:col-span-2 space-y-4">
+            {results && (
+              <>
+                <div className="flex gap-2 mb-4">
+                  <button
+                    onClick={() => setViewMode('raw')}
+                    className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+                      viewMode === 'raw'
+                        ? 'bg-blue-600 text-white'
+                        : 'bg-gray-800 text-gray-400 hover:text-white'
+                    }`}
+                  >
+                    Raw Values
+                  </button>
+                  <button
+                    onClick={() => setViewMode('normalised')}
+                    className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+                      viewMode === 'normalised'
+                        ? 'bg-blue-600 text-white'
+                        : 'bg-gray-800 text-gray-400 hover:text-white'
+                    }`}
+                  >
+                    Normalised Values
+                  </button>
+                </div>
+
+                <NormalisationChart results={results} viewMode={viewMode} />
+                <NormalisationResultsDisplay results={results} />
+              </>
+            )}
+          </div>
+        </div>
+
+        <div className="mt-8 bg-amber-900/30 rounded-xl border border-amber-700 p-5">
+          <h3 className="text-lg font-semibold text-amber-300 mb-2">When to Use Normalisation</h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <h4 className="text-sm font-medium text-green-400 mb-2">Good Use Cases</h4>
+              <ul className="space-y-1 text-sm text-gray-300">
+                <li>Multi-region experiments with currency differences</li>
+                <li>Cross-segment analysis (e.g., new vs returning users)</li>
+                <li>Product categories with different price points</li>
+                <li>Time-of-day effects with varying baseline activity</li>
+              </ul>
+            </div>
+            <div>
+              <h4 className="text-sm font-medium text-red-400 mb-2">Caution Needed</h4>
+              <ul className="space-y-1 text-sm text-gray-300">
+                <li>When absolute business impact matters more than relative</li>
+                <li>If segments have very different sample sizes</li>
+                <li>When segment-level effects need separate interpretation</li>
+                <li>If normalisation parameters can be influenced by treatment</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
