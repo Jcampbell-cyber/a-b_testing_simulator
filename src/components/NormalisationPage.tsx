@@ -72,8 +72,11 @@ export function NormalisationPage({ onBack }: Props) {
             <p className="text-sm text-gray-300 mb-3">
               Consider an experiment measuring order value across regions with different price levels. If randomisation happens to assign more users from a high-priced region to treatment, that group will show a higher average even if the treatment has no real effect.
             </p>
-            <p className="text-sm text-gray-300">
+            <p className="text-sm text-gray-300 mb-3">
               The raw data has high variance because values from different regions are on completely different scales. This inflates confidence intervals and makes it harder to detect true effects.
+            </p>
+            <p className="text-sm text-gray-300">
+              Moreover, when treatment effects apply proportionally, a +$5 absolute uplift might represent a meaningful 20% gain in a low-price region but only a negligible 2.5% increase in a high-price region. In raw aggregation, the signal gets dominated by the high-volume, high-price market where the percentage effect appears smallest, potentially masking significant relative improvements in smaller markets.
             </p>
           </div>
 
