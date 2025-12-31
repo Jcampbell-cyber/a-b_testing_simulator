@@ -12,7 +12,6 @@ interface Props {
 
 const DEFAULT_GROUPS: GroupConfig[] = [
   { name: 'Southeast Asia', baselineMean: 25, baselineStd: 8 },
-  { name: 'Europe', baselineMean: 75, baselineStd: 20 },
   { name: 'North America', baselineMean: 200, baselineStd: 50 }
 ];
 

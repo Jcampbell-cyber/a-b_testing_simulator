@@ -6,7 +6,7 @@ interface Props {
 }
 
 export function NormalisationResultsDisplay({ results }: Props) {
-  const { groups, aggregatedRaw, aggregatedNorm, trueEffectPercent } = results;
+  const { groups, aggregatedRaw, aggregatedNorm } = results;
 
   const ciWidthRaw = aggregatedRaw.ci95[1] - aggregatedRaw.ci95[0];
   const ciWidthNorm = aggregatedNorm.ci95[1] - aggregatedNorm.ci95[0];
@@ -51,6 +51,23 @@ export function NormalisationResultsDisplay({ results }: Props) {
                   </td>
                 </tr>
               ))}
+              <tr className="border-t-2 border-gray-700 bg-gray-800/50">
+                <td className="py-2 px-3 text-white font-bold">Total</td>
+                <td className="py-2 px-3 text-right text-gray-400">-</td>
+                <td className="py-2 px-3 text-right text-white font-semibold">{aggregatedRaw.controlMean.toFixed(2)}</td>
+                <td className="py-2 px-3 text-right text-white font-semibold">{aggregatedRaw.treatmentMean.toFixed(2)}</td>
+                <td className={`py-2 px-3 text-right font-bold ${aggregatedRaw.lift >= 0 ? 'text-green-400' : 'text-red-400'}`}>
+                  {aggregatedRaw.lift >= 0 ? '+' : ''}{aggregatedRaw.lift.toFixed(2)}
+                </td>
+                <td className={`py-2 px-3 text-right font-bold ${aggregatedRaw.liftPercent >= 0 ? 'text-green-400' : 'text-red-400'}`}>
+                  {aggregatedRaw.liftPercent >= 0 ? '+' : ''}{aggregatedRaw.liftPercent.toFixed(1)}%
+                </td>
+                <td className="py-2 px-3 text-right text-blue-400 font-semibold">{aggregatedNorm.controlMean.toFixed(3)}</td>
+                <td className="py-2 px-3 text-right text-blue-400 font-semibold">{aggregatedNorm.treatmentMean.toFixed(3)}</td>
+                <td className={`py-2 px-3 text-right font-bold ${aggregatedNorm.lift >= 0 ? 'text-green-400' : 'text-red-400'}`}>
+                  {aggregatedNorm.lift >= 0 ? '+' : ''}{aggregatedNorm.lift.toFixed(3)}
+                </td>
+              </tr>
             </tbody>
           </table>
         </div>

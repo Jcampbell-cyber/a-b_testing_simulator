@@ -232,10 +232,12 @@ export function runNormalisationSimulation(
   const normCI95: [number, number] = [normLift - 1.96 * normSE, normLift + 1.96 * normSE];
 
   const normLiftPercent = rawLiftPercent;
-  const percentSE = (rawSE / rawControlMean) * 100;
+  const seRatio = normSE / rawSE;
+  const rawPercentSE = (rawSE / rawControlMean) * 100;
+  const normPercentSE = rawPercentSE * seRatio;
   const normCI95Percent: [number, number] = [
-    rawLiftPercent - 1.96 * percentSE,
-    rawLiftPercent + 1.96 * percentSE
+    rawLiftPercent - 1.96 * normPercentSE,
+    rawLiftPercent + 1.96 * normPercentSE
   ];
 
   return {
