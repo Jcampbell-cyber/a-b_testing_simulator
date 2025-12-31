@@ -11,9 +11,9 @@ interface Props {
 }
 
 const DEFAULT_GROUPS: GroupConfig[] = [
-  { name: 'Budget Segment', baselineMean: 25, baselineStd: 8 },
-  { name: 'Mid-tier Segment', baselineMean: 75, baselineStd: 20 },
-  { name: 'Premium Segment', baselineMean: 200, baselineStd: 50 }
+  { name: 'Southeast Asia', baselineMean: 25, baselineStd: 8 },
+  { name: 'Europe', baselineMean: 75, baselineStd: 20 },
+  { name: 'North America', baselineMean: 200, baselineStd: 50 }
 ];
 
 export function NormalisationPage({ onBack }: Props) {
@@ -64,7 +64,7 @@ export function NormalisationPage({ onBack }: Props) {
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-white mb-3">Metric Normalisation</h1>
           <p className="text-gray-400">
-            When running experiments across segments with different underlying distributions, raw metrics may not be directly comparable. Normalisation transforms metrics to an equivalent scale so aggregated results reflect the treatment effect rather than baseline differences.
+            When running experiments across regions with different price levels, raw metrics may not be directly comparable. Normalisation transforms metrics to an equivalent scale so aggregated results reflect the treatment effect rather than baseline differences between markets.
           </p>
         </div>
 
@@ -72,22 +72,22 @@ export function NormalisationPage({ onBack }: Props) {
           <div className="bg-gray-900 rounded-xl border border-gray-800 p-5">
             <h3 className="text-lg font-semibold text-blue-400 mb-3">The Problem</h3>
             <p className="text-sm text-gray-300 mb-3">
-              Consider an experiment measuring order value across different customer segments. Budget customers might average $25, while premium customers average $200.
+              Consider an experiment measuring order value across different regions. Southeast Asia might average $25, while North America averages $200 due to higher local prices.
             </p>
             <p className="text-sm text-gray-300">
-              If we aggregate raw values, the premium segment dominates the overall mean simply because its values are larger, not because the effect is stronger. A 5% lift means $1.25 for budget but $10 for premium.
+              If we aggregate raw values, North America dominates the overall mean simply because its values are larger, not because the effect is stronger. A 5% lift means $1.25 in Southeast Asia but $10 in North America.
             </p>
           </div>
 
           <div className="bg-gray-900 rounded-xl border border-gray-800 p-5">
             <h3 className="text-lg font-semibold text-green-400 mb-3">The Solution</h3>
             <p className="text-sm text-gray-300 mb-3">
-              Z-score normalisation transforms each segment's data to have mean 0 and standard deviation 1. This ensures:
+              Z-score normalisation transforms each region's data to have mean 0 and standard deviation 1. This ensures:
             </p>
             <ul className="space-y-1.5 text-sm text-gray-300">
-              <li>Each segment contributes equally to the aggregate</li>
+              <li>Each region contributes equally to the aggregate</li>
               <li>Effects are measured in comparable units (std devs)</li>
-              <li>High-baseline segments don't dominate results</li>
+              <li>High-priced regions don't dominate results</li>
             </ul>
           </div>
         </div>
@@ -120,7 +120,7 @@ export function NormalisationPage({ onBack }: Props) {
                 <tr className="border-b border-gray-800 bg-blue-900/20">
                   <td className="py-2 px-3 text-blue-400 font-medium">Z-score (Standardisation)</td>
                   <td className="py-2 px-3 text-gray-300 font-mono text-xs">x' = (x - mean) / std</td>
-                  <td className="py-2 px-3 text-gray-300">Aggregation across segments</td>
+                  <td className="py-2 px-3 text-gray-300">Aggregation across regions</td>
                   <td className="py-2 px-3 text-gray-400">Widely used; centers and scales distribution</td>
                 </tr>
                 <tr className="border-b border-gray-800">
@@ -190,18 +190,18 @@ export function NormalisationPage({ onBack }: Props) {
             <div>
               <h4 className="text-sm font-medium text-green-400 mb-2">Good Use Cases</h4>
               <ul className="space-y-1 text-sm text-gray-300">
-                <li>Multi-region experiments with currency differences</li>
-                <li>Cross-segment analysis (e.g., new vs returning users)</li>
-                <li>Product categories with different price points</li>
-                <li>Time-of-day effects with varying baseline activity</li>
+                <li>Multi-region experiments with different price levels</li>
+                <li>Cross-market analysis with currency differences</li>
+                <li>Geographic regions with varying cost of living</li>
+                <li>Markets at different maturity stages</li>
               </ul>
             </div>
             <div>
               <h4 className="text-sm font-medium text-red-400 mb-2">Caution Needed</h4>
               <ul className="space-y-1 text-sm text-gray-300">
-                <li>When absolute business impact matters more than relative</li>
-                <li>If segments have very different sample sizes</li>
-                <li>When segment-level effects need separate interpretation</li>
+                <li>When absolute revenue impact matters more than relative</li>
+                <li>If regions have very different sample sizes</li>
+                <li>When region-level effects need separate interpretation</li>
                 <li>If normalisation parameters can be influenced by treatment</li>
               </ul>
             </div>

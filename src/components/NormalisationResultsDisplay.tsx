@@ -11,13 +11,13 @@ export function NormalisationResultsDisplay({ results }: Props) {
   return (
     <div className="space-y-4">
       <div className="bg-gray-900 rounded-xl border border-gray-800 p-5">
-        <h3 className="text-lg font-semibold text-white mb-4">Per-Segment Results</h3>
+        <h3 className="text-lg font-semibold text-white mb-4">Per-Region Results</h3>
 
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead>
               <tr className="border-b border-gray-700">
-                <th className="text-left py-2 px-3 text-gray-400 font-medium">Segment</th>
+                <th className="text-left py-2 px-3 text-gray-400 font-medium">Region</th>
                 <th className="text-right py-2 px-3 text-gray-400 font-medium">Baseline</th>
                 <th className="text-right py-2 px-3 text-gray-400 font-medium">Control</th>
                 <th className="text-right py-2 px-3 text-gray-400 font-medium">Treatment</th>
@@ -45,7 +45,7 @@ export function NormalisationResultsDisplay({ results }: Props) {
         </div>
 
         <p className="text-xs text-gray-500 mt-3">
-          Notice how the absolute lift varies greatly between segments due to different baselines, even though the relative effect ({trueEffectPercent}%) is the same.
+          Notice how the absolute lift varies greatly between regions due to different price levels, even though the relative effect ({trueEffectPercent}%) is the same.
         </p>
       </div>
 
@@ -56,7 +56,7 @@ export function NormalisationResultsDisplay({ results }: Props) {
             <h3 className="text-lg font-semibold text-red-400">Raw Aggregation</h3>
           </div>
           <p className="text-xs text-gray-400 mb-4">
-            Pooling raw values across segments with different scales
+            Pooling raw values across regions with different price levels
           </p>
 
           <div className="space-y-3">
@@ -100,7 +100,7 @@ export function NormalisationResultsDisplay({ results }: Props) {
 
           <div className="mt-4 p-3 bg-red-900/20 rounded-lg border border-red-800/50">
             <p className="text-xs text-red-300">
-              The aggregated mean is dominated by high-baseline segments, making the result hard to interpret and potentially misleading.
+              The aggregated mean is dominated by high-priced regions, making the result hard to interpret and potentially misleading.
             </p>
           </div>
         </div>
@@ -111,7 +111,7 @@ export function NormalisationResultsDisplay({ results }: Props) {
             <h3 className="text-lg font-semibold text-green-400">Normalised Aggregation</h3>
           </div>
           <p className="text-xs text-gray-400 mb-4">
-            Z-score standardisation within each segment before pooling
+            Z-score standardisation within each region before pooling
           </p>
 
           <div className="space-y-3">
@@ -149,7 +149,7 @@ export function NormalisationResultsDisplay({ results }: Props) {
 
           <div className="mt-4 p-3 bg-green-900/20 rounded-lg border border-green-800/50">
             <p className="text-xs text-green-300">
-              Each segment contributes equally to the result regardless of its baseline scale. The effect is measured in comparable units.
+              Each region contributes equally to the result regardless of its local price level. The effect is measured in comparable units.
             </p>
           </div>
         </div>
@@ -163,7 +163,7 @@ export function NormalisationResultsDisplay({ results }: Props) {
           <div>
             <h4 className="text-sm font-semibold text-blue-300 mb-1">Interpreting Normalised Results</h4>
             <p className="text-xs text-blue-200">
-              After Z-score normalisation, the effect is measured in standard deviation units. A lift of 0.1 means the treatment moved outcomes by 0.1 standard deviations above control. This is comparable across segments regardless of their original scale.
+              After Z-score normalisation, the effect is measured in standard deviation units. A lift of 0.1 means the treatment moved outcomes by 0.1 standard deviations above control. This is comparable across regions regardless of their local price levels.
             </p>
           </div>
         </div>

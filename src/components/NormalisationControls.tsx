@@ -29,10 +29,10 @@ export function NormalisationControls({
       <div className="space-y-5">
         <div>
           <label className="block text-sm font-medium text-gray-300 mb-2">
-            Segment Configurations
+            Region Configurations
           </label>
           <p className="text-xs text-gray-500 mb-3">
-            Each segment has a different baseline distribution (e.g., different markets, user types, or product categories)
+            Each region has a different baseline distribution due to local price levels and market conditions
           </p>
 
           <div className="space-y-3">
@@ -66,7 +66,7 @@ export function NormalisationControls({
 
         <div>
           <label className="block text-sm font-medium text-gray-300 mb-1">
-            Sample Size per Segment: {sampleSizePerGroup.toLocaleString()}
+            Sample Size per Region: {sampleSizePerGroup.toLocaleString()}
           </label>
           <input
             type="range"
@@ -88,7 +88,7 @@ export function NormalisationControls({
             True Treatment Effect: {trueEffectPercent}%
           </label>
           <p className="text-xs text-gray-500 mb-2">
-            The same relative effect is applied to all segments
+            The same relative effect is applied to all regions
           </p>
           <input
             type="range"
