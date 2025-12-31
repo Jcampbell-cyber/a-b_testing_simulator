@@ -12,8 +12,8 @@ export function WinsorizingPage() {
   const [baselineStd, setBaselineStd] = useState(300);
   const [outlierRate, setOutlierRate] = useState(0.05);
   const [outlierMagnitude, setOutlierMagnitude] = useState(5);
-  const [lowerPercentile, setLowerPercentile] = useState(5);
-  const [upperPercentile, setUpperPercentile] = useState(95);
+  const [lowerPercentile, setLowerPercentile] = useState(1);
+  const [upperPercentile, setUpperPercentile] = useState(99);
   const [treatmentUplift, setTreatmentUplift] = useState(5);
   const [results, setResults] = useState<WinsorizingResults | null>(null);
   const [abTestResults, setAbTestResults] = useState<ABTestResults | null>(null);
@@ -71,11 +71,11 @@ export function WinsorizingPage() {
                 with less extreme values at specified percentile thresholds, rather than removing them entirely.
               </p>
               <p>
-                For example, with 5th and 95th percentile winsorizing:
+                For example, with 1st and 99th percentile winsorizing:
               </p>
               <ul className="list-disc list-inside space-y-1 ml-4">
-                <li>All values below the 5th percentile are replaced with the 5th percentile value</li>
-                <li>All values above the 95th percentile are replaced with the 95th percentile value</li>
+                <li>All values below the 1st percentile are replaced with the 1st percentile value</li>
+                <li>All values above the 99th percentile are replaced with the 99th percentile value</li>
                 <li>All other values remain unchanged</li>
               </ul>
               <p className="mt-3">
@@ -182,7 +182,7 @@ export function WinsorizingPage() {
                 </ul>
                 <p className="mt-3 text-blue-700 bg-blue-50 p-2 rounded">
                   <strong>Pro Tip:</strong> Try different outlier rates (2-10%) and percentile thresholds (1-10% and 90-99%)
-                  to see how they affect your results. Common choices are 1st/99th or 5th/95th percentiles.
+                  to see how they affect your results. Common choices are 1st/99th (default) or 5th/95th percentiles.
                 </p>
               </div>
             }

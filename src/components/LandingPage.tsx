@@ -2,7 +2,7 @@ import { Eye, Shield, Scale, Clock, GitMerge, TrendingUp } from 'lucide-react';
 
 interface LandingPageProps {
   onGetStarted: (
-    mode: 'nhst' | 'peeking' | 'guardrails' | 'imbalanced' | 'cuped' | 'fwer' | 'sample-size-calc' | 'test-duration-calc' | 'effect-detection-calc' | 'test-results-calc'
+    mode: 'nhst' | 'peeking' | 'guardrails' | 'imbalanced' | 'cuped' | 'fwer' | 'winsorizing' | 'sample-size-calc' | 'test-duration-calc' | 'effect-detection-calc' | 'test-results-calc'
   ) => void;
 }
 
@@ -71,6 +71,12 @@ export function LandingPage({ onGetStarted }: LandingPageProps) {
       title="Family‑Wise Error Rate"
       description="Simulate post‑hoc corrections like Bonferroni, Holm, Tukey, and Dunnett to explore their impact on false‑positive and false‑negative rates."
       onClick={() => onGetStarted('fwer')}
+    />,
+    <Card
+      key="winsorizing"
+      title="Winsorizing Simulator"
+      description="Explore how winsorizing handles outliers by capping extreme values to reduce variance and improve statistical precision."
+      onClick={() => onGetStarted('winsorizing')}
     />,
   ];
 
