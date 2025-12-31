@@ -63,7 +63,7 @@ export function NormalisationPage({ onBack }: Props) {
 
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-white mb-3">Metric Normalisation</h1>
-          <p className="text-gray-400 max-w-3xl">
+          <p className="text-gray-400">
             When running experiments across segments with different underlying distributions, raw metrics may not be directly comparable. Normalisation transforms metrics to an equivalent scale so aggregated results reflect the treatment effect rather than baseline differences.
           </p>
         </div>
