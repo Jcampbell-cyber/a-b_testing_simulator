@@ -21,6 +21,7 @@ export function Navigation({ currentPage, onNavigate }: NavigationProps) {
     { id: 'imbalanced', label: 'Imbalanced Flights', group: 'Understanding & Simulators' },
     { id: 'cuped', label: 'CUPED Variance Reduction', group: 'Understanding & Simulators' },
     { id: 'fwer', label: 'Family-Wise Error Rate', group: 'Understanding & Simulators' },
+    { id: 'winsorizing', label: 'Winsorizing Simulator', group: 'Understanding & Simulators' },
     { id: 'glossary', label: 'Glossary', group: null },
     { id: 'feedback', label: 'Feedback & Enquiries', group: null },
   ];

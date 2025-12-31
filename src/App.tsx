@@ -14,6 +14,7 @@ import { SampleSizeCalculator } from './components/SampleSizeCalculator';
 import { TestDurationCalculator } from './components/TestDurationCalculator';
 import { EffectDetectionCalculator } from './components/EffectDetectionCalculator';
 import { TestResultsCalculator } from './components/TestResultsCalculator';
+import { WinsorizingPage } from './components/WinsorizingPage';
 
 type PageMode =
   | 'nhst'
@@ -23,6 +24,7 @@ type PageMode =
   | 'imbalanced'
   | 'cuped'
   | 'fwer'
+  | 'winsorizing'
   | 'feedback'
   | 'glossary'
   | 'sample-size-calc'
@@ -59,6 +61,8 @@ function App() {
         return <CUPEDPage />;
       case 'fwer':
         return <FWERPage />;
+      case 'winsorizing':
+        return <WinsorizingPage />;
       case 'feedback':
         return <FeedbackPage />;
       case 'glossary':

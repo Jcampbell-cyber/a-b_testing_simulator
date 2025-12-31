@@ -12,6 +12,7 @@ const pageLabels: Record<string, string> = {
   fwer: 'Family-Wise Error Rate',
   imbalanced: 'Imbalanced Flights',
   cuped: 'CUPED Variance Reduction',
+  winsorizing: 'Winsorizing Simulator',
   feedback: 'Feedback & Enquiries',
   glossary: 'Glossary',
 };
