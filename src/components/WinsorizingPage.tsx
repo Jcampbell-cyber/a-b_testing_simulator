@@ -92,6 +92,20 @@ export function WinsorizingPage() {
             </div>
           </div>
 
+          <div className="bg-gray-800 rounded-lg border border-cyan-700/50 p-5">
+            <h3 className="text-lg font-semibold text-cyan-400 mb-3">How to Apply in A/B Tests</h3>
+            <p className="text-sm text-gray-300 mb-2">
+              Calculate the percentile threshold using the <strong className="text-white">combined population</strong> (both control and treatment together), then apply this single threshold to all data.
+            </p>
+            <ul className="space-y-1.5 text-sm text-gray-300 mt-3">
+              <li><strong className="text-white">Do:</strong> Pool all data, find the 99th percentile, cap both groups at that value</li>
+              <li><strong className="text-white">Don't:</strong> Calculate separate thresholds for control and treatment</li>
+            </ul>
+            <p className="text-sm text-gray-400 mt-3">
+              Since both groups share the same threshold, winsorizing can affect each group's mean differently depending on their outlier distribution. A group with more extreme outliers will see a larger reduction in mean.
+            </p>
+          </div>
+
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="bg-gray-800 rounded-lg border border-gray-700 p-5">
               <h3 className="text-lg font-semibold text-green-400 mb-3">When to Use</h3>
