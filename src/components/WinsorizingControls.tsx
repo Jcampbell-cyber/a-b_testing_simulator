@@ -46,20 +46,20 @@ export function WinsorizingControls({
           <div className="flex gap-2">
             <button
               onClick={() => setMode('single')}
-              className={`flex-1 px-4 py-2 rounded-md text-sm font-medium transition-colors ${
+              className={`flex-1 px-4 py-2 rounded-md text-sm font-medium ${
                 mode === 'single'
                   ? 'bg-blue-600 text-white'
-                  : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
+                  : 'bg-gray-700 text-gray-300'
               }`}
             >
               Single Sample
             </button>
             <button
               onClick={() => setMode('abtest')}
-              className={`flex-1 px-4 py-2 rounded-md text-sm font-medium transition-colors ${
+              className={`flex-1 px-4 py-2 rounded-md text-sm font-medium ${
                 mode === 'abtest'
                   ? 'bg-blue-600 text-white'
-                  : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
+                  : 'bg-gray-700 text-gray-300'
               }`}
             >
               A/B Test

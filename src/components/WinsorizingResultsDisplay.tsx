@@ -1,4 +1,4 @@
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, Cell } from 'recharts';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import { CheckCircle2, XCircle, TrendingDown } from 'lucide-react';
 import type { WinsorizingResults, ABTestResults } from '../utils/winsorizingSimulation';
 
@@ -244,14 +244,23 @@ function ABTestResultsDisplay({ results }: { results: ABTestResults }) {
             <XAxis dataKey="test" />
             <YAxis yAxisId="left" orientation="left" label={{ value: 'P-Value', angle: -90, position: 'insideLeft' }} />
             <YAxis yAxisId="right" orientation="right" label={{ value: 'CI Width', angle: 90, position: 'insideRight' }} />
-            <Tooltip />
+            <Tooltip
+              content={({ active, payload }) => {
+                if (active && payload && payload.length) {
+                  return (
+                    <div className="bg-white p-3 border border-gray-200 rounded shadow-lg">
+                      <p className="text-sm font-medium mb-2">{payload[0].payload.test}</p>
+                      <p className="text-sm text-blue-600">P-Value: {Number(payload[0].value).toFixed(4)}</p>
+                      <p className="text-sm text-amber-600">CI Width: {Number(payload[1].value).toFixed(2)}</p>
+                    </div>
+                  );
+                }
+                return null;
+              }}
+            />
             <Legend />
-            <Bar yAxisId="left" dataKey="pValue" fill="#3b82f6" name="P-Value">
-              {comparisonData.map((entry, index) => (
-                <Cell key={`cell-${index}`} fill={entry.pValue < 0.05 ? '#10b981' : '#ef4444'} />
-              ))}
-            </Bar>
-            <Bar yAxisId="right" dataKey="ciWidth" fill="#8b5cf6" name="CI Width" />
+            <Bar yAxisId="left" dataKey="pValue" fill="#3b82f6" name="P-Value (left axis)" />
+            <Bar yAxisId="right" dataKey="ciWidth" fill="#f59e0b" name="CI Width (right axis)" />
           </BarChart>
         </ResponsiveContainer>
       </div>
