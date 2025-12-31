@@ -56,7 +56,7 @@ export function WinsorizingPage() {
         <InfoSection
           title="What is Winsorizing?"
           content={
-            <div className="space-y-3 text-sm text-gray-700">
+            <div className="space-y-3 text-sm">
               <p>
                 <strong>Winsorizing</strong> is a statistical technique for handling outliers by capping extreme values
                 at a specified percentile threshold, rather than removing them entirely.
@@ -88,7 +88,7 @@ export function WinsorizingPage() {
                 <li>When outliers are legitimate but shouldn't dominate the analysis</li>
                 <li>To make results more robust to extreme values while maintaining sample size</li>
               </ul>
-              <p className="mt-3 text-amber-700 bg-amber-50 p-2 rounded">
+              <p className="mt-3 text-amber-300 bg-amber-900/30 p-2 rounded border border-amber-800">
                 <strong>Important:</strong> Winsorizing should be pre-specified in your analysis plan, not applied
                 post-hoc to achieve desired results. Document your winsorizing strategy before analyzing results.
               </p>
