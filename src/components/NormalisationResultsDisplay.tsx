@@ -8,8 +8,8 @@ interface Props {
 export function NormalisationResultsDisplay({ results }: Props) {
   const { groups, aggregatedRaw, aggregatedNorm } = results;
 
-  const ciWidthRaw = aggregatedRaw.ci95[1] - aggregatedRaw.ci95[0];
-  const ciWidthNorm = aggregatedNorm.ci95[1] - aggregatedNorm.ci95[0];
+  const ciWidthRawPercent = aggregatedRaw.ci95Percent[1] - aggregatedRaw.ci95Percent[0];
+  const ciWidthNormPercent = aggregatedNorm.ci95Percent[1] - aggregatedNorm.ci95Percent[0];
 
   return (
     <div className="space-y-4">
@@ -24,11 +24,10 @@ export function NormalisationResultsDisplay({ results }: Props) {
                 <th className="text-right py-2 px-3 text-gray-400 font-medium">Baseline</th>
                 <th className="text-right py-2 px-3 text-gray-400 font-medium">Control</th>
                 <th className="text-right py-2 px-3 text-gray-400 font-medium">Treatment</th>
-                <th className="text-right py-2 px-3 text-gray-400 font-medium">Raw Lift</th>
                 <th className="text-right py-2 px-3 text-gray-400 font-medium">% Lift</th>
                 <th className="text-right py-2 px-3 text-gray-400 font-medium">Z-Score Ctrl</th>
                 <th className="text-right py-2 px-3 text-gray-400 font-medium">Z-Score Trt</th>
-                <th className="text-right py-2 px-3 text-gray-400 font-medium">Z Lift</th>
+                <th className="text-right py-2 px-3 text-gray-400 font-medium">Z % Lift</th>
               </tr>
             </thead>
             <tbody>
@@ -38,16 +37,13 @@ export function NormalisationResultsDisplay({ results }: Props) {
                   <td className="py-2 px-3 text-right text-gray-400">{group.baselineMean.toFixed(1)}</td>
                   <td className="py-2 px-3 text-right text-gray-300">{group.rawControlMean.toFixed(2)}</td>
                   <td className="py-2 px-3 text-right text-gray-300">{group.rawTreatmentMean.toFixed(2)}</td>
-                  <td className={`py-2 px-3 text-right font-medium ${group.rawLift >= 0 ? 'text-green-400' : 'text-red-400'}`}>
-                    {group.rawLift >= 0 ? '+' : ''}{group.rawLift.toFixed(2)}
-                  </td>
                   <td className={`py-2 px-3 text-right font-medium ${group.rawLiftPercent >= 0 ? 'text-green-400' : 'text-red-400'}`}>
                     {group.rawLiftPercent >= 0 ? '+' : ''}{group.rawLiftPercent.toFixed(1)}%
                   </td>
                   <td className="py-2 px-3 text-right text-blue-300">{group.normControlMean.toFixed(3)}</td>
                   <td className="py-2 px-3 text-right text-blue-300">{group.normTreatmentMean.toFixed(3)}</td>
-                  <td className={`py-2 px-3 text-right font-medium ${group.normLift >= 0 ? 'text-green-400' : 'text-red-400'}`}>
-                    {group.normLift >= 0 ? '+' : ''}{group.normLift.toFixed(3)}
+                  <td className={`py-2 px-3 text-right font-medium ${group.normLiftPercent >= 0 ? 'text-green-400' : 'text-red-400'}`}>
+                    {group.normLiftPercent >= 0 ? '+' : ''}{group.normLiftPercent.toFixed(1)}%
                   </td>
                 </tr>
               ))}
@@ -56,16 +52,13 @@ export function NormalisationResultsDisplay({ results }: Props) {
                 <td className="py-2 px-3 text-right text-gray-400">-</td>
                 <td className="py-2 px-3 text-right text-white font-semibold">{aggregatedRaw.controlMean.toFixed(2)}</td>
                 <td className="py-2 px-3 text-right text-white font-semibold">{aggregatedRaw.treatmentMean.toFixed(2)}</td>
-                <td className={`py-2 px-3 text-right font-bold ${aggregatedRaw.lift >= 0 ? 'text-green-400' : 'text-red-400'}`}>
-                  {aggregatedRaw.lift >= 0 ? '+' : ''}{aggregatedRaw.lift.toFixed(2)}
-                </td>
                 <td className={`py-2 px-3 text-right font-bold ${aggregatedRaw.liftPercent >= 0 ? 'text-green-400' : 'text-red-400'}`}>
                   {aggregatedRaw.liftPercent >= 0 ? '+' : ''}{aggregatedRaw.liftPercent.toFixed(1)}%
                 </td>
                 <td className="py-2 px-3 text-right text-blue-400 font-semibold">{aggregatedNorm.controlMean.toFixed(3)}</td>
                 <td className="py-2 px-3 text-right text-blue-400 font-semibold">{aggregatedNorm.treatmentMean.toFixed(3)}</td>
-                <td className={`py-2 px-3 text-right font-bold ${aggregatedNorm.lift >= 0 ? 'text-green-400' : 'text-red-400'}`}>
-                  {aggregatedNorm.lift >= 0 ? '+' : ''}{aggregatedNorm.lift.toFixed(3)}
+                <td className={`py-2 px-3 text-right font-bold ${aggregatedNorm.liftPercent >= 0 ? 'text-green-400' : 'text-red-400'}`}>
+                  {aggregatedNorm.liftPercent >= 0 ? '+' : ''}{aggregatedNorm.liftPercent.toFixed(1)}%
                 </td>
               </tr>
             </tbody>
@@ -86,26 +79,20 @@ export function NormalisationResultsDisplay({ results }: Props) {
 
           <div className="space-y-3">
             <div className="flex justify-between">
-              <span className="text-gray-400">Lift (absolute)</span>
-              <span className={`font-mono font-medium ${aggregatedRaw.lift >= 0 ? 'text-green-400' : 'text-red-400'}`}>
-                {aggregatedRaw.lift >= 0 ? '+' : ''}{aggregatedRaw.lift.toFixed(2)}
-              </span>
-            </div>
-            <div className="flex justify-between">
               <span className="text-gray-400">Lift (%)</span>
               <span className={`font-mono font-medium ${aggregatedRaw.liftPercent >= 0 ? 'text-green-400' : 'text-red-400'}`}>
                 {aggregatedRaw.liftPercent >= 0 ? '+' : ''}{aggregatedRaw.liftPercent.toFixed(2)}%
               </span>
             </div>
             <div className="flex justify-between">
-              <span className="text-gray-400">95% CI</span>
+              <span className="text-gray-400">95% CI (%)</span>
               <span className="text-white font-mono text-sm">
-                [{aggregatedRaw.ci95[0].toFixed(2)}, {aggregatedRaw.ci95[1].toFixed(2)}]
+                [{aggregatedRaw.ci95Percent[0].toFixed(2)}%, {aggregatedRaw.ci95Percent[1].toFixed(2)}%]
               </span>
             </div>
             <div className="flex justify-between">
-              <span className="text-gray-400">CI Width</span>
-              <span className="text-red-400 font-mono font-medium">{ciWidthRaw.toFixed(2)}</span>
+              <span className="text-gray-400">CI Width (%)</span>
+              <span className="text-red-400 font-mono font-medium">{ciWidthRawPercent.toFixed(2)}%</span>
             </div>
             <div className="flex justify-between">
               <span className="text-gray-400">p-value</span>
@@ -132,21 +119,9 @@ export function NormalisationResultsDisplay({ results }: Props) {
 
           <div className="space-y-3">
             <div className="flex justify-between">
-              <span className="text-gray-400">Lift (Z-score)</span>
-              <span className={`font-mono font-medium ${aggregatedNorm.lift >= 0 ? 'text-green-400' : 'text-red-400'}`}>
-                {aggregatedNorm.lift >= 0 ? '+' : ''}{aggregatedNorm.lift.toFixed(4)}
-              </span>
-            </div>
-            <div className="flex justify-between">
               <span className="text-gray-400">Lift (%)</span>
               <span className={`font-mono font-medium ${aggregatedNorm.liftPercent >= 0 ? 'text-green-400' : 'text-red-400'}`}>
                 {aggregatedNorm.liftPercent >= 0 ? '+' : ''}{aggregatedNorm.liftPercent.toFixed(2)}%
-              </span>
-            </div>
-            <div className="flex justify-between">
-              <span className="text-gray-400">95% CI (Z-score)</span>
-              <span className="text-white font-mono text-sm">
-                [{aggregatedNorm.ci95[0].toFixed(4)}, {aggregatedNorm.ci95[1].toFixed(4)}]
               </span>
             </div>
             <div className="flex justify-between">
@@ -156,8 +131,8 @@ export function NormalisationResultsDisplay({ results }: Props) {
               </span>
             </div>
             <div className="flex justify-between">
-              <span className="text-gray-400">CI Width</span>
-              <span className="text-green-400 font-mono font-medium">{ciWidthNorm.toFixed(4)}</span>
+              <span className="text-gray-400">CI Width (%)</span>
+              <span className="text-green-400 font-mono font-medium">{ciWidthNormPercent.toFixed(2)}%</span>
             </div>
             <div className="flex justify-between">
               <span className="text-gray-400">p-value</span>

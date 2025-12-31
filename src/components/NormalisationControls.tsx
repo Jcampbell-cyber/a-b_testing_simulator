@@ -92,16 +92,16 @@ export function NormalisationControls({
           </p>
           <input
             type="range"
-            min="-10"
-            max="20"
+            min="0"
+            max="10"
             step="0.5"
             value={trueEffectPercent}
             onChange={(e) => onTrueEffectChange(Number(e.target.value))}
             className="w-full accent-blue-500"
           />
           <div className="flex justify-between text-xs text-gray-500">
-            <span>-10%</span>
-            <span>+20%</span>
+            <span>0%</span>
+            <span>+10%</span>
           </div>
         </div>
 

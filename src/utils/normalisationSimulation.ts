@@ -13,6 +13,7 @@ export interface GroupData {
   normControlMean: number;
   normTreatmentMean: number;
   normLift: number;
+  normLiftPercent: number;
 }
 
 export interface NormalisationResults {
@@ -26,6 +27,7 @@ export interface NormalisationResults {
     significant: boolean;
     pooledStd: number;
     ci95: [number, number];
+    ci95Percent: [number, number];
   };
   aggregatedNorm: {
     controlMean: number;
@@ -190,6 +192,7 @@ export function runNormalisationSimulation(
     const normControlMean = mean(controlNorm);
     const normTreatmentMean = mean(treatmentNorm);
     const normLift = normTreatmentMean - normControlMean;
+    const normLiftPercent = (normLift / Math.abs(normControlMean)) * 100;
 
     groups.push({
       name: config.name,
@@ -205,7 +208,8 @@ export function runNormalisationSimulation(
       rawLiftPercent,
       normControlMean,
       normTreatmentMean,
-      normLift
+      normLift,
+      normLiftPercent
     });
 
     allControlRaw = allControlRaw.concat(controlRaw);
@@ -222,6 +226,11 @@ export function runNormalisationSimulation(
   const rawPooledStd = std([...allControlRaw, ...allTreatmentRaw]);
   const rawSE = rawPooledStd * Math.sqrt(1/allControlRaw.length + 1/allTreatmentRaw.length);
   const rawCI95: [number, number] = [rawLift - 1.96 * rawSE, rawLift + 1.96 * rawSE];
+  const rawPercentSE = (rawSE / rawControlMean) * 100;
+  const rawCI95Percent: [number, number] = [
+    rawLiftPercent - 1.96 * rawPercentSE,
+    rawLiftPercent + 1.96 * rawPercentSE
+  ];
 
   const normControlMean = mean(allControlNorm);
   const normTreatmentMean = mean(allTreatmentNorm);
@@ -233,7 +242,6 @@ export function runNormalisationSimulation(
 
   const normLiftPercent = rawLiftPercent;
   const seRatio = normSE / rawSE;
-  const rawPercentSE = (rawSE / rawControlMean) * 100;
   const normPercentSE = rawPercentSE * seRatio;
   const normCI95Percent: [number, number] = [
     rawLiftPercent - 1.96 * normPercentSE,
@@ -250,7 +258,8 @@ export function runNormalisationSimulation(
       pValue: rawPValue,
       significant: rawPValue < 0.05,
       pooledStd: rawPooledStd,
-      ci95: rawCI95
+      ci95: rawCI95,
+      ci95Percent: rawCI95Percent
     },
     aggregatedNorm: {
       controlMean: normControlMean,
