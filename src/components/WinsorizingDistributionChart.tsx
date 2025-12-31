@@ -114,14 +114,14 @@ export function WinsorizingDistributionChart({
         <h3 className="text-lg font-semibold text-white mb-4">Histogram Comparison</h3>
         <div className="grid grid-cols-2 gap-4">
           <HistogramChart data={originalData} title="Original Distribution" color="#3b82f6" domain={[Math.min(...originalData), Math.max(...originalData)]} />
-          <HistogramChart data={winsorizedData} title="Winsorized Distribution" color="#ef4444" domain={[Math.min(...originalData), Math.max(...originalData)]} />
+          <HistogramChart data={winsorizedData} title="Winsorized Distribution" color="#3b82f6" domain={[Math.min(...originalData), Math.max(...originalData)]} cappedValues={originalData.filter((val, idx) => val !== winsorizedData[idx])} />
         </div>
       </div>
     </div>
   );
 }
 
-function HistogramChart({ data, title, color, domain }: { data: number[], title: string, color: string, domain: [number, number] }) {
+function HistogramChart({ data, title, color, domain, cappedValues }: { data: number[], title: string, color: string, domain: [number, number], cappedValues?: number[] }) {
   const histogramData = useMemo(() => {
     const [min, max] = domain;
     const binCount = 30;
@@ -131,7 +131,8 @@ function HistogramChart({ data, title, color, domain }: { data: number[], title:
       start: min + i * binWidth,
       end: min + (i + 1) * binWidth,
       count: 0,
-      midpoint: min + (i + 0.5) * binWidth
+      midpoint: min + (i + 0.5) * binWidth,
+      hasCappedValues: false
     }));
 
     data.forEach(val => {
@@ -139,8 +140,16 @@ function HistogramChart({ data, title, color, domain }: { data: number[], title:
       bins[binIndex].count++;
     });
 
+    // Mark bins that contain capped values
+    if (cappedValues) {
+      cappedValues.forEach(val => {
+        const binIndex = Math.min(Math.max(Math.floor((val - min) / binWidth), 0), binCount - 1);
+        bins[binIndex].hasCappedValues = true;
+      });
+    }
+
     return bins;
-  }, [data, domain]);
+  }, [data, domain, cappedValues]);
 
   return (
     <div>
@@ -161,8 +170,8 @@ function HistogramChart({ data, title, color, domain }: { data: number[], title:
             tick={{ fontSize: 11 }}
           />
           <Scatter data={histogramData} fill={color}>
-            {histogramData.map((_, index) => (
-              <Cell key={`cell-${index}`} />
+            {histogramData.map((entry, index) => (
+              <Cell key={`cell-${index}`} fill={entry.hasCappedValues ? '#ef4444' : color} />
             ))}
           </Scatter>
         </ScatterChart>

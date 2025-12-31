@@ -86,8 +86,10 @@ function SingleSampleResults({ results }: { results: WinsorizingResults }) {
               }}
             />
             <Legend />
-            <Bar dataKey="original" fill="#3b82f6" name="Original" />
-            <Bar dataKey="winsorized" fill="#10b981" name="Winsorized" />
+            <Bar dataKey="original" fill="#3b82f6" name="Original" label={{ position: 'top', fontSize: 12, formatter: (val: number) => val.toFixed(2) }}>
+            </Bar>
+            <Bar dataKey="winsorized" fill="#10b981" name="Winsorized" label={{ position: 'top', fontSize: 12, formatter: (val: number) => val.toFixed(2) }}>
+            </Bar>
           </BarChart>
         </ResponsiveContainer>
       </div>
