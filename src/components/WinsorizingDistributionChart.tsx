@@ -4,46 +4,39 @@ import { ScatterChart, Scatter, XAxis, YAxis, CartesianGrid, Tooltip, Legend, Re
 interface WinsorizingDistributionChartProps {
   originalData: number[];
   winsorizedData: number[];
-  lowerPercentile: number;
   upperPercentile: number;
 }
 
 export function WinsorizingDistributionChart({
   originalData,
   winsorizedData,
-  lowerPercentile,
   upperPercentile
 }: WinsorizingDistributionChartProps) {
   const chartData = useMemo(() => {
     const sorted = [...originalData].sort((a, b) => a - b);
-    const lowerThreshold = sorted[Math.floor(sorted.length * lowerPercentile / 100)];
     const upperThreshold = sorted[Math.ceil(sorted.length * upperPercentile / 100) - 1];
 
     return originalData.map((val, idx) => {
-      const isOutlier = val < lowerThreshold || val > upperThreshold;
+      const isOutlier = val > upperThreshold;
       return {
         index: idx,
         original: val,
         winsorized: winsorizedData[idx],
         isOutlier,
-        lowerThreshold,
         upperThreshold
       };
     });
-  }, [originalData, winsorizedData, lowerPercentile, upperPercentile]);
+  }, [originalData, winsorizedData, upperPercentile]);
 
-  const thresholds = useMemo(() => {
+  const upperThreshold = useMemo(() => {
     const sorted = [...originalData].sort((a, b) => a - b);
-    return {
-      lower: sorted[Math.floor(sorted.length * lowerPercentile / 100)],
-      upper: sorted[Math.ceil(sorted.length * upperPercentile / 100) - 1]
-    };
-  }, [originalData, lowerPercentile, upperPercentile]);
+    return sorted[Math.ceil(sorted.length * upperPercentile / 100) - 1];
+  }, [originalData, upperPercentile]);
 
   return (
     <div className="space-y-6">
-      <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-        <h3 className="text-lg font-semibold text-gray-900 mb-4">Distribution with Cutoff Lines</h3>
+      <div className="bg-gray-800 rounded-lg shadow-sm border border-gray-700 p-6">
+        <h3 className="text-lg font-semibold text-white mb-4">Distribution with Cutoff Line</h3>
         <ResponsiveContainer width="100%" height={400}>
           <ScatterChart margin={{ top: 20, right: 30, left: 20, bottom: 20 }}>
             <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
@@ -80,23 +73,12 @@ export function WinsorizingDistributionChart({
             />
             <Legend />
             <ReferenceLine
-              y={thresholds.lower}
+              y={upperThreshold}
               stroke="#ef4444"
               strokeDasharray="5 5"
               strokeWidth={2}
               label={{
-                value: `Lower: ${thresholds.lower.toFixed(0)}`,
-                position: 'right',
-                fill: '#ef4444'
-              }}
-            />
-            <ReferenceLine
-              y={thresholds.upper}
-              stroke="#ef4444"
-              strokeDasharray="5 5"
-              strokeWidth={2}
-              label={{
-                value: `Upper: ${thresholds.upper.toFixed(0)}`,
+                value: `${upperPercentile}th: ${upperThreshold.toFixed(0)}`,
                 position: 'right',
                 fill: '#ef4444'
               }}
@@ -115,21 +97,21 @@ export function WinsorizingDistributionChart({
         <div className="mt-4 flex items-center justify-center gap-6 text-sm">
           <div className="flex items-center gap-2">
             <div className="w-3 h-3 rounded-full bg-blue-500"></div>
-            <span className="text-gray-700">Normal Values</span>
+            <span className="text-gray-300">Normal Values</span>
           </div>
           <div className="flex items-center gap-2">
             <div className="w-3 h-3 rounded-full bg-red-500"></div>
-            <span className="text-gray-700">Outliers (Winsorized)</span>
+            <span className="text-gray-300">Outliers (Capped)</span>
           </div>
           <div className="flex items-center gap-2">
             <div className="w-8 h-0.5 bg-red-500" style={{ borderTop: '2px dashed' }}></div>
-            <span className="text-gray-700">Cutoff Lines</span>
+            <span className="text-gray-300">Cutoff Line</span>
           </div>
         </div>
       </div>
 
-      <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-        <h3 className="text-lg font-semibold text-gray-900 mb-4">Histogram Comparison</h3>
+      <div className="bg-gray-800 rounded-lg shadow-sm border border-gray-700 p-6">
+        <h3 className="text-lg font-semibold text-white mb-4">Histogram Comparison</h3>
         <div className="grid grid-cols-2 gap-4">
           <HistogramChart data={originalData} title="Original Distribution" color="#3b82f6" />
           <HistogramChart data={winsorizedData} title="Winsorized Distribution" color="#10b981" />
@@ -163,7 +145,7 @@ function HistogramChart({ data, title, color }: { data: number[], title: string,
 
   return (
     <div>
-      <h4 className="text-sm font-medium text-gray-700 mb-2 text-center">{title}</h4>
+      <h4 className="text-sm font-medium text-gray-300 mb-2 text-center">{title}</h4>
       <ResponsiveContainer width="100%" height={200}>
         <ScatterChart margin={{ top: 10, right: 10, left: 10, bottom: 20 }}>
           <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />

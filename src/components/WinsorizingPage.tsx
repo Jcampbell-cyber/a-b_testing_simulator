@@ -10,9 +10,6 @@ export function WinsorizingPage() {
   const [sampleSize, setSampleSize] = useState(1000);
   const [baselineMean, setBaselineMean] = useState(1000);
   const [baselineStd, setBaselineStd] = useState(300);
-  const [outlierRate, setOutlierRate] = useState(0.05);
-  const [outlierMagnitude, setOutlierMagnitude] = useState(5);
-  const [lowerPercentile, setLowerPercentile] = useState(1);
   const [upperPercentile, setUpperPercentile] = useState(99);
   const [treatmentUplift, setTreatmentUplift] = useState(5);
   const [results, setResults] = useState<WinsorizingResults | null>(null);
@@ -27,9 +24,6 @@ export function WinsorizingPage() {
           sampleSize,
           baselineMean,
           baselineStd,
-          outlierRate,
-          outlierMagnitude,
-          lowerPercentile,
           upperPercentile
         );
         setResults(simResults);
@@ -40,9 +34,6 @@ export function WinsorizingPage() {
           baselineMean,
           treatmentUplift,
           baselineStd,
-          outlierRate,
-          outlierMagnitude,
-          lowerPercentile,
           upperPercentile
         );
         setAbTestResults(abResults);
@@ -53,11 +44,11 @@ export function WinsorizingPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div className="min-h-screen bg-gray-900">
+      <div className="container mx-auto px-4 py-8">
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">Winsorizing Simulator</h1>
-          <p className="text-lg text-gray-600">
+          <h1 className="text-4xl font-bold text-white mb-2">Winsorizing Simulator</h1>
+          <p className="text-lg text-gray-300">
             Understand how winsorizing handles outliers and improves statistical precision
           </p>
         </div>
@@ -67,16 +58,16 @@ export function WinsorizingPage() {
           content={
             <div className="space-y-3 text-sm text-gray-700">
               <p>
-                <strong>Winsorizing</strong> is a statistical technique for handling outliers by replacing extreme values
-                with less extreme values at specified percentile thresholds, rather than removing them entirely.
+                <strong>Winsorizing</strong> is a statistical technique for handling outliers by capping extreme values
+                at a specified percentile threshold, rather than removing them entirely.
               </p>
               <p>
-                For example, with 1st and 99th percentile winsorizing:
+                For example, with 99th percentile winsorizing:
               </p>
               <ul className="list-disc list-inside space-y-1 ml-4">
-                <li>All values below the 1st percentile are replaced with the 1st percentile value</li>
-                <li>All values above the 99th percentile are replaced with the 99th percentile value</li>
+                <li>All values above the 99th percentile are capped to the 99th percentile value</li>
                 <li>All other values remain unchanged</li>
+                <li>No data points are removed, preserving sample size</li>
               </ul>
               <p className="mt-3">
                 <strong>Key Benefits:</strong>
@@ -116,12 +107,6 @@ export function WinsorizingPage() {
               setBaselineMean={setBaselineMean}
               baselineStd={baselineStd}
               setBaselineStd={setBaselineStd}
-              outlierRate={outlierRate}
-              setOutlierRate={setOutlierRate}
-              outlierMagnitude={outlierMagnitude}
-              setOutlierMagnitude={setOutlierMagnitude}
-              lowerPercentile={lowerPercentile}
-              setLowerPercentile={setLowerPercentile}
               upperPercentile={upperPercentile}
               setUpperPercentile={setUpperPercentile}
               treatmentUplift={treatmentUplift}
@@ -137,7 +122,6 @@ export function WinsorizingPage() {
                 <WinsorizingDistributionChart
                   originalData={results.original.data}
                   winsorizedData={results.winsorized.data}
-                  lowerPercentile={lowerPercentile}
                   upperPercentile={upperPercentile}
                 />
                 <WinsorizingResultsDisplay results={results} abTestResults={null} mode="single" />
@@ -149,44 +133,39 @@ export function WinsorizingPage() {
             )}
 
             {!results && !abTestResults && (
-              <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-12 text-center">
-                <p className="text-gray-500">Configure parameters and click "Run Simulation" to see results</p>
+              <div className="bg-gray-800 rounded-lg shadow-sm border border-gray-700 p-12 text-center">
+                <p className="text-gray-400">Configure parameters and click "Run Simulation" to see results</p>
               </div>
             )}
           </div>
         </div>
 
-        <div className="mt-8">
-          <InfoSection
-            title="Understanding the Results"
-            content={
-              <div className="space-y-3 text-sm text-gray-700">
-                <p>
-                  <strong>Single Sample Mode:</strong> Compare statistics between original and winsorized data to see
-                  how outlier treatment affects mean, standard deviation, and confidence intervals.
-                </p>
-                <ul className="list-disc list-inside space-y-1 ml-4">
-                  <li><strong>Distribution Chart:</strong> Shows original values with red markers indicating outliers that will be capped</li>
-                  <li><strong>Histogram Comparison:</strong> Visual comparison of original vs. winsorized distributions</li>
-                  <li><strong>CI Width Reduction:</strong> Percentage decrease in confidence interval width after winsorizing</li>
-                  <li><strong>Standard Deviation:</strong> Reduction in variability after capping extreme values</li>
-                </ul>
-                <p className="mt-3">
-                  <strong>A/B Test Mode:</strong> See how winsorizing affects statistical significance and effect size estimates
-                  in a two-sample comparison.
-                </p>
-                <ul className="list-disc list-inside space-y-1 ml-4">
-                  <li><strong>P-Value Comparison:</strong> How statistical significance changes with and without winsorizing</li>
-                  <li><strong>Effect Size:</strong> More stable lift estimates with reduced outlier influence</li>
-                  <li><strong>Confidence Intervals:</strong> Narrower CIs typically lead to more decisive test results</li>
-                </ul>
-                <p className="mt-3 text-blue-700 bg-blue-50 p-2 rounded">
-                  <strong>Pro Tip:</strong> Try different outlier rates (2-10%) and percentile thresholds (1-10% and 90-99%)
-                  to see how they affect your results. Common choices are 1st/99th (default) or 5th/95th percentiles.
-                </p>
-              </div>
-            }
-          />
+        <div className="mt-8 bg-gray-800 rounded-lg p-6">
+          <h2 className="text-2xl font-bold text-white mb-4">Understanding the Results</h2>
+          <div className="text-gray-300 space-y-3">
+            <p>
+              <strong>Single Sample Mode:</strong> Compare statistics between original and winsorized data to see
+              how outlier treatment affects mean, standard deviation, and confidence intervals.
+            </p>
+            <ul className="list-disc ml-6 space-y-1">
+              <li><strong>Distribution Chart:</strong> Shows original values with red markers indicating outliers that will be capped</li>
+              <li><strong>Histogram Comparison:</strong> Visual comparison of original vs. winsorized distributions</li>
+              <li><strong>CI Width Reduction:</strong> Percentage decrease in confidence interval width after winsorizing</li>
+              <li><strong>Standard Deviation:</strong> Reduction in variability after capping extreme values</li>
+            </ul>
+            <p className="mt-3">
+              <strong>A/B Test Mode:</strong> See how winsorizing affects statistical significance and effect size estimates
+              in a two-sample comparison.
+            </p>
+            <ul className="list-disc ml-6 space-y-1">
+              <li><strong>P-Value Comparison:</strong> How statistical significance changes with and without winsorizing</li>
+              <li><strong>Effect Size:</strong> More stable lift estimates with reduced outlier influence</li>
+              <li><strong>Confidence Intervals:</strong> Narrower CIs typically lead to more decisive test results</li>
+            </ul>
+            <p className="mt-3">
+              <strong>Key insight:</strong> Winsorizing reduces the impact of extreme outliers while preserving sample size. By capping values at the upper percentile threshold, you prevent a few extreme observations from dominating your variance estimates and inflating confidence intervals. This often results in more statistically sensitive tests without removing legitimate data points.
+            </p>
+          </div>
         </div>
       </div>
     </div>

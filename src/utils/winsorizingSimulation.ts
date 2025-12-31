@@ -54,19 +54,17 @@ function generateNormalData(n: number, mean: number, std: number): number[] {
   return data;
 }
 
-function addOutliers(data: number[], outlierRate: number, outlierMagnitude: number): number[] {
-  const result = [...data];
-  const mean = calculateMean(data);
-  const std = calculateStd(data, mean);
-  const numOutliers = Math.floor(data.length * outlierRate);
-
-  for (let i = 0; i < numOutliers; i++) {
-    const idx = Math.floor(Math.random() * result.length);
-    const direction = Math.random() > 0.5 ? 1 : -1;
-    result[idx] = mean + direction * outlierMagnitude * std;
+function generateSkewedData(n: number, mean: number, std: number): number[] {
+  const data: number[] = [];
+  for (let i = 0; i < n; i++) {
+    const u1 = Math.random();
+    const u2 = Math.random();
+    const z = Math.sqrt(-2 * Math.log(u1)) * Math.cos(2 * Math.PI * u2);
+    const value = mean + z * std;
+    const skewedValue = Math.random() < 0.1 ? value + Math.abs(z) * std * 2 : value;
+    data.push(Math.max(0, skewedValue));
   }
-
-  return result;
+  return data;
 }
 
 function calculateMean(data: number[]): number {
@@ -88,20 +86,14 @@ function calculateCI(data: number[], confidence: number = 0.95): [number, number
   return [mean - marginOfError, mean + marginOfError];
 }
 
-function winsorizeData(data: number[], lowerPercentile: number, upperPercentile: number): { data: number[], cappedCount: number } {
+function winsorizeData(data: number[], upperPercentile: number): { data: number[], cappedCount: number } {
   const sorted = [...data].sort((a, b) => a - b);
-  const lowerIdx = Math.floor(sorted.length * lowerPercentile / 100);
   const upperIdx = Math.ceil(sorted.length * upperPercentile / 100) - 1;
 
-  const lowerThreshold = sorted[lowerIdx];
   const upperThreshold = sorted[upperIdx];
 
   let cappedCount = 0;
   const winsorized = data.map(val => {
-    if (val < lowerThreshold) {
-      cappedCount++;
-      return lowerThreshold;
-    }
     if (val > upperThreshold) {
       cappedCount++;
       return upperThreshold;
@@ -112,35 +104,29 @@ function winsorizeData(data: number[], lowerPercentile: number, upperPercentile:
   return { data: winsorized, cappedCount };
 }
 
-function countOutliers(data: number[], lowerPercentile: number, upperPercentile: number): number {
+function countOutliers(data: number[], upperPercentile: number): number {
   const sorted = [...data].sort((a, b) => a - b);
-  const lowerIdx = Math.floor(sorted.length * lowerPercentile / 100);
   const upperIdx = Math.ceil(sorted.length * upperPercentile / 100) - 1;
 
-  const lowerThreshold = sorted[lowerIdx];
   const upperThreshold = sorted[upperIdx];
 
-  return data.filter(val => val < lowerThreshold || val > upperThreshold).length;
+  return data.filter(val => val > upperThreshold).length;
 }
 
 export function runWinsorizingSimulation(
   sampleSize: number,
   baselineMean: number,
   baselineStd: number,
-  outlierRate: number,
-  outlierMagnitude: number,
-  lowerPercentile: number,
   upperPercentile: number
 ): WinsorizingResults {
-  let originalData = generateNormalData(sampleSize, baselineMean, baselineStd);
-  originalData = addOutliers(originalData, outlierRate, outlierMagnitude);
+  const originalData = generateSkewedData(sampleSize, baselineMean, baselineStd);
 
   const originalMean = calculateMean(originalData);
   const originalStd = calculateStd(originalData, originalMean);
   const originalCI = calculateCI(originalData);
-  const outlierCount = countOutliers(originalData, lowerPercentile, upperPercentile);
+  const outlierCount = countOutliers(originalData, upperPercentile);
 
-  const { data: winsorizedData, cappedCount } = winsorizeData(originalData, lowerPercentile, upperPercentile);
+  const { data: winsorizedData, cappedCount } = winsorizeData(originalData, upperPercentile);
   const winsorizedMean = calculateMean(winsorizedData);
   const winsorizedStd = calculateStd(winsorizedData, winsorizedMean);
   const winsorizedCI = calculateCI(winsorizedData);
@@ -225,27 +211,21 @@ export function runABTestSimulation(
   controlMean: number,
   treatmentUplift: number,
   baselineStd: number,
-  outlierRate: number,
-  outlierMagnitude: number,
-  lowerPercentile: number,
   upperPercentile: number,
   alpha: number = 0.05
 ): ABTestResults {
   const treatmentMean = controlMean * (1 + treatmentUplift / 100);
 
-  let controlData = generateNormalData(sampleSize, controlMean, baselineStd);
-  let treatmentData = generateNormalData(sampleSize, treatmentMean, baselineStd);
-
-  controlData = addOutliers(controlData, outlierRate, outlierMagnitude);
-  treatmentData = addOutliers(treatmentData, outlierRate, outlierMagnitude);
+  const controlData = generateSkewedData(sampleSize, controlMean, baselineStd);
+  const treatmentData = generateSkewedData(sampleSize, treatmentMean, baselineStd);
 
   const originalTest = calculateTTest(controlData, treatmentData);
   const originalControlMean = calculateMean(controlData);
   const originalTreatmentMean = calculateMean(treatmentData);
   const originalLift = ((originalTreatmentMean - originalControlMean) / originalControlMean) * 100;
 
-  const { data: controlWinsorized } = winsorizeData(controlData, lowerPercentile, upperPercentile);
-  const { data: treatmentWinsorized } = winsorizeData(treatmentData, lowerPercentile, upperPercentile);
+  const { data: controlWinsorized } = winsorizeData(controlData, upperPercentile);
+  const { data: treatmentWinsorized } = winsorizeData(treatmentData, upperPercentile);
 
   const winsorizedTest = calculateTTest(controlWinsorized, treatmentWinsorized);
   const winsorizedControlMean = calculateMean(controlWinsorized);
