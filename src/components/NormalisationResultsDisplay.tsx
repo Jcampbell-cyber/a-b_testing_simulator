@@ -1,5 +1,5 @@
 import { NormalisationResults } from '../utils/normalisationSimulation';
-import { CheckCircle, XCircle, AlertTriangle } from 'lucide-react';
+import { CheckCircle, XCircle, TrendingDown } from 'lucide-react';
 
 interface Props {
   results: NormalisationResults;
@@ -7,6 +7,10 @@ interface Props {
 
 export function NormalisationResultsDisplay({ results }: Props) {
   const { groups, aggregatedRaw, aggregatedNorm, trueEffectPercent } = results;
+
+  const varianceReduction = ((1 - aggregatedNorm.pooledStd / aggregatedRaw.pooledStd) * 100);
+  const ciWidthRaw = aggregatedRaw.ci95[1] - aggregatedRaw.ci95[0];
+  const ciWidthNorm = aggregatedNorm.ci95[1] - aggregatedNorm.ci95[0];
 
   return (
     <div className="space-y-4">
@@ -49,42 +53,68 @@ export function NormalisationResultsDisplay({ results }: Props) {
         </p>
       </div>
 
+      <div className="bg-gradient-to-r from-green-900/30 to-blue-900/30 rounded-xl border border-green-800/50 p-5">
+        <div className="flex items-center gap-3 mb-4">
+          <div className="w-10 h-10 rounded-full bg-green-600/30 flex items-center justify-center">
+            <TrendingDown className="w-5 h-5 text-green-400" />
+          </div>
+          <div>
+            <h3 className="text-lg font-semibold text-green-400">Variance Reduction</h3>
+            <p className="text-sm text-gray-400">The key benefit of normalisation</p>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="bg-gray-900/50 rounded-lg p-4 text-center">
+            <div className="text-3xl font-bold text-white mb-1">
+              {aggregatedRaw.pooledStd.toFixed(1)}
+            </div>
+            <div className="text-sm text-gray-400">Raw Pooled Std Dev</div>
+          </div>
+
+          <div className="bg-gray-900/50 rounded-lg p-4 text-center">
+            <div className="text-3xl font-bold text-green-400 mb-1">
+              {aggregatedNorm.pooledStd.toFixed(3)}
+            </div>
+            <div className="text-sm text-gray-400">Normalised Pooled Std Dev</div>
+          </div>
+
+          <div className="bg-gray-900/50 rounded-lg p-4 text-center">
+            <div className="text-3xl font-bold text-green-400 mb-1">
+              {varianceReduction.toFixed(0)}%
+            </div>
+            <div className="text-sm text-gray-400">Reduction in Std Dev</div>
+          </div>
+        </div>
+      </div>
+
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div className="bg-gray-900 rounded-xl border border-red-900/50 p-5">
-          <div className="flex items-center gap-2 mb-3">
-            <AlertTriangle className="w-5 h-5 text-red-400" />
-            <h3 className="text-lg font-semibold text-red-400">Raw Aggregation</h3>
-          </div>
+          <h3 className="text-lg font-semibold text-red-400 mb-3">Raw Aggregation</h3>
           <p className="text-xs text-gray-400 mb-4">
             Pooling raw values across regions with different price levels
           </p>
 
           <div className="space-y-3">
             <div className="flex justify-between">
-              <span className="text-gray-400">Control Mean</span>
-              <span className="text-white font-mono">{aggregatedRaw.controlMean.toFixed(2)}</span>
+              <span className="text-gray-400">Lift</span>
+              <span className={`font-mono font-medium ${aggregatedRaw.lift >= 0 ? 'text-green-400' : 'text-red-400'}`}>
+                {aggregatedRaw.lift >= 0 ? '+' : ''}{aggregatedRaw.lift.toFixed(2)}
+              </span>
             </div>
             <div className="flex justify-between">
-              <span className="text-gray-400">Treatment Mean</span>
-              <span className="text-white font-mono">{aggregatedRaw.treatmentMean.toFixed(2)}</span>
+              <span className="text-gray-400">95% CI</span>
+              <span className="text-white font-mono text-sm">
+                [{aggregatedRaw.ci95[0].toFixed(2)}, {aggregatedRaw.ci95[1].toFixed(2)}]
+              </span>
             </div>
-            <div className="border-t border-gray-700 pt-3">
-              <div className="flex justify-between">
-                <span className="text-gray-400">Absolute Lift</span>
-                <span className={`font-mono font-medium ${aggregatedRaw.lift >= 0 ? 'text-green-400' : 'text-red-400'}`}>
-                  {aggregatedRaw.lift >= 0 ? '+' : ''}{aggregatedRaw.lift.toFixed(2)}
-                </span>
-              </div>
-              <div className="flex justify-between mt-2">
-                <span className="text-gray-400">Relative Lift</span>
-                <span className={`font-mono font-medium ${aggregatedRaw.liftPercent >= 0 ? 'text-green-400' : 'text-red-400'}`}>
-                  {aggregatedRaw.liftPercent >= 0 ? '+' : ''}{aggregatedRaw.liftPercent.toFixed(2)}%
-                </span>
-              </div>
-              <div className="flex justify-between mt-2">
-                <span className="text-gray-400">p-value</span>
-                <span className="text-white font-mono">{aggregatedRaw.pValue.toFixed(4)}</span>
-              </div>
+            <div className="flex justify-between">
+              <span className="text-gray-400">CI Width</span>
+              <span className="text-red-400 font-mono font-medium">{ciWidthRaw.toFixed(2)}</span>
+            </div>
+            <div className="flex justify-between">
+              <span className="text-gray-400">p-value</span>
+              <span className="text-white font-mono">{aggregatedRaw.pValue.toFixed(4)}</span>
             </div>
             <div className={`flex items-center gap-2 mt-2 p-2 rounded ${aggregatedRaw.significant ? 'bg-green-900/30' : 'bg-gray-800'}`}>
               {aggregatedRaw.significant ? (
@@ -97,43 +127,34 @@ export function NormalisationResultsDisplay({ results }: Props) {
               </span>
             </div>
           </div>
-
-          <div className="mt-4 p-3 bg-red-900/20 rounded-lg border border-red-800/50">
-            <p className="text-xs text-red-300">
-              The aggregated mean is dominated by high-priced regions, making the result hard to interpret and potentially misleading.
-            </p>
-          </div>
         </div>
 
         <div className="bg-gray-900 rounded-xl border border-green-900/50 p-5">
-          <div className="flex items-center gap-2 mb-3">
-            <CheckCircle className="w-5 h-5 text-green-400" />
-            <h3 className="text-lg font-semibold text-green-400">Normalised Aggregation</h3>
-          </div>
+          <h3 className="text-lg font-semibold text-green-400 mb-3">Normalised Aggregation</h3>
           <p className="text-xs text-gray-400 mb-4">
             Z-score standardisation within each region before pooling
           </p>
 
           <div className="space-y-3">
             <div className="flex justify-between">
-              <span className="text-gray-400">Control Mean (Z)</span>
-              <span className="text-white font-mono">{aggregatedNorm.controlMean.toFixed(4)}</span>
+              <span className="text-gray-400">Lift (Z-score)</span>
+              <span className={`font-mono font-medium ${aggregatedNorm.lift >= 0 ? 'text-green-400' : 'text-red-400'}`}>
+                {aggregatedNorm.lift >= 0 ? '+' : ''}{aggregatedNorm.lift.toFixed(4)}
+              </span>
             </div>
             <div className="flex justify-between">
-              <span className="text-gray-400">Treatment Mean (Z)</span>
-              <span className="text-white font-mono">{aggregatedNorm.treatmentMean.toFixed(4)}</span>
+              <span className="text-gray-400">95% CI</span>
+              <span className="text-white font-mono text-sm">
+                [{aggregatedNorm.ci95[0].toFixed(4)}, {aggregatedNorm.ci95[1].toFixed(4)}]
+              </span>
             </div>
-            <div className="border-t border-gray-700 pt-3">
-              <div className="flex justify-between">
-                <span className="text-gray-400">Effect (Z-score units)</span>
-                <span className={`font-mono font-medium ${aggregatedNorm.lift >= 0 ? 'text-green-400' : 'text-red-400'}`}>
-                  {aggregatedNorm.lift >= 0 ? '+' : ''}{aggregatedNorm.lift.toFixed(4)}
-                </span>
-              </div>
-              <div className="flex justify-between mt-2">
-                <span className="text-gray-400">p-value</span>
-                <span className="text-white font-mono">{aggregatedNorm.pValue.toFixed(4)}</span>
-              </div>
+            <div className="flex justify-between">
+              <span className="text-gray-400">CI Width</span>
+              <span className="text-green-400 font-mono font-medium">{ciWidthNorm.toFixed(4)}</span>
+            </div>
+            <div className="flex justify-between">
+              <span className="text-gray-400">p-value</span>
+              <span className="text-white font-mono">{aggregatedNorm.pValue.toFixed(4)}</span>
             </div>
             <div className={`flex items-center gap-2 mt-2 p-2 rounded ${aggregatedNorm.significant ? 'bg-green-900/30' : 'bg-gray-800'}`}>
               {aggregatedNorm.significant ? (
@@ -146,12 +167,6 @@ export function NormalisationResultsDisplay({ results }: Props) {
               </span>
             </div>
           </div>
-
-          <div className="mt-4 p-3 bg-green-900/20 rounded-lg border border-green-800/50">
-            <p className="text-xs text-green-300">
-              Each region contributes equally to the result regardless of its local price level. The effect is measured in comparable units.
-            </p>
-          </div>
         </div>
       </div>
 
@@ -161,9 +176,9 @@ export function NormalisationResultsDisplay({ results }: Props) {
             <span className="text-white text-xs font-bold">i</span>
           </div>
           <div>
-            <h4 className="text-sm font-semibold text-blue-300 mb-1">Interpreting Normalised Results</h4>
+            <h4 className="text-sm font-semibold text-blue-300 mb-1">Why Tighter CIs Matter</h4>
             <p className="text-xs text-blue-200">
-              After Z-score normalisation, the effect is measured in standard deviation units. A lift of 0.1 means the treatment moved outcomes by 0.1 standard deviations above control. This is comparable across regions regardless of their local price levels.
+              Normalisation collapses the distinct regional distributions into a single scale, eliminating the between-region variance that inflates standard errors. With the same sample size, you get narrower confidence intervals, making it easier to detect true effects and reducing the risk that random regional imbalances create false positives.
             </p>
           </div>
         </div>

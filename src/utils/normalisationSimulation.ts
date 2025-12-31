@@ -24,6 +24,8 @@ export interface NormalisationResults {
     liftPercent: number;
     pValue: number;
     significant: boolean;
+    pooledStd: number;
+    ci95: [number, number];
   };
   aggregatedNorm: {
     controlMean: number;
@@ -31,8 +33,14 @@ export interface NormalisationResults {
     lift: number;
     pValue: number;
     significant: boolean;
+    pooledStd: number;
+    ci95: [number, number];
   };
   trueEffectPercent: number;
+  allControlRaw: number[];
+  allTreatmentRaw: number[];
+  allControlNorm: number[];
+  allTreatmentNorm: number[];
 }
 
 function generateNormal(mean: number, std: number, n: number): number[] {
@@ -209,11 +217,17 @@ export function runNormalisationSimulation(
   const rawLift = rawTreatmentMean - rawControlMean;
   const rawLiftPercent = (rawLift / rawControlMean) * 100;
   const rawPValue = welchTTest(allTreatmentRaw, allControlRaw);
+  const rawPooledStd = std([...allControlRaw, ...allTreatmentRaw]);
+  const rawSE = rawPooledStd * Math.sqrt(1/allControlRaw.length + 1/allTreatmentRaw.length);
+  const rawCI95: [number, number] = [rawLift - 1.96 * rawSE, rawLift + 1.96 * rawSE];
 
   const normControlMean = mean(allControlNorm);
   const normTreatmentMean = mean(allTreatmentNorm);
   const normLift = normTreatmentMean - normControlMean;
   const normPValue = welchTTest(allTreatmentNorm, allControlNorm);
+  const normPooledStd = std([...allControlNorm, ...allTreatmentNorm]);
+  const normSE = normPooledStd * Math.sqrt(1/allControlNorm.length + 1/allTreatmentNorm.length);
+  const normCI95: [number, number] = [normLift - 1.96 * normSE, normLift + 1.96 * normSE];
 
   return {
     groups,
@@ -223,15 +237,23 @@ export function runNormalisationSimulation(
       lift: rawLift,
       liftPercent: rawLiftPercent,
       pValue: rawPValue,
-      significant: rawPValue < 0.05
+      significant: rawPValue < 0.05,
+      pooledStd: rawPooledStd,
+      ci95: rawCI95
     },
     aggregatedNorm: {
       controlMean: normControlMean,
       treatmentMean: normTreatmentMean,
       lift: normLift,
       pValue: normPValue,
-      significant: normPValue < 0.05
+      significant: normPValue < 0.05,
+      pooledStd: normPooledStd,
+      ci95: normCI95
     },
-    trueEffectPercent
+    trueEffectPercent,
+    allControlRaw,
+    allTreatmentRaw,
+    allControlNorm,
+    allTreatmentNorm
   };
 }

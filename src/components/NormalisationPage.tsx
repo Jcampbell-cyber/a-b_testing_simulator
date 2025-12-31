@@ -3,7 +3,7 @@ import { ArrowLeft } from 'lucide-react';
 import { Breadcrumb } from './Breadcrumb';
 import { NormalisationControls } from './NormalisationControls';
 import { NormalisationResultsDisplay } from './NormalisationResultsDisplay';
-import { NormalisationChart } from './NormalisationChart';
+import { NormalisationHistogram } from './NormalisationHistogram';
 import { runNormalisationSimulation, NormalisationResults, GroupConfig } from '../utils/normalisationSimulation';
 
 interface Props {
@@ -22,7 +22,6 @@ export function NormalisationPage({ onBack }: Props) {
   const [trueEffectPercent, setTrueEffectPercent] = useState(5);
   const [results, setResults] = useState<NormalisationResults | null>(null);
   const [isRunning, setIsRunning] = useState(false);
-  const [viewMode, setViewMode] = useState<'raw' | 'normalised'>('raw');
 
   const handleGroupConfigChange = (index: number, field: 'baselineMean' | 'baselineStd', value: number) => {
     const newConfigs = [...groupConfigs];
@@ -64,7 +63,7 @@ export function NormalisationPage({ onBack }: Props) {
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-white mb-3">Metric Normalisation</h1>
           <p className="text-gray-400">
-            When running experiments across regions with different price levels, raw metrics may not be directly comparable. Normalisation transforms metrics to an equivalent scale so aggregated results reflect the treatment effect rather than baseline differences between markets.
+            When running experiments across regions with different price levels, imbalanced user allocation can create spurious effects. Normalisation reduces variance by putting all regions on the same scale, leading to tighter confidence intervals.
           </p>
         </div>
 
@@ -72,22 +71,23 @@ export function NormalisationPage({ onBack }: Props) {
           <div className="bg-gray-900 rounded-xl border border-gray-800 p-5">
             <h3 className="text-lg font-semibold text-blue-400 mb-3">The Problem</h3>
             <p className="text-sm text-gray-300 mb-3">
-              Consider an experiment measuring order value across different regions. Southeast Asia might average $25, while North America averages $200 due to higher local prices.
+              Consider an experiment measuring order value across regions with different price levels. If randomisation happens to assign more users from a high-priced region to treatment, that group will show a higher average even if the treatment has no real effect.
             </p>
             <p className="text-sm text-gray-300">
-              If we aggregate raw values, North America dominates the overall mean simply because its values are larger, not because the effect is stronger. A 5% lift means $1.25 in Southeast Asia but $10 in North America.
+              The raw data has high variance because values from different regions are on completely different scales. This inflates confidence intervals and makes it harder to detect true effects.
             </p>
           </div>
 
           <div className="bg-gray-900 rounded-xl border border-gray-800 p-5">
             <h3 className="text-lg font-semibold text-green-400 mb-3">The Solution</h3>
             <p className="text-sm text-gray-300 mb-3">
-              Z-score normalisation transforms each region's data to have mean 0 and standard deviation 1. This ensures:
+              Z-score normalisation transforms each region's data to have mean 0 and standard deviation 1. This:
             </p>
             <ul className="space-y-1.5 text-sm text-gray-300">
-              <li>Each region contributes equally to the aggregate</li>
-              <li>Effects are measured in comparable units (std devs)</li>
-              <li>High-priced regions don't dominate results</li>
+              <li>Removes the scale differences between regions</li>
+              <li>Dramatically reduces overall variance in the pooled data</li>
+              <li>Produces tighter confidence intervals for the same sample size</li>
+              <li>Prevents regional imbalances from creating false positives</li>
             </ul>
           </div>
         </div>
@@ -137,7 +137,7 @@ export function NormalisationPage({ onBack }: Props) {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
           <div className="lg:col-span-1">
             <NormalisationControls
               groupConfigs={groupConfigs}
@@ -151,33 +151,13 @@ export function NormalisationPage({ onBack }: Props) {
             />
           </div>
 
-          <div className="lg:col-span-2 space-y-4">
+          <div className="lg:col-span-3 space-y-4">
             {results && (
               <>
-                <div className="flex gap-2 mb-4">
-                  <button
-                    onClick={() => setViewMode('raw')}
-                    className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-                      viewMode === 'raw'
-                        ? 'bg-blue-600 text-white'
-                        : 'bg-gray-800 text-gray-400 hover:text-white'
-                    }`}
-                  >
-                    Raw Values
-                  </button>
-                  <button
-                    onClick={() => setViewMode('normalised')}
-                    className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-                      viewMode === 'normalised'
-                        ? 'bg-blue-600 text-white'
-                        : 'bg-gray-800 text-gray-400 hover:text-white'
-                    }`}
-                  >
-                    Normalised Values
-                  </button>
+                <div className="grid grid-cols-1 xl:grid-cols-2 gap-4">
+                  <NormalisationHistogram results={results} viewMode="raw" />
+                  <NormalisationHistogram results={results} viewMode="normalised" />
                 </div>
-
-                <NormalisationChart results={results} viewMode={viewMode} />
                 <NormalisationResultsDisplay results={results} />
               </>
             )}
