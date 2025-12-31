@@ -41,7 +41,6 @@ export function WinsorizingControls({
         <div>
           <label className="flex items-center gap-2 text-sm font-medium text-gray-200 mb-3">
             Simulation Mode
-            <Tooltip content="Single Sample: View distribution with/without winsorizing. A/B Test: Compare test results with/without winsorizing." />
           </label>
           <div className="flex gap-2">
             <button

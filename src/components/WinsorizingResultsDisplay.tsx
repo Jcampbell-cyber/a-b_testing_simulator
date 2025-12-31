@@ -261,8 +261,8 @@ function ABTestResultsDisplay({ results }: { results: ABTestResults }) {
               }}
             />
             <Legend />
-            <Bar yAxisId="left" dataKey="pValue" fill="#3b82f6" name="P-Value (left axis)" />
-            <Bar yAxisId="right" dataKey="ciWidth" fill="#f59e0b" name="CI Width (right axis)" />
+            <Bar yAxisId="left" dataKey="pValue" fill="#3b82f6" name="P-Value (left axis)" label={{ position: 'top', fontSize: 12, formatter: (val: number) => val.toFixed(4) }} />
+            <Bar yAxisId="right" dataKey="ciWidth" fill="#f59e0b" name="CI Width (right axis)" label={{ position: 'top', fontSize: 12, formatter: (val: number) => val.toFixed(2) }} />
           </BarChart>
         </ResponsiveContainer>
       </div>

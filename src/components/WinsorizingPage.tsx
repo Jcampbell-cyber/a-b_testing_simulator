@@ -83,10 +83,21 @@ export function WinsorizingPage() {
                 <strong>When to Use Winsorizing:</strong>
               </p>
               <ul className="list-disc list-inside space-y-1 ml-4">
-                <li>When you have a metric with heavy-tailed distributions or outliers</li>
-                <li>In A/B testing with high-variance metrics like revenue or session duration</li>
-                <li>When outliers are legitimate but shouldn't dominate the analysis</li>
-                <li>To make results more robust to extreme values while maintaining sample size</li>
+                <li>Revenue per user in e-commerce where a few whale customers skew results</li>
+                <li>Session duration metrics where some users leave tabs open for days</li>
+                <li>Ad spend metrics with occasional very high-value campaigns</li>
+                <li>Time-to-complete metrics with legitimate but extreme outliers</li>
+                <li>Retention metrics where a small subset has unusually high engagement</li>
+              </ul>
+              <p className="mt-3">
+                <strong>When NOT to Use Winsorizing:</strong>
+              </p>
+              <ul className="list-disc list-inside space-y-1 ml-4">
+                <li>Binary metrics (conversion rate, click-through rate) - use as is</li>
+                <li>Count metrics with natural bounds (pages viewed: 1-10) - already constrained</li>
+                <li>When outliers represent your key business outcomes (viral content, premium sales)</li>
+                <li>Metrics that are already normally distributed without extreme tails</li>
+                <li>When the treatment specifically targets high-value users or edge cases</li>
               </ul>
               <p className="mt-3 text-amber-300 bg-amber-900/30 p-2 rounded border border-amber-800">
                 <strong>Important:</strong> Winsorizing should be pre-specified in your analysis plan, not applied

@@ -114,14 +114,14 @@ export function WinsorizingDistributionChart({
         <h3 className="text-lg font-semibold text-white mb-4">Histogram Comparison</h3>
         <div className="grid grid-cols-2 gap-4">
           <HistogramChart data={originalData} title="Original Distribution" color="#3b82f6" domain={[Math.min(...originalData), Math.max(...originalData)]} />
-          <HistogramChart data={winsorizedData} title="Winsorized Distribution" color="#3b82f6" domain={[Math.min(...originalData), Math.max(...originalData)]} cappedValues={originalData.filter((val, idx) => val !== winsorizedData[idx])} />
+          <HistogramChart data={winsorizedData} title="Winsorized Distribution" color="#3b82f6" domain={[Math.min(...originalData), Math.max(...originalData)]} thresholdValue={upperThreshold} />
         </div>
       </div>
     </div>
   );
 }
 
-function HistogramChart({ data, title, color, domain, cappedValues }: { data: number[], title: string, color: string, domain: [number, number], cappedValues?: number[] }) {
+function HistogramChart({ data, title, color, domain, thresholdValue }: { data: number[], title: string, color: string, domain: [number, number], thresholdValue?: number }) {
   const histogramData = useMemo(() => {
     const [min, max] = domain;
     const binCount = 30;
@@ -140,16 +140,14 @@ function HistogramChart({ data, title, color, domain, cappedValues }: { data: nu
       bins[binIndex].count++;
     });
 
-    // Mark bins that contain capped values
-    if (cappedValues) {
-      cappedValues.forEach(val => {
-        const binIndex = Math.min(Math.max(Math.floor((val - min) / binWidth), 0), binCount - 1);
-        bins[binIndex].hasCappedValues = true;
-      });
+    // Mark bins that contain the threshold value (where capped values end up)
+    if (thresholdValue !== undefined) {
+      const thresholdBinIndex = Math.min(Math.max(Math.floor((thresholdValue - min) / binWidth), 0), binCount - 1);
+      bins[thresholdBinIndex].hasCappedValues = true;
     }
 
     return bins;
-  }, [data, domain, cappedValues]);
+  }, [data, domain, thresholdValue]);
 
   return (
     <div>
