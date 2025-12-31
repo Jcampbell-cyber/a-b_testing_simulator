@@ -3,7 +3,6 @@ import { WinsorizingControls, type SimulationMode } from './WinsorizingControls'
 import { WinsorizingDistributionChart } from './WinsorizingDistributionChart';
 import { WinsorizingResultsDisplay } from './WinsorizingResultsDisplay';
 import { runWinsorizingSimulation, runABTestSimulation, type WinsorizingResults, type ABTestResults } from '../utils/winsorizingSimulation';
-import { InfoSection } from './InfoSection';
 
 export function WinsorizingPage() {
   const [mode, setMode] = useState<SimulationMode>('single');
@@ -53,73 +52,78 @@ export function WinsorizingPage() {
           </p>
         </div>
 
-        <InfoSection
-          title="What is Winsorizing?"
-          content={
-            <div className="space-y-3 text-sm">
-              <p>
-                <strong>Winsorizing</strong> is a statistical technique for handling outliers by capping extreme values
-                at a specified percentile threshold, rather than removing them entirely.
-              </p>
-              <p>
-                For example, with 99th percentile winsorizing:
-              </p>
-              <ul className="list-disc list-inside space-y-1 ml-4">
-                <li>All values above the 99th percentile are capped to the 99th percentile value</li>
-                <li>All other values remain unchanged</li>
-                <li>No data points are removed, preserving sample size</li>
+        <div className="space-y-4">
+          <div className="bg-gray-800 rounded-lg border border-gray-700 p-5">
+            <h3 className="text-lg font-semibold text-white mb-3">What is Winsorizing?</h3>
+            <p className="text-sm text-gray-300 mb-3">
+              <strong className="text-white">Winsorizing</strong> is a statistical technique for handling outliers by capping extreme values
+              at a specified percentile threshold, rather than removing them entirely.
+            </p>
+            <p className="text-sm text-gray-300 mb-2">For example, with 99th percentile winsorizing:</p>
+            <ul className="list-disc list-inside space-y-1 ml-2 text-sm text-gray-300">
+              <li>All values above the 99th percentile are capped to the 99th percentile value</li>
+              <li>All other values remain unchanged</li>
+              <li>No data points are removed, preserving sample size</li>
+            </ul>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="bg-gray-800 rounded-lg border border-gray-700 p-5">
+              <h3 className="text-lg font-semibold text-emerald-400 mb-3">Key Benefits</h3>
+              <ul className="space-y-2 text-sm text-gray-300">
+                <li><strong className="text-white">Reduces variance:</strong> Controls the influence of extreme outliers</li>
+                <li><strong className="text-white">Narrows confidence intervals:</strong> More precise estimates</li>
+                <li><strong className="text-white">Preserves sample size:</strong> No data points discarded</li>
+                <li><strong className="text-white">Improves power:</strong> Better ability to detect true effects</li>
+                <li><strong className="text-white">Robust estimation:</strong> More stable estimates of central tendency</li>
               </ul>
-              <p className="mt-3">
-                <strong>Key Benefits:</strong>
-              </p>
-              <ul className="list-disc list-inside space-y-1 ml-4">
-                <li><strong>Reduces variance:</strong> Controls the influence of extreme outliers on statistical measures</li>
-                <li><strong>Narrows confidence intervals:</strong> More precise estimates with smaller confidence intervals</li>
-                <li><strong>Preserves sample size:</strong> Unlike trimming, no data points are discarded</li>
-                <li><strong>Improves power:</strong> Can increase the ability to detect true effects in experiments</li>
-                <li><strong>Robust estimation:</strong> Provides more stable estimates of central tendency</li>
-              </ul>
-              <p className="mt-3">
-                <strong>When to Use Winsorizing:</strong>
-              </p>
-              <ul className="list-disc list-inside space-y-1 ml-4">
-                <li>Revenue per user in e-commerce where a few whale customers skew results</li>
-                <li>Session duration metrics where some users leave tabs open for days</li>
-                <li>Ad spend metrics with occasional very high-value campaigns</li>
-                <li>Time-to-complete metrics with legitimate but extreme outliers</li>
-                <li>Retention metrics where a small subset has unusually high engagement</li>
-              </ul>
-              <p className="mt-3">
-                <strong>When NOT to Use Winsorizing:</strong>
-              </p>
-              <ul className="list-disc list-inside space-y-1 ml-4">
-                <li>Binary metrics (conversion rate, click-through rate) - use as is</li>
-                <li>Count metrics with natural bounds (pages viewed: 1-10) - already constrained</li>
-                <li>When outliers represent your key business outcomes (viral content, premium sales)</li>
-                <li>Metrics that are already normally distributed without extreme tails</li>
-                <li>When the treatment specifically targets high-value users or edge cases</li>
-              </ul>
-              <p className="mt-3">
-                <strong>Choosing the Right Threshold:</strong>
-              </p>
-              <p>
-                A lower percentile threshold (e.g., 95th vs 99th) caps more values and produces greater variance reduction:
-              </p>
-              <ul className="list-disc list-inside space-y-1 ml-4 mt-2">
-                <li><strong>Lower threshold (90-95%):</strong> Stronger CI reduction, but risks introducing bias by modifying too much data</li>
-                <li><strong>Higher threshold (99%):</strong> More conservative, only addresses extreme outliers with minimal bias risk</li>
-                <li><strong>Common practice:</strong> 95th-99th percentile is typical; start conservative and justify more aggressive thresholds</li>
-              </ul>
-              <p className="mt-3">
-                <strong>Effect on A/B Tests:</strong> Winsorizing will not always change the observed uplift (since it affects both control and treatment equally), but it should consistently reduce confidence interval width. This means tests become more sensitive to detecting true effects without systematically biasing the point estimate.
-              </p>
-              <p className="mt-3 text-amber-300 bg-amber-900/30 p-2 rounded border border-amber-800">
-                <strong>Important:</strong> Winsorizing should be pre-specified in your analysis plan, not applied
-                post-hoc to achieve desired results. Document your winsorizing strategy before analyzing results.
-              </p>
             </div>
-          }
-        />
+
+            <div className="bg-gray-800 rounded-lg border border-gray-700 p-5">
+              <h3 className="text-lg font-semibold text-blue-400 mb-3">Choosing the Right Threshold</h3>
+              <p className="text-sm text-gray-300 mb-2">
+                A lower percentile caps more values and produces greater variance reduction:
+              </p>
+              <ul className="space-y-2 text-sm text-gray-300">
+                <li><strong className="text-white">90-95%:</strong> Stronger CI reduction, risks introducing bias</li>
+                <li><strong className="text-white">99%:</strong> Conservative, only addresses extreme outliers</li>
+                <li><strong className="text-white">Common practice:</strong> 95th-99th percentile is typical</li>
+              </ul>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="bg-gray-800 rounded-lg border border-gray-700 p-5">
+              <h3 className="text-lg font-semibold text-green-400 mb-3">When to Use</h3>
+              <ul className="space-y-1.5 text-sm text-gray-300">
+                <li>Revenue per user with whale customers</li>
+                <li>Session duration with tabs left open</li>
+                <li>Ad spend with high-value campaigns</li>
+                <li>Time-to-complete with extreme outliers</li>
+                <li>Retention metrics with unusual engagement</li>
+              </ul>
+            </div>
+
+            <div className="bg-gray-800 rounded-lg border border-gray-700 p-5">
+              <h3 className="text-lg font-semibold text-red-400 mb-3">When NOT to Use</h3>
+              <ul className="space-y-1.5 text-sm text-gray-300">
+                <li>Binary metrics (conversion, CTR)</li>
+                <li>Count metrics with natural bounds</li>
+                <li>When outliers are key business outcomes</li>
+                <li>Already normally distributed metrics</li>
+                <li>Treatment targets high-value users</li>
+              </ul>
+            </div>
+          </div>
+
+          <div className="bg-amber-900/30 rounded-lg border border-amber-700 p-5">
+            <h3 className="text-lg font-semibold text-amber-300 mb-2">Important Note</h3>
+            <p className="text-sm text-amber-200">
+              Winsorizing should be pre-specified in your analysis plan, not applied post-hoc to achieve desired results.
+              Document your winsorizing strategy before analyzing results.
+            </p>
+          </div>
+        </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-6">
           <div className="lg:col-span-1">

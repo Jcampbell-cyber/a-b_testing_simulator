@@ -144,6 +144,26 @@ interface HistogramChartProps {
   showWinsorized?: boolean;
 }
 
+interface CustomBarProps {
+  cx?: number;
+  cy?: number;
+  fill?: string;
+}
+
+function CustomBar({ cx, cy, fill }: CustomBarProps) {
+  if (cx === undefined || cy === undefined) return null;
+  return (
+    <rect
+      x={cx - 3}
+      y={cy - 4}
+      width={6}
+      height={8}
+      fill={fill}
+      rx={1}
+    />
+  );
+}
+
 function HistogramChart({ data, originalData, title, color, domain, thresholdValue, showWinsorized }: HistogramChartProps) {
   const dotData = useMemo(() => {
     const [min, max] = domain;
@@ -210,7 +230,11 @@ function HistogramChart({ data, originalData, title, color, domain, thresholdVal
             tick={{ fontSize: 11, fill: '#9ca3af' }}
             stroke="#4b5563"
           />
-          <Scatter data={dotData} fill={color}>
+          <Scatter
+            data={dotData}
+            fill={color}
+            shape={(props: CustomBarProps) => <CustomBar {...props} />}
+          >
             {dotData.map((entry, index) => (
               <Cell
                 key={`cell-${index}`}
