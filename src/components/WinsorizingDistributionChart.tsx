@@ -113,18 +113,17 @@ export function WinsorizingDistributionChart({
       <div className="bg-gray-800 rounded-lg shadow-sm border border-gray-700 p-6">
         <h3 className="text-lg font-semibold text-white mb-4">Histogram Comparison</h3>
         <div className="grid grid-cols-2 gap-4">
-          <HistogramChart data={originalData} title="Original Distribution" color="#3b82f6" />
-          <HistogramChart data={winsorizedData} title="Winsorized Distribution" color="#10b981" />
+          <HistogramChart data={originalData} title="Original Distribution" color="#3b82f6" domain={[Math.min(...originalData), Math.max(...originalData)]} />
+          <HistogramChart data={winsorizedData} title="Winsorized Distribution" color="#ef4444" domain={[Math.min(...originalData), Math.max(...originalData)]} />
         </div>
       </div>
     </div>
   );
 }
 
-function HistogramChart({ data, title, color }: { data: number[], title: string, color: string }) {
+function HistogramChart({ data, title, color, domain }: { data: number[], title: string, color: string, domain: [number, number] }) {
   const histogramData = useMemo(() => {
-    const min = Math.min(...data);
-    const max = Math.max(...data);
+    const [min, max] = domain;
     const binCount = 30;
     const binWidth = (max - min) / binCount;
 
@@ -136,12 +135,12 @@ function HistogramChart({ data, title, color }: { data: number[], title: string,
     }));
 
     data.forEach(val => {
-      const binIndex = Math.min(Math.floor((val - min) / binWidth), binCount - 1);
+      const binIndex = Math.min(Math.max(Math.floor((val - min) / binWidth), 0), binCount - 1);
       bins[binIndex].count++;
     });
 
     return bins;
-  }, [data]);
+  }, [data, domain]);
 
   return (
     <div>
@@ -152,7 +151,7 @@ function HistogramChart({ data, title, color }: { data: number[], title: string,
           <XAxis
             type="number"
             dataKey="midpoint"
-            domain={['dataMin', 'dataMax']}
+            domain={domain}
             tickFormatter={(val) => val.toFixed(0)}
             tick={{ fontSize: 11 }}
           />
@@ -162,7 +161,7 @@ function HistogramChart({ data, title, color }: { data: number[], title: string,
             tick={{ fontSize: 11 }}
           />
           <Scatter data={histogramData} fill={color}>
-            {histogramData.map((entry, index) => (
+            {histogramData.map((_, index) => (
               <Cell key={`cell-${index}`} />
             ))}
           </Scatter>
