@@ -16,7 +16,7 @@ export function TestDurationCalculator({ onBack, onNavigate }: TestDurationCalcu
   const [dailyUnits, setDailyUnits] = useState(10000);
   const [trafficSplit, setTrafficSplit] = useState<'both' | 'one'>('both');
   const [numFlights, setNumFlights] = useState(2);
-  const [comparisonType, setComparisonType] = useState<'control' | 'pairwise'>('control');
+  const [comparisonType, setComparisonType] = useState<'none' | 'control' | 'pairwise'>('none');
 
   const [mean, setMean] = useState(100);
   const [stdev, setStdev] = useState(20);
@@ -36,7 +36,7 @@ export function TestDurationCalculator({ onBack, onNavigate }: TestDurationCalcu
   };
 
   const calculateDuration = () => {
-    const numComparisons = numFlights === 2 ? 1 :
+    const numComparisons = comparisonType === 'none' ? 1 :
       comparisonType === 'control' ? numFlights - 1 :
       (numFlights * (numFlights - 1)) / 2;
     const adjustedAlpha = alpha / numComparisons;
@@ -179,45 +179,6 @@ export function TestDurationCalculator({ onBack, onNavigate }: TestDurationCalcu
                   />
                 </div>
               </div>
-
-              {numFlights > 2 && (
-                <div>
-                  <label className="block text-white font-semibold mb-3">Comparison Type</label>
-                  <div className="space-y-2">
-                    <label className="flex items-center gap-3 cursor-pointer">
-                      <input
-                        type="radio"
-                        checked={comparisonType === 'control'}
-                        onChange={() => setComparisonType('control')}
-                        className="w-4 h-4"
-                      />
-                      <span className="text-gray-300">Compare to control ({numFlights - 1} comparisons)</span>
-                    </label>
-                    <label className="flex items-center gap-3 cursor-pointer">
-                      <input
-                        type="radio"
-                        checked={comparisonType === 'pairwise'}
-                        onChange={() => setComparisonType('pairwise')}
-                        className="w-4 h-4"
-                      />
-                      <span className="text-gray-300">Pairwise ({(numFlights * (numFlights - 1)) / 2} comparisons)</span>
-                    </label>
-                  </div>
-                  <div className="flex items-center gap-2 mt-2">
-                    <p className="text-xs text-gray-400">
-                      Bonferroni adjusted α: {(alpha / (comparisonType === 'control' ? numFlights - 1 : (numFlights * (numFlights - 1)) / 2)).toFixed(4)}
-                    </p>
-                    <button
-                      onClick={() => onNavigate('fwer')}
-                      className="flex items-center gap-1 text-blue-400 hover:text-blue-300 text-xs transition-colors"
-                      title="Learn more about FWER correction"
-                    >
-                      <Info className="w-3 h-3" />
-                      <span>Learn more</span>
-                    </button>
-                  </div>
-                </div>
-              )}
 
               {metricType === 'continuous' && (
                 <div className="grid grid-cols-2 gap-4">
@@ -372,6 +333,54 @@ export function TestDurationCalculator({ onBack, onNavigate }: TestDurationCalcu
                     +
                   </button>
                 </div>
+
+                <div className="mt-4">
+                  <label className="block text-white font-semibold mb-3">Comparison Type</label>
+                  <div className="space-y-2">
+                    <label className="flex items-center gap-3 cursor-pointer">
+                      <input
+                        type="radio"
+                        checked={comparisonType === 'none'}
+                        onChange={() => setComparisonType('none')}
+                        className="w-4 h-4"
+                      />
+                      <span className="text-gray-300">No correction</span>
+                    </label>
+                    <label className="flex items-center gap-3 cursor-pointer">
+                      <input
+                        type="radio"
+                        checked={comparisonType === 'control'}
+                        onChange={() => setComparisonType('control')}
+                        className="w-4 h-4"
+                      />
+                      <span className="text-gray-300">Compare to control ({numFlights - 1} comparisons)</span>
+                    </label>
+                    <label className="flex items-center gap-3 cursor-pointer">
+                      <input
+                        type="radio"
+                        checked={comparisonType === 'pairwise'}
+                        onChange={() => setComparisonType('pairwise')}
+                        className="w-4 h-4"
+                      />
+                      <span className="text-gray-300">Pairwise ({(numFlights * (numFlights - 1)) / 2} comparisons)</span>
+                    </label>
+                  </div>
+                  {comparisonType !== 'none' && (
+                    <div className="flex items-center gap-2 mt-2">
+                      <p className="text-xs text-gray-400">
+                        Bonferroni adjusted α: {(alpha / (comparisonType === 'control' ? numFlights - 1 : (numFlights * (numFlights - 1)) / 2)).toFixed(4)}
+                      </p>
+                      <button
+                        onClick={() => onNavigate('fwer')}
+                        className="flex items-center gap-1 text-blue-400 hover:text-blue-300 text-xs transition-colors"
+                        title="Learn more about FWER correction"
+                      >
+                        <Info className="w-3 h-3" />
+                        <span>Learn more</span>
+                      </button>
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
 
@@ -407,7 +416,7 @@ export function TestDurationCalculator({ onBack, onNavigate }: TestDurationCalcu
                   <p className="text-sm text-gray-200">
                     <strong>{result.absoluteMde.toFixed(2)}</strong> absolute
                   </p>
-                  {numFlights > 2 && (
+                  {comparisonType !== 'none' && (
                     <div className="text-xs text-gray-400 mt-3 pt-2 border-t border-gray-500">
                       <p>Bonferroni correction applied</p>
                       <p>Adjusted α: {result.adjustedAlpha.toFixed(4)}</p>
