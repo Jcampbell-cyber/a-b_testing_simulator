@@ -14,7 +14,7 @@ export function EffectDetectionCalculator({ onBack, onNavigate }: EffectDetectio
   const [sampleSizePerGroup, setSampleSizePerGroup] = useState(10000);
   const [numFlights, setNumFlights] = useState(2);
   const [sampleSizeMode, setSampleSizeMode] = useState<'per-group' | 'both'>('per-group');
-  const [numComparisons, setNumComparisons] = useState(1);
+  const [comparisonType, setComparisonType] = useState<'control' | 'pairwise'>('control');
 
   const [mean, setMean] = useState(100);
   const [stdev, setStdev] = useState(20);
@@ -34,6 +34,9 @@ export function EffectDetectionCalculator({ onBack, onNavigate }: EffectDetectio
   };
 
   const calculateMDE = () => {
+    const numComparisons = numFlights === 2 ? 1 :
+      comparisonType === 'control' ? numFlights - 1 :
+      (numFlights * (numFlights - 1)) / 2;
     const adjustedAlpha = alpha / numComparisons;
     const alphaTwoSided = testType === 'two-sided' ? adjustedAlpha / 2 : adjustedAlpha;
     const zAlpha = normalInverse(1 - alphaTwoSided);
@@ -194,22 +197,33 @@ export function EffectDetectionCalculator({ onBack, onNavigate }: EffectDetectio
                 </div>
               </div>
 
-              <div>
-                <label className="block text-white font-semibold mb-2">
-                  Number of Comparisons: {numComparisons}
-                </label>
-                <input
-                  type="number"
-                  min="1"
-                  value={numComparisons}
-                  onChange={(e) => setNumComparisons(Math.max(1, parseInt(e.target.value) || 1))}
-                  className="w-full bg-gray-700 text-white px-3 py-2 rounded"
-                />
-                <div className="flex items-center gap-2 mt-1">
-                  <p className="text-xs text-gray-400">
-                    {numComparisons > 1 ? `Bonferroni adjusted α: ${(alpha / numComparisons).toFixed(4)}` : 'No adjustment'}
-                  </p>
-                  {numComparisons > 1 && (
+              {numFlights > 2 && (
+                <div>
+                  <label className="block text-white font-semibold mb-3">Comparison Type</label>
+                  <div className="space-y-2">
+                    <label className="flex items-center gap-3 cursor-pointer">
+                      <input
+                        type="radio"
+                        checked={comparisonType === 'control'}
+                        onChange={() => setComparisonType('control')}
+                        className="w-4 h-4"
+                      />
+                      <span className="text-gray-300">Compare to control ({numFlights - 1} comparisons)</span>
+                    </label>
+                    <label className="flex items-center gap-3 cursor-pointer">
+                      <input
+                        type="radio"
+                        checked={comparisonType === 'pairwise'}
+                        onChange={() => setComparisonType('pairwise')}
+                        className="w-4 h-4"
+                      />
+                      <span className="text-gray-300">Pairwise ({(numFlights * (numFlights - 1)) / 2} comparisons)</span>
+                    </label>
+                  </div>
+                  <div className="flex items-center gap-2 mt-2">
+                    <p className="text-xs text-gray-400">
+                      Bonferroni adjusted α: {(alpha / (comparisonType === 'control' ? numFlights - 1 : (numFlights * (numFlights - 1)) / 2)).toFixed(4)}
+                    </p>
                     <button
                       onClick={() => onNavigate('fwer')}
                       className="flex items-center gap-1 text-blue-400 hover:text-blue-300 text-xs transition-colors"
@@ -218,9 +232,9 @@ export function EffectDetectionCalculator({ onBack, onNavigate }: EffectDetectio
                       <Info className="w-3 h-3" />
                       <span>Learn more</span>
                     </button>
-                  )}
+                  </div>
                 </div>
-              </div>
+              )}
 
               {metricType === 'continuous' && (
                 <div className="grid grid-cols-2 gap-4">
@@ -465,11 +479,11 @@ export function EffectDetectionCalculator({ onBack, onNavigate }: EffectDetectio
                   <ul className="space-y-1 text-xs">
                     <li>Metric: {metricType}</li>
                     <li>Test: {testType}</li>
-                    <li>α = {alpha.toFixed(3)}{numComparisons > 1 ? ` (adjusted: ${result.adjustedAlpha.toFixed(4)})` : ''}, Power = {power.toFixed(2)}</li>
+                    <li>α = {alpha.toFixed(3)}{numFlights > 2 ? ` (adjusted: ${result.adjustedAlpha.toFixed(4)})` : ''}, Power = {power.toFixed(2)}</li>
                     <li>Flights: {numFlights}</li>
-                    {numComparisons > 1 && <li>Comparisons: {numComparisons} (Bonferroni)</li>}
+                    {numFlights > 2 && <li>{comparisonType === 'control' ? `${numFlights - 1} comparisons to control` : `${(numFlights * (numFlights - 1)) / 2} pairwise comparisons`} (Bonferroni)</li>}
                   </ul>
-                  {numComparisons > 1 && (
+                  {numFlights > 2 && (
                     <button
                       onClick={() => onNavigate('fwer')}
                       className="flex items-center gap-1 text-blue-400 hover:text-blue-300 text-xs mt-2 transition-colors"

@@ -10,7 +10,8 @@ export function TestResultsCalculator({ onBack, onNavigate }: TestResultsCalcula
   const [metricType, setMetricType] = useState<'continuous' | 'binary'>('continuous');
   const [testType, setTestType] = useState<'two-sided' | 'one-sided'>('two-sided');
   const [alpha, setAlpha] = useState(0.05);
-  const [numComparisons, setNumComparisons] = useState(1);
+  const [numFlights, setNumFlights] = useState(2);
+  const [comparisonType, setComparisonType] = useState<'control' | 'pairwise'>('control');
 
   const [controlMean, setControlMean] = useState(100);
   const [treatmentMean, setTreatmentMean] = useState(105);
@@ -24,6 +25,9 @@ export function TestResultsCalculator({ onBack, onNavigate }: TestResultsCalcula
   const [sampleSizeTreatmentBinary, setSampleSizeTreatmentBinary] = useState(5000);
 
   const calculateResults = () => {
+    const numComparisons = numFlights === 2 ? 1 :
+      comparisonType === 'control' ? numFlights - 1 :
+      (numFlights * (numFlights - 1)) / 2;
     const adjustedAlpha = alpha / numComparisons;
 
     if (metricType === 'continuous') {
@@ -225,32 +229,73 @@ export function TestResultsCalculator({ onBack, onNavigate }: TestResultsCalcula
                 </div>
 
                 <div>
-                  <label className="block text-white font-semibold mb-2">
-                    Number of Comparisons: {numComparisons}
+                  <label className="block text-white font-semibold mb-3">
+                    Number of Flights: {numFlights}
                   </label>
-                  <input
-                    type="number"
-                    min="1"
-                    value={numComparisons}
-                    onChange={(e) => setNumComparisons(Math.max(1, parseInt(e.target.value) || 1))}
-                    className="w-full bg-gray-700 text-white px-3 py-2 rounded"
-                  />
-                  <div className="flex items-center gap-2 mt-1">
-                    <p className="text-xs text-gray-400">
-                      {numComparisons > 1 ? `Bonferroni adjusted α: ${(alpha / numComparisons).toFixed(4)}` : 'No adjustment'}
-                    </p>
-                    {numComparisons > 1 && (
-                      <button
-                        onClick={() => onNavigate('fwer')}
-                        className="flex items-center gap-1 text-blue-400 hover:text-blue-300 text-xs transition-colors"
-                        title="Learn more about FWER correction"
-                      >
-                        <Info className="w-3 h-3" />
-                        <span>Learn more</span>
-                      </button>
-                    )}
+                  <div className="flex gap-2">
+                    <button
+                      onClick={() => setNumFlights(Math.max(2, numFlights - 1))}
+                      className="flex-1 bg-gray-700 hover:bg-gray-600 text-white py-2 rounded"
+                    >
+                      -
+                    </button>
+                    <input
+                      type="number"
+                      min="2"
+                      value={numFlights}
+                      onChange={(e) => setNumFlights(Math.max(2, parseInt(e.target.value) || 2))}
+                      className="flex-1 bg-gray-700 text-white px-3 py-2 rounded text-center"
+                    />
+                    <button
+                      onClick={() => setNumFlights(numFlights + 1)}
+                      className="flex-1 bg-gray-700 hover:bg-gray-600 text-white py-2 rounded"
+                    >
+                      +
+                    </button>
                   </div>
                 </div>
+              </div>
+
+              {numFlights > 2 && (
+                <div>
+                  <label className="block text-white font-semibold mb-3">Comparison Type</label>
+                  <div className="space-y-2">
+                    <label className="flex items-center gap-3 cursor-pointer">
+                      <input
+                        type="radio"
+                        checked={comparisonType === 'control'}
+                        onChange={() => setComparisonType('control')}
+                        className="w-4 h-4"
+                      />
+                      <span className="text-gray-300">Compare to control ({numFlights - 1} comparisons)</span>
+                    </label>
+                    <label className="flex items-center gap-3 cursor-pointer">
+                      <input
+                        type="radio"
+                        checked={comparisonType === 'pairwise'}
+                        onChange={() => setComparisonType('pairwise')}
+                        className="w-4 h-4"
+                      />
+                      <span className="text-gray-300">Pairwise ({(numFlights * (numFlights - 1)) / 2} comparisons)</span>
+                    </label>
+                  </div>
+                  <div className="flex items-center gap-2 mt-2">
+                    <p className="text-xs text-gray-400">
+                      Bonferroni adjusted α: {(alpha / (comparisonType === 'control' ? numFlights - 1 : (numFlights * (numFlights - 1)) / 2)).toFixed(4)}
+                    </p>
+                    <button
+                      onClick={() => onNavigate('fwer')}
+                      className="flex items-center gap-1 text-blue-400 hover:text-blue-300 text-xs transition-colors"
+                      title="Learn more about FWER correction"
+                    >
+                      <Info className="w-3 h-3" />
+                      <span>Learn more</span>
+                    </button>
+                  </div>
+                </div>
+              )}
+
+              <div className="border-t border-gray-700 pt-6">
               </div>
 
               {metricType === 'continuous' && (
@@ -461,10 +506,13 @@ export function TestResultsCalculator({ onBack, onNavigate }: TestResultsCalcula
                   <p className={`text-lg font-bold ${result.isSignificant ? 'text-green-400' : 'text-red-400'}`}>
                     {result.isSignificant ? '✓ Significant' : '✗ Not Significant'}
                   </p>
-                  {numComparisons > 1 ? (
+                  {numFlights > 2 ? (
                     <div className="text-gray-400 text-xs mt-1">
                       <p>at α = {alpha.toFixed(3)} (original)</p>
                       <p>Bonferroni adjusted: {result.adjustedAlpha.toFixed(4)}</p>
+                      <p className="text-gray-400 mt-1">
+                        {comparisonType === 'control' ? `${numFlights - 1} comparisons to control` : `${(numFlights * (numFlights - 1)) / 2} pairwise comparisons`}
+                      </p>
                       <button
                         onClick={() => onNavigate('fwer')}
                         className="flex items-center gap-1 text-blue-400 hover:text-blue-300 text-xs mt-1 transition-colors"
