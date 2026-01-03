@@ -1,11 +1,12 @@
 import { useState } from 'react';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, Info } from 'lucide-react';
 
 interface TestResultsCalculatorProps {
   onBack: () => void;
+  onNavigate: (page: string) => void;
 }
 
-export function TestResultsCalculator({ onBack }: TestResultsCalculatorProps) {
+export function TestResultsCalculator({ onBack, onNavigate }: TestResultsCalculatorProps) {
   const [metricType, setMetricType] = useState<'continuous' | 'binary'>('continuous');
   const [testType, setTestType] = useState<'two-sided' | 'one-sided'>('two-sided');
   const [alpha, setAlpha] = useState(0.05);
@@ -234,9 +235,21 @@ export function TestResultsCalculator({ onBack }: TestResultsCalculatorProps) {
                     onChange={(e) => setNumComparisons(Math.max(1, parseInt(e.target.value) || 1))}
                     className="w-full bg-gray-700 text-white px-3 py-2 rounded"
                   />
-                  <p className="text-xs text-gray-400 mt-1">
-                    {numComparisons > 1 ? `Bonferroni adjusted α: ${(alpha / numComparisons).toFixed(4)}` : 'No adjustment'}
-                  </p>
+                  <div className="flex items-center gap-2 mt-1">
+                    <p className="text-xs text-gray-400">
+                      {numComparisons > 1 ? `Bonferroni adjusted α: ${(alpha / numComparisons).toFixed(4)}` : 'No adjustment'}
+                    </p>
+                    {numComparisons > 1 && (
+                      <button
+                        onClick={() => onNavigate('fwer')}
+                        className="flex items-center gap-1 text-blue-400 hover:text-blue-300 text-xs transition-colors"
+                        title="Learn more about FWER correction"
+                      >
+                        <Info className="w-3 h-3" />
+                        <span>Learn more</span>
+                      </button>
+                    )}
+                  </div>
                 </div>
               </div>
 
@@ -452,6 +465,13 @@ export function TestResultsCalculator({ onBack }: TestResultsCalculatorProps) {
                     <div className="text-gray-400 text-xs mt-1">
                       <p>at α = {alpha.toFixed(3)} (original)</p>
                       <p>Bonferroni adjusted: {result.adjustedAlpha.toFixed(4)}</p>
+                      <button
+                        onClick={() => onNavigate('fwer')}
+                        className="flex items-center gap-1 text-blue-400 hover:text-blue-300 text-xs mt-1 transition-colors"
+                      >
+                        <Info className="w-3 h-3" />
+                        <span>Learn about FWER</span>
+                      </button>
                     </div>
                   ) : (
                     <p className="text-gray-400 text-xs mt-1">at α = {alpha.toFixed(3)}</p>

@@ -72,13 +72,13 @@ function App() {
       case 'glossary':
         return <GlossaryPage />;
       case 'sample-size-calc':
-        return <SampleSizeCalculator onBack={() => setCurrentPage('landing')} />;
+        return <SampleSizeCalculator onBack={() => setCurrentPage('landing')} onNavigate={handleNavigate} />;
       case 'test-duration-calc':
-        return <TestDurationCalculator onBack={() => setCurrentPage('landing')} />;
+        return <TestDurationCalculator onBack={() => setCurrentPage('landing')} onNavigate={handleNavigate} />;
       case 'effect-detection-calc':
-        return <EffectDetectionCalculator onBack={() => setCurrentPage('landing')} />;
+        return <EffectDetectionCalculator onBack={() => setCurrentPage('landing')} onNavigate={handleNavigate} />;
       case 'test-results-calc':
-        return <TestResultsCalculator onBack={() => setCurrentPage('landing')} />;
+        return <TestResultsCalculator onBack={() => setCurrentPage('landing')} onNavigate={handleNavigate} />;
       default:
         return <NHSTPage />;
     }

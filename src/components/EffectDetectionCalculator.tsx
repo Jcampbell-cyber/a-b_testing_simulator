@@ -1,11 +1,12 @@
 import { useState } from 'react';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, Info } from 'lucide-react';
 
 interface EffectDetectionCalculatorProps {
   onBack: () => void;
+  onNavigate: (page: string) => void;
 }
 
-export function EffectDetectionCalculator({ onBack }: EffectDetectionCalculatorProps) {
+export function EffectDetectionCalculator({ onBack, onNavigate }: EffectDetectionCalculatorProps) {
   const [metricType, setMetricType] = useState<'continuous' | 'binary'>('continuous');
   const [testType, setTestType] = useState<'two-sided' | 'one-sided'>('two-sided');
   const [alpha, setAlpha] = useState(0.05);
@@ -204,9 +205,21 @@ export function EffectDetectionCalculator({ onBack }: EffectDetectionCalculatorP
                   onChange={(e) => setNumComparisons(Math.max(1, parseInt(e.target.value) || 1))}
                   className="w-full bg-gray-700 text-white px-3 py-2 rounded"
                 />
-                <p className="text-xs text-gray-400 mt-1">
-                  {numComparisons > 1 ? `Bonferroni adjusted α: ${(alpha / numComparisons).toFixed(4)}` : 'No adjustment'}
-                </p>
+                <div className="flex items-center gap-2 mt-1">
+                  <p className="text-xs text-gray-400">
+                    {numComparisons > 1 ? `Bonferroni adjusted α: ${(alpha / numComparisons).toFixed(4)}` : 'No adjustment'}
+                  </p>
+                  {numComparisons > 1 && (
+                    <button
+                      onClick={() => onNavigate('fwer')}
+                      className="flex items-center gap-1 text-blue-400 hover:text-blue-300 text-xs transition-colors"
+                      title="Learn more about FWER correction"
+                    >
+                      <Info className="w-3 h-3" />
+                      <span>Learn more</span>
+                    </button>
+                  )}
+                </div>
               </div>
 
               {metricType === 'continuous' && (
@@ -456,6 +469,15 @@ export function EffectDetectionCalculator({ onBack }: EffectDetectionCalculatorP
                     <li>Flights: {numFlights}</li>
                     {numComparisons > 1 && <li>Comparisons: {numComparisons} (Bonferroni)</li>}
                   </ul>
+                  {numComparisons > 1 && (
+                    <button
+                      onClick={() => onNavigate('fwer')}
+                      className="flex items-center gap-1 text-blue-400 hover:text-blue-300 text-xs mt-2 transition-colors"
+                    >
+                      <Info className="w-3 h-3" />
+                      <span>Learn about FWER</span>
+                    </button>
+                  )}
                 </div>
               </div>
             </div>
