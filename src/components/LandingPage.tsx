@@ -118,10 +118,10 @@ export function LandingPage({ onGetStarted }: LandingPageProps) {
       <div className="max-w-6xl mx-auto px-4 py-16">
         <div className="text-center mb-16">
           <h1 className="text-5xl font-bold text-white mb-4">
-            A/B Testing Tools
+            Advanced A/B Testing Concepts
           </h1>
           <p className="text-xl text-gray-300 max-w-3xl mx-auto">
-            Interactive tools to understand common pitfalls and advanced techniques in A/B testing
+            Interactive tools to understand common pitfalls and advanced techniques in A/B (split) testing
           </p>
         </div>
 
