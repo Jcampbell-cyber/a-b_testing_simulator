@@ -401,11 +401,14 @@ export function TestDurationCalculator({ onBack, onNavigate }: TestDurationCalcu
                 </div>
 
                 <div className="border-t border-gray-600 pt-6">
-                  <p className="text-gray-300 text-sm mb-1">Total Samples Needed</p>
+                  <p className="text-gray-300 text-sm mb-1">Total Samples Needed (all flights)</p>
                   <p className="text-2xl font-bold text-gray-200">
                     {result.totalSamples.toLocaleString()}
                   </p>
                   <p className="text-gray-400 text-xs mt-1">at {result.samplesPerDay.toLocaleString()} per day</p>
+                  <p className="text-gray-400 text-xs mt-2">
+                    {Math.ceil(result.totalSamples / numFlights).toLocaleString()} per flight
+                  </p>
                 </div>
 
                 <div className="bg-gray-600 rounded p-4 text-sm text-gray-200 border-t border-gray-600">
