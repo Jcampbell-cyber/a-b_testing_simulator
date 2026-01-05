@@ -4,7 +4,7 @@ import { PeekingPage } from './components/PeekingPage';
 import { GuardrailsPage } from './components/GuardrailsPage';
 import { ImbalancedFlightsPage } from './components/ImbalancedFlightsPage';
 import { CUPEDPage } from './components/CUPEDPage';
-import { FeedbackPage } from './components/FeedbackPage';
+import { FeedbackForm } from './components/FeedbackForm';
 import { Navigation } from './components/Navigation';
 import { FWERPage } from './components/FWERPage';
 import NHSTPage from './components/NHSTPage';
@@ -72,7 +72,7 @@ function App() {
       case 'normalisation':
         return <NormalisationPage onBack={() => setCurrentPage('landing')} />;
       case 'feedback':
-        return <FeedbackPage />;
+        return <FeedbackForm />;
       case 'glossary':
         return <GlossaryPage />;
       case 'sample-size-calc':
