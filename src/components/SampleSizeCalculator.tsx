@@ -404,6 +404,75 @@ export function SampleSizeCalculator({ onBack, onNavigate }: SampleSizeCalculato
               </div>
             </div>
           </div>
+
+          <div className="mt-12 bg-gray-700 rounded-lg p-8">
+            <h2 className="text-2xl font-bold text-white mb-6">How the Calculation Works</h2>
+
+            <div className="space-y-6 text-gray-300">
+              <div>
+                <h3 className="text-lg font-semibold text-emerald-400 mb-2">The Core Formula</h3>
+                <p className="mb-3">
+                  Sample size calculations use the standard statistical formula that balances Type I and Type II error rates:
+                </p>
+                <div className="bg-gray-900 rounded p-4 font-mono text-sm mb-3">
+                  n = (z_α + z_β)² × (variance) / (effect size)²
+                </div>
+                <p className="text-sm text-gray-400">
+                  Where n is the sample size per group, z_α and z_β are critical values from the normal distribution, and variance depends on your metric type.
+                </p>
+              </div>
+
+              <div>
+                <h3 className="text-lg font-semibold text-emerald-400 mb-2">Key Components</h3>
+                <ul className="space-y-3 ml-4">
+                  <li className="text-sm">
+                    <strong>Significance Level (α):</strong> The probability of incorrectly rejecting a true null hypothesis (Type I error). Typically 0.05 means a 5% chance of a false positive.
+                  </li>
+                  <li className="text-sm">
+                    <strong>Power (1 - β):</strong> The probability of correctly detecting a true effect. Higher power (e.g., 0.80 or 80%) requires larger sample sizes but gives you more confidence in detecting real effects.
+                  </li>
+                  <li className="text-sm">
+                    <strong>Effect Size:</strong> The difference you want to detect between variants. Smaller effects require larger samples. We express this as Cohen's d for continuous metrics or absolute/relative uplift for binary metrics.
+                  </li>
+                  <li className="text-sm">
+                    <strong>Variance:</strong> For continuous metrics, this is 2 × (standard deviation)². For binary metrics, this is 2 × p × (1-p), where p is the baseline success rate.
+                  </li>
+                </ul>
+              </div>
+
+              <div>
+                <h3 className="text-lg font-semibold text-emerald-400 mb-2">Multiple Comparison Correction</h3>
+                <p className="text-sm mb-2">
+                  When testing multiple flights (variants), we apply <strong>Bonferroni correction</strong> to control for Family-Wise Error Rate (FWER):
+                </p>
+                <div className="bg-gray-900 rounded p-4 font-mono text-sm mb-3">
+                  Adjusted α = α / number of comparisons
+                </div>
+                <p className="text-sm text-gray-400">
+                  This more conservative threshold increases the required sample size. For example, with 3 flights and pairwise comparisons (3 comparisons total), the adjusted α would be 0.05 / 3 ≈ 0.0167 instead of 0.05.
+                </p>
+              </div>
+
+              <div>
+                <h3 className="text-lg font-semibold text-emerald-400 mb-2">What the Results Mean</h3>
+                <ul className="space-y-2 ml-4 text-sm">
+                  <li><strong>Per Flight Group:</strong> The minimum sample size needed for each variant to achieve your desired power and significance level.</li>
+                  <li><strong>Total Samples:</strong> The complete sample size across all flights. Multiply per-group size by the number of flights.</li>
+                  <li><strong>Example:</strong> 5,000 samples per flight × 3 flights = 15,000 total samples needed for your experiment.</li>
+                </ul>
+              </div>
+
+              <div>
+                <h3 className="text-lg font-semibold text-emerald-400 mb-2">Practical Implications</h3>
+                <ul className="space-y-2 ml-4 text-sm text-gray-400">
+                  <li>Larger effects require smaller samples</li>
+                  <li>Higher power requirements increase sample size</li>
+                  <li>Multiple comparisons significantly inflate sample size needs</li>
+                  <li>Binary metrics (like click rates) typically need more samples than continuous metrics (like revenue) for the same effect size</li>
+                </ul>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
