@@ -382,30 +382,30 @@ export function TestResultsCalculator({ onBack, onNavigate }: TestResultsCalcula
                   <div className="grid grid-cols-2 gap-4">
                     <div>
                       <label className="block text-white font-semibold mb-2">
-                        Control Proportion: {(controlProportion * 100).toFixed(2)}%
+                        Control Success Rate (%)
                       </label>
                       <input
-                        type="range"
+                        type="number"
                         min="0.01"
-                        max="0.99"
+                        max="99.99"
                         step="0.01"
-                        value={controlProportion}
-                        onChange={(e) => setControlProportion(parseFloat(e.target.value))}
-                        className="w-full"
+                        value={(controlProportion * 100).toFixed(2)}
+                        onChange={(e) => setControlProportion(parseFloat(e.target.value) / 100)}
+                        className="w-full bg-gray-700 text-white px-3 py-2 rounded"
                       />
                     </div>
                     <div>
                       <label className="block text-white font-semibold mb-2">
-                        Treatment Proportion: {(treatmentProportion * 100).toFixed(2)}%
+                        Treatment Success Rate (%)
                       </label>
                       <input
-                        type="range"
+                        type="number"
                         min="0.01"
-                        max="0.99"
+                        max="99.99"
                         step="0.01"
-                        value={treatmentProportion}
-                        onChange={(e) => setTreatmentProportion(parseFloat(e.target.value))}
-                        className="w-full"
+                        value={(treatmentProportion * 100).toFixed(2)}
+                        onChange={(e) => setTreatmentProportion(parseFloat(e.target.value) / 100)}
+                        className="w-full bg-gray-700 text-white px-3 py-2 rounded"
                       />
                     </div>
                   </div>

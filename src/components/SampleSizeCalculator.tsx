@@ -211,16 +211,16 @@ export function SampleSizeCalculator({ onBack, onNavigate }: SampleSizeCalculato
               {metricType === 'binary' && (
                 <div>
                   <label className="block text-white font-semibold mb-2">
-                    Success Rate: {(proportion * 100).toFixed(2)}%
+                    Control Success Rate (%)
                   </label>
                   <input
-                    type="range"
+                    type="number"
                     min="0.01"
-                    max="0.99"
+                    max="99.99"
                     step="0.01"
-                    value={proportion}
-                    onChange={(e) => setProportion(parseFloat(e.target.value))}
-                    className="w-full"
+                    value={(proportion * 100).toFixed(2)}
+                    onChange={(e) => setProportion(parseFloat(e.target.value) / 100)}
+                    className="w-full bg-gray-700 text-white px-3 py-2 rounded"
                   />
                 </div>
               )}
