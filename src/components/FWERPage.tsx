@@ -165,17 +165,6 @@ export function FWERPage() {
           isRunning={isRunning}
         />
 
-        <div className="mt-8">
-          <FWERErrorRateChart
-            comparisonType={comparisonType}
-            baselineMean={baselineMean}
-            stdev={stdev}
-            sampleSize={sampleSize}
-            alpha={alpha}
-            trueUplift={trueUplift}
-          />
-        </div>
-
         {results && (
           <div className="mt-8 space-y-6">
             <FWERResultsDisplay
@@ -190,6 +179,17 @@ export function FWERPage() {
               numFlights={numFlights}
               comparisonType={comparisonType}
             />
+
+            <div className="mt-8">
+              <FWERErrorRateChart
+                comparisonType={comparisonType}
+                baselineMean={baselineMean}
+                stdev={stdev}
+                sampleSize={sampleSize}
+                alpha={alpha}
+                trueUplift={trueUplift}
+              />
+            </div>
           </div>
         )}
       </div>
