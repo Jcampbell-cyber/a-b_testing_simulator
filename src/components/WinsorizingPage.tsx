@@ -56,8 +56,8 @@ export function WinsorizingPage() {
           <div className="bg-gray-800 rounded-lg border border-gray-700 p-5">
             <h3 className="text-lg font-semibold text-white mb-3">What is Winsorizing?</h3>
             <p className="text-sm text-gray-300 mb-3">
-              <strong className="text-white">Winsorizing</strong> is a statistical technique for handling outliers by capping extreme values
-              at a specified percentile threshold, rather than removing them entirely.
+              <strong className="text-white">Winsorizing</strong> is a statistical technique for handling skewed distributions and outliers by capping extreme values
+              at a specified percentile threshold, rather than removing them entirely. It's particularly effective for metrics with heavy tails or extreme values.
             </p>
             <p className="text-sm text-gray-300 mb-2">For example, with 99th percentile winsorizing:</p>
             <ul className="list-disc list-inside space-y-1 ml-2 text-sm text-gray-300">
@@ -65,6 +65,10 @@ export function WinsorizingPage() {
               <li>All other values remain unchanged</li>
               <li>No data points are removed, preserving sample size</li>
             </ul>
+            <p className="text-sm text-gray-400 mt-3">
+              <strong>Why it works:</strong> In skewed distributions, extreme outliers inflate variance and widen confidence intervals, making it harder to detect real effects.
+              By capping these values, you reduce noise without losing the information that these data points exist.
+            </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

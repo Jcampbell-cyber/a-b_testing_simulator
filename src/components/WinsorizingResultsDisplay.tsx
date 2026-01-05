@@ -43,13 +43,7 @@ function SingleSampleResults({ results }: { results: WinsorizingResults }) {
 
   return (
     <div className="space-y-6">
-      <div className="grid grid-cols-3 gap-4">
-        <MetricCard
-          title="Outliers Detected"
-          value={results.original.outlierCount}
-          subtitle={`${((results.original.outlierCount / results.original.data.length) * 100).toFixed(1)}% of sample`}
-          icon={<TrendingDown className="w-5 h-5 text-red-500" />}
-        />
+      <div className="grid grid-cols-2 gap-4">
         <MetricCard
           title="Values Capped"
           value={results.winsorized.cappedCount}
