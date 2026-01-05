@@ -142,6 +142,17 @@ export function FWERPage() {
           </div>
         </div>
 
+        <div className="mb-8">
+          <FWERErrorRateChart
+            comparisonType={comparisonType}
+            baselineMean={baselineMean}
+            stdev={stdev}
+            sampleSize={sampleSize}
+            alpha={alpha}
+            trueUplift={trueUplift}
+          />
+        </div>
+
         <FWERControls
           testType={testType}
           numFlights={numFlights}
@@ -179,17 +190,6 @@ export function FWERPage() {
               numFlights={numFlights}
               comparisonType={comparisonType}
             />
-
-            <div className="mt-8">
-              <FWERErrorRateChart
-                comparisonType={comparisonType}
-                baselineMean={baselineMean}
-                stdev={stdev}
-                sampleSize={sampleSize}
-                alpha={alpha}
-                trueUplift={trueUplift}
-              />
-            </div>
           </div>
         )}
       </div>
