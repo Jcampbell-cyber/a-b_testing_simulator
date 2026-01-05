@@ -537,6 +537,92 @@ export function TestResultsCalculator({ onBack, onNavigate }: TestResultsCalcula
               </div>
             </div>
           </div>
+
+          <div className="mt-12 bg-gray-700 rounded-lg p-8">
+            <h2 className="text-2xl font-bold text-white mb-6">How the Calculation Works</h2>
+
+            <div className="space-y-6 text-gray-300">
+              <div>
+                <h3 className="text-lg font-semibold text-emerald-400 mb-2">Statistical Testing Overview</h3>
+                <p className="mb-3">
+                  This calculator performs hypothesis testing to determine if your observed difference between variants is statistically significant. The process:
+                </p>
+                <ol className="space-y-2 ml-4 text-sm list-decimal">
+                  <li>Calculate the observed difference between variants</li>
+                  <li>Compute a test statistic (t-test for continuous, z-test for binary)</li>
+                  <li>Calculate the p-value: probability of observing this result if there's no real difference</li>
+                  <li>Compare p-value to significance level (α) to determine significance</li>
+                </ol>
+              </div>
+
+              <div>
+                <h3 className="text-lg font-semibold text-emerald-400 mb-2">Understanding Your Results</h3>
+                <ul className="space-y-3 ml-4">
+                  <li className="text-sm">
+                    <strong>Difference:</strong> The observed change between control and treatment. Positive means treatment is better; negative means it's worse.
+                  </li>
+                  <li className="text-sm">
+                    <strong>P-value:</strong> The probability of seeing this difference (or larger) if there's actually no real effect. Smaller p-values provide stronger evidence of a real effect.
+                  </li>
+                  <li className="text-sm">
+                    <strong>Confidence Interval:</strong> A range of plausible values for the true effect. Narrower intervals indicate more precise estimates. If the interval doesn't cross zero, the effect is significant.
+                  </li>
+                  <li className="text-sm">
+                    <strong>Significant:</strong> p-value is less than α, meaning we reject the null hypothesis and conclude there's a real difference.
+                  </li>
+                </ul>
+              </div>
+
+              <div>
+                <h3 className="text-lg font-semibold text-emerald-400 mb-2">Continuous Metrics (T-test)</h3>
+                <p className="text-sm mb-2">
+                  For metrics like revenue, time on page, or other numerical measures. We compare means and account for variability:
+                </p>
+                <div className="bg-gray-900 rounded p-4 font-mono text-sm mb-3">
+                  t = (mean_treatment - mean_control) / SE
+                </div>
+                <p className="text-sm text-gray-400">
+                  Where SE (standard error) is calculated from your sample sizes and standard deviation.
+                </p>
+              </div>
+
+              <div>
+                <h3 className="text-lg font-semibold text-emerald-400 mb-2">Binary Metrics (Z-test)</h3>
+                <p className="text-sm mb-2">
+                  For metrics like click rate, conversion rate, or other proportions. We compare success proportions:
+                </p>
+                <div className="bg-gray-900 rounded p-4 font-mono text-sm mb-3">
+                  z = (p_treatment - p_control) / SE
+                </div>
+                <p className="text-sm text-gray-400">
+                  Where SE accounts for both proportions and sample sizes.
+                </p>
+              </div>
+
+              <div>
+                <h3 className="text-lg font-semibold text-emerald-400 mb-2">Multiple Comparison Correction</h3>
+                <p className="text-sm mb-2">
+                  When testing multiple variants, we apply Bonferroni correction to reduce false positives:
+                </p>
+                <div className="bg-gray-900 rounded p-4 font-mono text-sm mb-3">
+                  Adjusted α = α / number of comparisons
+                </div>
+                <p className="text-sm text-gray-400">
+                  This makes it stricter to achieve significance (higher p-value threshold required). For example, with 3 pairwise comparisons and α=0.05, the adjusted threshold is 0.05/3 ≈ 0.0167.
+                </p>
+              </div>
+
+              <div>
+                <h3 className="text-lg font-semibold text-emerald-400 mb-2">Important Notes</h3>
+                <ul className="space-y-2 ml-4 text-sm text-gray-400">
+                  <li>A non-significant result doesn't mean there's no effect; it may mean your sample size was too small</li>
+                  <li>Confidence intervals are often more informative than p-values alone</li>
+                  <li>Always check practical significance: Is a 0.1% improvement worth implementing?</li>
+                  <li>Be cautious of p-hacking or multiple testing without proper corrections</li>
+                </ul>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>

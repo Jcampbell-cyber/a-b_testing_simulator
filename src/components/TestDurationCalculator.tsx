@@ -436,6 +436,75 @@ export function TestDurationCalculator({ onBack, onNavigate }: TestDurationCalcu
               </div>
             </div>
           </div>
+
+          <div className="mt-12 bg-gray-700 rounded-lg p-8">
+            <h2 className="text-2xl font-bold text-white mb-6">How the Calculation Works</h2>
+
+            <div className="space-y-6 text-gray-300">
+              <div>
+                <h3 className="text-lg font-semibold text-emerald-400 mb-2">Duration Formula</h3>
+                <p className="mb-3">
+                  Test duration is determined by how long it takes to collect the required sample size:
+                </p>
+                <div className="bg-gray-900 rounded p-4 font-mono text-sm mb-3">
+                  Days Needed = Sample Size Required / Daily Traffic
+                </div>
+                <p className="text-sm text-gray-400">
+                  First, we calculate the total sample size needed (using the same formula as Sample Size Calculator). Then we divide by your daily traffic to estimate how many days the test must run.
+                </p>
+              </div>
+
+              <div>
+                <h3 className="text-lg font-semibold text-emerald-400 mb-2">Traffic Distribution Options</h3>
+                <ul className="space-y-3 ml-4">
+                  <li className="text-sm">
+                    <strong>Across All Flights:</strong> Daily traffic value is split evenly among all variants. For example, 10,000 daily users with 3 flights means ~3,333 per flight per day.
+                  </li>
+                  <li className="text-sm">
+                    <strong>Per Flight Only:</strong> Daily traffic value applies to each flight individually. Use this when you have dedicated traffic pools for each variant.
+                  </li>
+                </ul>
+              </div>
+
+              <div>
+                <h3 className="text-lg font-semibold text-emerald-400 mb-2">Key Factors Affecting Duration</h3>
+                <ul className="space-y-2 ml-4 text-sm text-gray-400">
+                  <li>
+                    <strong>Smaller MDE:</strong> Requires larger sample size → longer test duration
+                  </li>
+                  <li>
+                    <strong>Lower Traffic:</strong> Fewer daily conversions → longer test duration
+                  </li>
+                  <li>
+                    <strong>More Variants:</strong> More comparisons needed → larger sample size → longer duration
+                  </li>
+                  <li>
+                    <strong>Higher Power:</strong> More stringent requirements → larger sample size → longer duration
+                  </li>
+                </ul>
+              </div>
+
+              <div>
+                <h3 className="text-lg font-semibold text-emerald-400 mb-2">Multiple Comparison Impact</h3>
+                <p className="text-sm mb-2">
+                  With multiple flights, Bonferroni correction requires a stricter significance threshold. This increases the sample size needed by a factor roughly proportional to the number of comparisons.
+                </p>
+                <p className="text-sm text-gray-400">
+                  Example: Testing 3 variants with pairwise comparisons (3 comparisons total) roughly triples your duration compared to a 2-variant test.
+                </p>
+              </div>
+
+              <div>
+                <h3 className="text-lg font-semibold text-emerald-400 mb-2">Practical Considerations</h3>
+                <ul className="space-y-2 ml-4 text-sm text-gray-400">
+                  <li>Longer tests have lower risk of being affected by external events or temporal patterns</li>
+                  <li>Shorter tests reduce time-to-insight but have less data to work with</li>
+                  <li>Consider business constraints: Can you wait 60 days? Can you spare the traffic? Are seasonal factors a concern?</li>
+                  <li>High traffic or large expected effects can dramatically reduce test duration</li>
+                </ul>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>

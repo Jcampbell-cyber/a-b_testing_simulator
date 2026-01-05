@@ -505,6 +505,77 @@ export function EffectDetectionCalculator({ onBack, onNavigate }: EffectDetectio
               </div>
             </div>
           </div>
+
+          <div className="mt-12 bg-gray-700 rounded-lg p-8">
+            <h2 className="text-2xl font-bold text-white mb-6">How the Calculation Works</h2>
+
+            <div className="space-y-6 text-gray-300">
+              <div>
+                <h3 className="text-lg font-semibold text-emerald-400 mb-2">Minimum Detectable Effect (MDE)</h3>
+                <p className="mb-3">
+                  The MDE is the smallest difference between variants that your test is statistically powered to detect. We calculate it by rearranging the standard sample size formula:
+                </p>
+                <div className="bg-gray-900 rounded p-4 font-mono text-sm mb-3">
+                  MDE = (z_α + z_β) × SD / √n
+                </div>
+                <p className="text-sm text-gray-400">
+                  Where SD is standard deviation, n is samples per group, and z values represent your significance and power thresholds.
+                </p>
+              </div>
+
+              <div>
+                <h3 className="text-lg font-semibold text-emerald-400 mb-2">What This Tells You</h3>
+                <ul className="space-y-3 ml-4">
+                  <li className="text-sm">
+                    <strong>Current Configuration:</strong> The MDE at your specified sample size, power, and significance level. This is the minimum real effect your test can reliably detect.
+                  </li>
+                  <li className="text-sm">
+                    <strong>Half Sample Size:</strong> What you could detect with half the samples. Effects need to be larger when you collect fewer samples.
+                  </li>
+                  <li className="text-sm">
+                    <strong>Double Sample Size:</strong> What you could detect with double the samples. Larger samples allow you to detect smaller, more subtle effects.
+                  </li>
+                </ul>
+              </div>
+
+              <div>
+                <h3 className="text-lg font-semibold text-emerald-400 mb-2">Sample Size Impact</h3>
+                <p className="text-sm mb-2">
+                  MDE has an inverse square root relationship with sample size. This means:
+                </p>
+                <ul className="space-y-2 ml-4 text-sm text-gray-400">
+                  <li>Doubling your sample size reduces MDE by ~29% (divide by √2)</li>
+                  <li>Quadrupling your sample size reduces MDE by 50% (divide by 2)</li>
+                  <li>To detect an effect half as large, you need 4x the sample size</li>
+                </ul>
+              </div>
+
+              <div>
+                <h3 className="text-lg font-semibold text-emerald-400 mb-2">Multiple Comparison Correction</h3>
+                <p className="text-sm mb-2">
+                  When testing multiple flights (variants), Bonferroni correction makes detection harder by requiring a stricter significance threshold:
+                </p>
+                <div className="bg-gray-900 rounded p-4 font-mono text-sm mb-3">
+                  Adjusted α = α / number of comparisons
+                </div>
+                <p className="text-sm text-gray-400">
+                  This increases the z-value used in the formula, which increases the MDE. Testing more variants means needing larger sample sizes to detect the same effects.
+                </p>
+              </div>
+
+              <div>
+                <h3 className="text-lg font-semibold text-emerald-400 mb-2">Practical Use</h3>
+                <p className="text-sm text-gray-400">
+                  Use this calculator to understand trade-offs: With a fixed sample size, you can either:
+                </p>
+                <ul className="space-y-2 ml-4 text-sm text-gray-400 mt-2">
+                  <li>Detect smaller effects by running longer (collecting more samples)</li>
+                  <li>Detect larger effects right away with the samples you have</li>
+                  <li>Determine if your expected effect size is realistic for your budget and timeline</li>
+                </ul>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
