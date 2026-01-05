@@ -442,15 +442,28 @@ export function TestDurationCalculator({ onBack, onNavigate }: TestDurationCalcu
 
             <div className="space-y-6 text-gray-300">
               <div>
+                <h3 className="text-lg font-semibold text-emerald-400 mb-2">Sample Size Calculation</h3>
+                <p className="mb-3">
+                  First, we calculate the required sample size per group using the power analysis formula:
+                </p>
+                <div className="bg-gray-900 rounded p-4 font-mono text-sm mb-3">
+                  n = (Variance × (z_α + z_β)²) / (Effect Size)²
+                </div>
+                <p className="text-sm text-gray-400 mb-3">
+                  Where z_α and z_β are the critical values for your significance level and power. Variance depends on metric type (continuous uses 2, binary uses 2p(1-p)). The effect size is calculated from your MDE and metric parameters.
+                </p>
+              </div>
+
+              <div>
                 <h3 className="text-lg font-semibold text-emerald-400 mb-2">Duration Formula</h3>
                 <p className="mb-3">
                   Test duration is determined by how long it takes to collect the required sample size:
                 </p>
                 <div className="bg-gray-900 rounded p-4 font-mono text-sm mb-3">
-                  Days Needed = Sample Size Required / Daily Traffic
+                  Days Needed = (Sample Size per Group × Number of Flights) / Daily Traffic
                 </div>
                 <p className="text-sm text-gray-400">
-                  First, we calculate the total sample size needed (using the same formula as Sample Size Calculator). Then we divide by your daily traffic to estimate how many days the test must run.
+                  The total sample size is calculated from the per-group requirement multiplied by the number of variants (flights) in your test. Then we divide by your daily traffic to estimate how many days the test must run.
                 </p>
               </div>
 
