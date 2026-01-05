@@ -62,7 +62,7 @@ export function TestDurationCalculator({ onBack, onNavigate }: TestDurationCalcu
       } else {
         absoluteMde = (mdeValue / 100) * proportion;
       }
-      effectSize = absoluteMde / Math.sqrt(proportion * (1 - proportion));
+      effectSize = absoluteMde;
       variance = 2 * proportion * (1 - proportion);
     }
 

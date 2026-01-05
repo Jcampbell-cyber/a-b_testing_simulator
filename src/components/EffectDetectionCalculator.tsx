@@ -60,7 +60,7 @@ export function EffectDetectionCalculator({ onBack, onNavigate }: EffectDetectio
 
     const absoluteMde = metricType === 'continuous'
       ? effectSizeCohen * stdev
-      : effectSizeCohen * Math.sqrt(proportion * (1 - proportion));
+      : effectSizeCohen;
 
     const relativeMde = metricType === 'continuous'
       ? (absoluteMde / mean) * 100
@@ -71,14 +71,14 @@ export function EffectDetectionCalculator({ onBack, onNavigate }: EffectDetectio
 
     const absoluteMdeHalf = metricType === 'continuous'
       ? mdeHalf * stdev
-      : mdeHalf * Math.sqrt(proportion * (1 - proportion));
+      : mdeHalf;
     const relativeMdeHalf = metricType === 'continuous'
       ? (absoluteMdeHalf / mean) * 100
       : (absoluteMdeHalf / proportion) * 100;
 
     const absoluteMdeDouble = metricType === 'continuous'
       ? mdeDouble * stdev
-      : mdeDouble * Math.sqrt(proportion * (1 - proportion));
+      : mdeDouble;
     const relativeMdeDouble = metricType === 'continuous'
       ? (absoluteMdeDouble / mean) * 100
       : (absoluteMdeDouble / proportion) * 100;
