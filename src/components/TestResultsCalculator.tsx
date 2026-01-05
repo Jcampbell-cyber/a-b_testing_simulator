@@ -124,7 +124,7 @@ export function TestResultsCalculator({ onBack, onNavigate }: TestResultsCalcula
 
     const y =
       1 -
-      (a5 * t5 + a4 * t4 + a3 * t3 + a2 * t2 + a1 * t) * Math.exp(-absZ * absZ);
+      (a5 * t5 + a4 * t4 + a3 * t3 + a2 * t2 + a1 * t) * Math.exp(-absZ * absZ / 2);
     return 0.5 * (1 + sign * y);
   };
 
