@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { LandingPage } from './components/LandingPage';
 import { PeekingPage } from './components/PeekingPage';
 import { GuardrailsPage } from './components/GuardrailsPage';
@@ -40,6 +40,10 @@ function App() {
   const handleNavigate = (page: string) => {
     setCurrentPage(page as PageMode);
   };
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [currentPage]);
 
   const renderPage = () => {
     switch (currentPage) {
