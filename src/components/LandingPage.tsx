@@ -1,8 +1,8 @@
-import { Eye, Shield, Scale, Clock, GitMerge, TrendingUp } from 'lucide-react';
+import { Eye, Shield, Scale, Clock, GitMerge, TrendingUp, Mail } from 'lucide-react';
 
 interface LandingPageProps {
   onGetStarted: (
-    mode: 'nhst' | 'peeking' | 'guardrails' | 'imbalanced' | 'cuped' | 'fwer' | 'winsorizing' | 'normalisation' | 'sample-size-calc' | 'test-duration-calc' | 'effect-detection-calc' | 'test-results-calc'
+    mode: 'nhst' | 'peeking' | 'guardrails' | 'imbalanced' | 'cuped' | 'fwer' | 'winsorizing' | 'normalisation' | 'sample-size-calc' | 'test-duration-calc' | 'effect-detection-calc' | 'test-results-calc' | 'feedback'
   ) => void;
 }
 
@@ -128,10 +128,17 @@ export function LandingPage({ onGetStarted }: LandingPageProps) {
         <CardSection title="Calculators" cards={calculatorCards} />
         <CardSection title="Understanding & Simulators" cards={understandingCards} />
 
-        <div className="mt-12 text-center text-gray-400 text-sm">
-          <p>
+        <div className="mt-12 text-center">
+          <p className="text-gray-400 text-sm mb-6">
             Built to educate data scientists and product managers about proper A/B testing methodology.
           </p>
+          <button
+            onClick={() => onGetStarted('feedback')}
+            className="inline-flex items-center gap-2 bg-gray-800 border border-gray-700 text-gray-300 hover:text-white hover:border-[#0017D2] px-4 py-2 rounded-lg transition-colors"
+          >
+            <Mail className="w-4 h-4" />
+            Send Feedback
+          </button>
         </div>
       </div>
     </div>
