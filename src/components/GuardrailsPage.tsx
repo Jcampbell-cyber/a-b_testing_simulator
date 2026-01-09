@@ -111,8 +111,7 @@ export function GuardrailsPage() {
               timelines={results.allTimelines}
               guardrailType={guardrailType}
               manualGuardrail={manualGuardrail}
-              testDuration={testDuration}
-              testDuration={testDuration}  
+              testDuration={testDuration} 
             />
           )}
         </div>
