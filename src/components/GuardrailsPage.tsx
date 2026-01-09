@@ -142,6 +142,10 @@ export function GuardrailsPage() {
             <div className="bg-gray-700 rounded p-4 mt-4">
               <p className="text-sm">
                 <strong>Recommendation:</strong> Use statistical guardrails for ongoing monitoring, as they balance safety with statistical rigor. Reserve manual guardrails only for absolute red-line thresholds where any breach—regardless of statistical significance—requires immediate action.
+             </p>
+              <p className="text-sm">
+                <strong>Peeking frequency:</strong> Weekly guardrail checks reduce false early stops compared to daily monitoring. Daily peeks inflate volatility at low sample sizes, increasing noise-driven guardrail breaches without improving detection of genuinely harmful effects.
+  </p>
               </p>
             </div>
           </div>
