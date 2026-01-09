@@ -160,27 +160,6 @@ export function NormalisationResultsDisplay({ results }: Props) {
         </div>
       </div>
 
-      <div className="bg-gray-900 rounded-xl border border-gray-800 p-5">
-        <h3 className="text-lg font-semibold text-white mb-3">Variance Reduction</h3>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <div className="bg-gray-800 rounded-lg p-4 text-center">
-            <div className="text-2xl font-bold text-blue-400">{results.varianceReductionRatio.toFixed(1)}x</div>
-            <div className="text-xs text-gray-400 mt-1">Variance Reduction</div>
-          </div>
-          <div className="bg-gray-800 rounded-lg p-4 text-center">
-            <div className="text-2xl font-bold text-green-400">{(ciWidthRawPercent / ciWidthNormPercent).toFixed(1)}x</div>
-            <div className="text-xs text-gray-400 mt-1">CI Narrowing</div>
-          </div>
-          <div className="bg-gray-800 rounded-lg p-4 text-center">
-            <div className="text-2xl font-bold text-amber-400">{Math.abs(aggregatedNorm.tStatistic / aggregatedRaw.tStatistic).toFixed(1)}x</div>
-            <div className="text-xs text-gray-400 mt-1">t-stat Improvement</div>
-          </div>
-        </div>
-        <p className="text-xs text-gray-500 mt-3">
-          By removing between-region variance, normalisation produces tighter confidence intervals and stronger test statistics for the same sample size.
-        </p>
-      </div>
-
       <div className="bg-blue-900/20 rounded-xl border border-blue-800 p-4">
         <div className="flex items-start gap-3">
           <div className="w-6 h-6 rounded-full bg-blue-600 flex items-center justify-center flex-shrink-0 mt-0.5">
