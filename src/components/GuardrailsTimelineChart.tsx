@@ -154,8 +154,8 @@ export function GuardrailsTimelineChart({
             dataKey="day"
             type="number"
             scale="linear"
-            domain={[0, maxDay]}
-            ticks={Array.from({ length: maxDay + 1 }, (_, i) => i)}
+            domain={[0, testDuration]}   // make sure `testDuration` is passed as prop
+            ticks={Array.from({ length: testDuration + 1 }, (_, i) => i)}
             stroke="#9ca3af"
             label={{ value: 'Day', position: 'insideBottom', offset: -5, fill: '#9ca3af' }}
           />
