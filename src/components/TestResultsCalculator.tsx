@@ -396,9 +396,8 @@ export function TestResultsCalculator({ onBack, onNavigate }: TestResultsCalcula
                       </label>
                       <input
                         type="number"
-                        min="10"
                         value={sampleSizeControl}
-                        onChange={(e) => setSampleSizeControl(Math.max(10, parseInt(e.target.value) || 10))}
+                        onChange={(e) => setSampleSizeControl(Math.max(1, parseInt(e.target.value) || 1))}
                         className="w-full bg-gray-700 text-white px-3 py-2 rounded"
                       />
                     </div>
@@ -409,9 +408,8 @@ export function TestResultsCalculator({ onBack, onNavigate }: TestResultsCalcula
                       </label>
                       <input
                         type="number"
-                        min="10"
                         value={sampleSizeTreatment}
-                        onChange={(e) => setSampleSizeTreatment(Math.max(10, parseInt(e.target.value) || 10))}
+                        onChange={(e) => setSampleSizeTreatment(Math.max(1, parseInt(e.target.value) || 1))}
                         className="w-full bg-gray-700 text-white px-3 py-2 rounded"
                       />
                     </div>
@@ -459,9 +457,8 @@ export function TestResultsCalculator({ onBack, onNavigate }: TestResultsCalcula
                       </label>
                       <input
                         type="number"
-                        min="10"
                         value={sampleSizeControlBinary}
-                        onChange={(e) => setSampleSizeControlBinary(Math.max(10, parseInt(e.target.value) || 10))}
+                        onChange={(e) => setSampleSizeControlBinary(Math.max(1, parseInt(e.target.value) || 1))}
                         className="w-full bg-gray-700 text-white px-3 py-2 rounded"
                       />
                     </div>
@@ -472,9 +469,8 @@ export function TestResultsCalculator({ onBack, onNavigate }: TestResultsCalcula
                       </label>
                       <input
                         type="number"
-                        min="10"
                         value={sampleSizeTreatmentBinary}
-                        onChange={(e) => setSampleSizeTreatmentBinary(Math.max(10, parseInt(e.target.value) || 10))}
+                        onChange={(e) => setSampleSizeTreatmentBinary(Math.max(1, parseInt(e.target.value) || 1))}
                         className="w-full bg-gray-700 text-white px-3 py-2 rounded"
                       />
                     </div>
