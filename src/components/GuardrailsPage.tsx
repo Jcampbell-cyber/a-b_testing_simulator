@@ -112,6 +112,7 @@ export function GuardrailsPage() {
               guardrailType={guardrailType}
               manualGuardrail={manualGuardrail}
               testDuration={testDuration}
+              testDuration={testDuration}  
             />
           )}
         </div>
