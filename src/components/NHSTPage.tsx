@@ -494,7 +494,6 @@ const NHSTPage: React.FC = () => {
             </div>
           </div>
         </div>
-
         <div className="bg-gray-800 border border-gray-700 rounded-xl shadow-lg p-6">
           <h2 className="text-2xl font-bold text-white mb-4">Understanding the Visualization</h2>
 
@@ -511,6 +510,14 @@ const NHSTPage: React.FC = () => {
                 <strong>Key insight:</strong> This visualization calculates the required <strong>effect size (Cohen's d)</strong> based on your desired power, sample size, and alpha level.
                 The H₀ distribution never moves (always centered at 0). Changing <strong>alpha (α)</strong> moves the <strong>critical value</strong> (cyan dashed line).
                 Changing <strong>power</strong> adjusts how far apart the distributions need to be.
+              </p>
+
+              {/* --- Added Cohen's d Explanation --- */}
+              <p className="leading-relaxed text-sm bg-gray-900/50 p-3 rounded border border-gray-700 mt-2">
+                <strong>Cohen's d:</strong> Cohen's d measures the standardized difference between the two distributions' means.
+                It is calculated as the difference between the means divided by the pooled standard deviation.
+                Larger values indicate greater separation between groups, making effects easier to detect.
+                In the visualization, the purple line shows this distance relative to the spread of the distributions.
               </p>
             </div>
 
@@ -562,3 +569,4 @@ const NHSTPage: React.FC = () => {
 };
 
 export default NHSTPage;
+
