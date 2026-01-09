@@ -113,7 +113,7 @@ export function TestDurationCalculator({ onBack, onNavigate }: TestDurationCalcu
     );
 
     const totalSamples = samplesPerGroup * numFlights;
-    const samplesPerDay = trafficSplit === 'both' ? dailyUnits : (dailyUnits * numFlights) / 2;
+    const samplesPerDay = trafficSplit === 'both' ? dailyUnits / numFlights : dailyUnits;
     const daysNeeded = Math.ceil(totalSamples / samplesPerDay);
 
     return { daysNeeded, totalSamples, samplesPerDay, absoluteMde, effectSize, adjustedAlpha };
@@ -315,9 +315,9 @@ export function TestDurationCalculator({ onBack, onNavigate }: TestDurationCalcu
                   </label>
                   <input
                     type="number"
-                    min="100"
+                    min="1"
                     value={dailyUnits}
-                    onChange={(e) => setDailyUnits(Math.max(100, parseInt(e.target.value) || 100))}
+                    onChange={(e) => setDailyUnits(Math.max(1, parseInt(e.target.value) || 1))}
                     className="w-full bg-gray-700 text-white px-3 py-2 rounded"
                   />
                   <p className="text-xs text-gray-400 mt-1">
@@ -431,13 +431,13 @@ export function TestDurationCalculator({ onBack, onNavigate }: TestDurationCalcu
               <div className="space-y-6">
                 <div>
                   <p className="text-gray-300 text-sm mb-1">Test Duration</p>
-                  <p className="text-3xl font-bold text-blue-400">{result.daysNeeded}</p>
+                  <p className="text-3xl font-bold text-blue-400">{(result.daysNeeded).toFixed(1)}</p>
                   <p className="text-gray-400 text-xs mt-1">days</p>
                 </div>
 
                 <div className="border-t border-gray-600 pt-6">
                   <p className="text-gray-300 text-sm mb-1">
-                    {result.daysNeeded > 30 ? '~' : ''} {Math.ceil(result.daysNeeded / 7)} weeks
+                    {result.daysNeeded > 30 ? '~' : ''} {(result.daysNeeded / 7).toFixed(1)} weeks
                   </p>
                   <p className="text-gray-400 text-xs">estimated duration</p>
                 </div>
