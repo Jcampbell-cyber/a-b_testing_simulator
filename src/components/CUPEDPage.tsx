@@ -91,6 +91,15 @@ export function CUPEDPage() {
           CUPED (Controlled-experiment Using Pre-Experiment Data) reduces variance in A/B tests by leveraging pre-experiment metrics.
         </p>
 
+        {/* What is CUPED? */}
+        <div className="mb-6 bg-gray-800 rounded-lg border border-gray-700 p-4">
+          <h2 className="text-xl font-semibold text-white mb-2">What is CUPED?</h2>
+          <p className="text-gray-300 text-sm">
+            CUPED (Controlled-experiment Using Pre-Experiment Data) is a technique used in A/B testing to reduce variance by leveraging historical data. 
+            By adjusting metrics based on pre-experiment behavior, it allows you to detect smaller effects with fewer samples, speeding up experiments and improving statistical power.
+          </p>
+        </div>
+
         {/* Parameters */}
         <div className="bg-gray-800 rounded-lg shadow-md border border-gray-700 p-6 mb-6">
           <h2 className="text-xl font-semibold text-white mb-4">Parameters</h2>
