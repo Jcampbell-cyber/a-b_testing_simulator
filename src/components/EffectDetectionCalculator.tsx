@@ -86,7 +86,7 @@ export function EffectDetectionCalculator({ onBack, onNavigate }: EffectDetectio
 
     let variance = 1;
     let effectSizeCohen = 0;
-    const totalN = sampleSizeMode === 'per-group' ? sampleSizePerGroup * numFlights / 2 : sampleSizePerGroup / 2;
+    const totalN = sampleSizeMode === 'per-group' ? sampleSizePerGroup * numFlights / 2 : sampleSizePerGroup / (numFlights * 2);
 
     if (metricType === 'continuous') {
       variance = 2;
