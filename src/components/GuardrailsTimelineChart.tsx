@@ -14,6 +14,7 @@ interface GuardrailsTimelineChartProps {
   timelines: GuardrailTimelineData[];
   guardrailType: 'manual' | 'statistical';
   manualGuardrail: number;
+  testDuration: number;
 }
 
 export function GuardrailsTimelineChart({
