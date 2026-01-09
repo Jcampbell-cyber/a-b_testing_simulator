@@ -21,6 +21,7 @@ export function GuardrailsTimelineChart({
   timelines,
   guardrailType,
   manualGuardrail,
+  testDuration,  
 }: GuardrailsTimelineChartProps) {
   const [hoveredRun, setHoveredRun] = useState<number | null>(null);
 
