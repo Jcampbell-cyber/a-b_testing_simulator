@@ -141,7 +141,7 @@ export function ImbalancedFlightsPage() {
           <h2 className="text-xl font-semibold text-white mb-4">Parameters</h2>
           <div className="flex items-center gap-8">
             <div className="flex-1">
-              <label className="block text-sm font-medium text-gray-300 mb-2">
+              <label className="block text-base font-medium text-gray-300 mb-2">
                 Control/Treatment Split
               </label>
               <input
@@ -153,11 +153,11 @@ export function ImbalancedFlightsPage() {
                 onChange={(e) => setSelectedSplit(Number(e.target.value))}
                 className="w-full"
               />
-              <div className="text-center text-sm text-gray-400 mt-1">
+              <div className="text-center text-base text-gray-400 mt-1">
                 {controlPercent}/{treatmentPercent} split
               </div>
             </div>
-            <div className="bg-gray-700 border border-gray-600 rounded-md p-3 space-y-2 text-sm">
+            <div className="bg-gray-700 border border-gray-600 rounded-md p-3 space-y-2 text-base">
               <div className="flex justify-between">
                 <span className="text-gray-300">Power (estimated):</span>
                 <span className="font-semibold text-white">{currentPower}%</span>
@@ -170,7 +170,7 @@ export function ImbalancedFlightsPage() {
           {/* --- Distribution visualization --- */}
           <div className="bg-gray-800 rounded-lg shadow-md border border-gray-700 p-6">
             <h2 className="text-xl font-semibold text-white mb-4">Distribution Visualization</h2>
-            <p className="text-sm text-gray-400 mb-4">
+            <p className="text-base text-gray-400 mb-4">
               Sampling distributions for control (blue) and treatment (green) groups. As imbalance increases, standard errors differ, reducing overlap and statistical power.
             </p>
 
@@ -232,7 +232,7 @@ export function ImbalancedFlightsPage() {
                 x={(xScaleDist(controlMean) + xScaleDist(treatmentMean)) / 2}
                 y={distChartPadding.top + 20}
                 textAnchor="middle"
-                className="text-sm fill-amber-400"
+                className="text-base fill-amber-400"
               >
                 Cohen's d = {cohenD.toFixed(3)}
               </text>
@@ -242,7 +242,7 @@ export function ImbalancedFlightsPage() {
                 x={distChartWidth / 2}
                 y={distChartHeight - 10}
                 textAnchor="middle"
-                className="text-sm fill-gray-300 font-semibold"
+                className="text-base fill-gray-300 font-semibold"
               >
                 Metric Value
               </text>
@@ -251,7 +251,7 @@ export function ImbalancedFlightsPage() {
                 y={distChartHeight / 2}
                 textAnchor="middle"
                 transform={`rotate(-90, ${distChartPadding.left / 2}, ${distChartHeight / 2})`}
-                className="text-sm fill-gray-300 font-semibold"
+                className="text-base fill-gray-300 font-semibold"
               >
                 Probability Density
               </text>
@@ -259,15 +259,15 @@ export function ImbalancedFlightsPage() {
               {/* Legend inside SVG */}
               <g transform={`translate(${distChartWidth - distChartPadding.right - 170}, ${distChartPadding.top})`}>
                 <line x1="0" y1="5" x2="25" y2="5" stroke="#3b82f6" strokeWidth="2" />
-                <text x="30" y="10" className="text-sm fill-white">Null (H₀)</text>
+                <text x="30" y="10" className="text-base fill-white">Null (H₀)</text>
                 <line x1="0" y1="30" x2="25" y2="30" stroke="#22c55e" strokeWidth="2" />
-                <text x="30" y="35" className="text-sm fill-white">Alternative (H₁)</text>
+                <text x="30" y="35" className="text-base fill-white">Alternative (H₁)</text>
                 <line x1="0" y1="55" x2="25" y2="55" stroke="#ef4444" strokeWidth="2" strokeDasharray="5,5" />
-                <text x="30" y="60" className="text-sm fill-white">Critical value</text>
+                <text x="30" y="60" className="text-base fill-white">Critical value</text>
                 <rect x="0" y="75" width="25" height="15" fill="#ef4444" fillOpacity="0.3" />
-                <text x="30" y="85" className="text-sm fill-white">Type I error (α)</text>
+                <text x="30" y="85" className="text-base fill-white">Type I error (α)</text>
                 <rect x="0" y="100" width="25" height="15" fill="#22c55e" fillOpacity="0.4" />
-                <text x="30" y="110" className="text-sm fill-white">Power (1-β)</text>
+                <text x="30" y="110" className="text-base fill-white">Power (1-β)</text>
               </g>
             </svg>
           </div>
@@ -275,7 +275,7 @@ export function ImbalancedFlightsPage() {
           {/* --- Power Chart --- */}
           <div className="bg-gray-800 rounded-lg shadow-md border border-gray-700 p-6">
             <h2 className="text-xl font-semibold text-white mb-4">Power at Different Splits – Ability to Detect a True Difference</h2>
-            <p className="text-sm text-gray-400 mb-4">
+            <p className="text-base text-gray-400 mb-4">
               Statistical power represents your ability to detect a true difference when one exists. At a 50/50 split, you achieve 80% power. Imbalanced splits reduce your ability to detect true effects.
             </p>
             <svg width="100%" height={chartHeight} viewBox={`0 0 ${chartWidth} ${chartHeight}`} preserveAspectRatio="xMidYMid meet">
@@ -296,7 +296,7 @@ export function ImbalancedFlightsPage() {
                       y={y}
                       textAnchor="end"
                       alignmentBaseline="middle"
-                      className="text-sm fill-gray-300"
+                      className="text-base fill-gray-300"
                     >
                       {value}%
                     </text>
@@ -319,7 +319,7 @@ export function ImbalancedFlightsPage() {
                       x={x}
                       y={chartHeight - chartPadding.bottom + 20}
                       textAnchor="middle"
-                      className="text-sm fill-gray-300"
+                      className="text-base fill-gray-300"
                     >
                       {split}/{100 - split}
                     </text>
@@ -371,7 +371,7 @@ export function ImbalancedFlightsPage() {
                       x={x}
                       y={y - 12}
                       textAnchor="middle"
-                      className="text-sm fill-red-500 font-semibold"
+                      className="text-base fill-red-500 font-semibold"
                     >
                       {data.rate.toFixed(1)}%
                     </text>
@@ -382,7 +382,7 @@ export function ImbalancedFlightsPage() {
                 x={chartWidth / 2}
                 y={chartHeight - 10}
                 textAnchor="middle"
-                className="text-sm fill-gray-300 font-semibold"
+                className="text-base fill-gray-300 font-semibold"
               >
                 Control/Treatment Split
               </text>
@@ -391,7 +391,7 @@ export function ImbalancedFlightsPage() {
                 y={chartHeight / 2}
                 textAnchor="middle"
                 transform={`rotate(-90, ${chartPadding.left / 2}, ${chartHeight / 2})`}
-                className="text-sm fill-gray-300 font-semibold"
+                className="text-base fill-gray-300 font-semibold"
               >
                 Power (%)
               </text>
@@ -401,7 +401,7 @@ export function ImbalancedFlightsPage() {
           {/* --- Sample Size Increase Chart --- */}
           <div className="bg-gray-800 rounded-lg shadow-md border border-gray-700 p-6">
             <h2 className="text-xl font-semibold text-white mb-4">Extra Sample Size Required vs 50/50 Split</h2>
-            <p className="text-sm text-gray-400 mb-4">
+            <p className="text-base text-gray-400 mb-4">
               Percentage increase in total sample size needed to maintain the same statistical power as a balanced 50/50 split.
             </p>
             <svg width="100%" height={chartHeight} viewBox={`0 0 ${chartWidth} ${chartHeight}`} preserveAspectRatio="xMidYMid meet">
@@ -422,7 +422,7 @@ export function ImbalancedFlightsPage() {
                       y={y}
                       textAnchor="end"
                       alignmentBaseline="middle"
-                      className="text-sm fill-gray-300"
+                      className="text-base fill-gray-300"
                     >
                       {value}%
                     </text>
@@ -445,7 +445,7 @@ export function ImbalancedFlightsPage() {
                       x={x}
                       y={chartHeight - chartPadding.bottom + 20}
                       textAnchor="middle"
-                      className="text-sm fill-gray-300"
+                      className="text-base fill-gray-300"
                     >
                       {split}/{100 - split}
                     </text>
@@ -497,7 +497,7 @@ export function ImbalancedFlightsPage() {
                       x={x}
                       y={y - 12}
                       textAnchor="middle"
-                      className="text-sm fill-purple-500 font-semibold"
+                      className="text-base fill-purple-500 font-semibold"
                     >
                       {data.increase}%
                     </text>
@@ -508,7 +508,7 @@ export function ImbalancedFlightsPage() {
                 x={chartWidth / 2}
                 y={chartHeight - 10}
                 textAnchor="middle"
-                className="text-sm fill-gray-300 font-semibold"
+                className="text-base fill-gray-300 font-semibold"
               >
                 Control/Treatment Split
               </text>
@@ -517,7 +517,7 @@ export function ImbalancedFlightsPage() {
                 y={chartHeight / 2}
                 textAnchor="middle"
                 transform={`rotate(-90, ${chartPadding.left / 2}, ${chartHeight / 2})`}
-                className="text-sm fill-gray-300 font-semibold"
+                className="text-base fill-gray-300 font-semibold"
               >
                 Extra Sample Size Required (%)
               </text>
