@@ -145,8 +145,7 @@ export function GuardrailsPage() {
              </p>
               <p className="text-sm">
                 <strong>Peeking frequency:</strong> Weekly guardrail checks reduce false early stops compared to daily monitoring. Daily peeks inflate volatility at low sample sizes, increasing noise-driven guardrail breaches without improving detection of genuinely harmful effects.
-             </p>
-              </p>
+             </p> 
             </div>
           </div>
         </div>
