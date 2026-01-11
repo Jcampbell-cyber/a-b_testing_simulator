@@ -1,37 +1,38 @@
 import { useState } from 'react';
 import { Menu, Home, X } from 'lucide-react';
+import { useNavigate, useLocation } from 'react-router-dom';
 
-interface NavigationProps {
-  currentPage: string;
-  onNavigate: (page: string) => void;
-}
-
-export function Navigation({ currentPage, onNavigate }: NavigationProps) {
+export function Navigation() {
   const [isOpen, setIsOpen] = useState(false);
+  const navigate = useNavigate();
+  const location = useLocation();
 
   const pages = [
-    { id: 'landing', label: 'Home', group: null },
-    { id: 'sample-size-calc', label: 'Sample Size Calculator', group: 'Calculators' },
-    { id: 'test-duration-calc', label: 'Test Duration Calculator', group: 'Calculators' },
-    { id: 'effect-detection-calc', label: 'Effect Detection Calculator', group: 'Calculators' },
-    { id: 'test-results-calc', label: 'Test Results Calculator', group: 'Calculators' },
-    { id: 'nhst', label: 'Significance Testing', group: 'Understanding & Simulators' },
-    { id: 'peeking', label: 'Peeking Simulator', group: 'Understanding & Simulators' },
-    { id: 'guardrails', label: 'Guardrails Simulator', group: 'Understanding & Simulators' },
-    { id: 'imbalanced', label: 'Imbalanced Flights', group: 'Understanding & Simulators' },
-    { id: 'cuped', label: 'CUPED Variance Reduction', group: 'Understanding & Simulators' },
-    { id: 'fwer', label: 'Family-Wise Error Rate', group: 'Understanding & Simulators' },
-    { id: 'winsorizing', label: 'Winsorizing Simulator', group: 'Understanding & Simulators' },
-    { id: 'normalisation', label: 'Normalisation Simulator', group: 'Understanding & Simulators' },
-    { id: 'glossary', label: 'Glossary', group: null },
-    { id: 'feedback', label: 'Feedback & Enquiries', group: null },
+    { id: 'landing', label: 'Home', group: null, path: '/' },
+    { id: 'sample-size-calc', label: 'Sample Size Calculator', group: 'Calculators', path: '/sample-size-calc' },
+    { id: 'test-duration-calc', label: 'Test Duration Calculator', group: 'Calculators', path: '/test-duration-calc' },
+    { id: 'effect-detection-calc', label: 'Effect Detection Calculator', group: 'Calculators', path: '/effect-detection-calc' },
+    { id: 'test-results-calc', label: 'Test Results Calculator', group: 'Calculators', path: '/test-results-calc' },
+    { id: 'nhst', label: 'Significance Testing', group: 'Understanding & Simulators', path: '/nhst' },
+    { id: 'peeking', label: 'Peeking Simulator', group: 'Understanding & Simulators', path: '/peeking' },
+    { id: 'guardrails', label: 'Guardrails Simulator', group: 'Understanding & Simulators', path: '/guardrails' },
+    { id: 'imbalanced', label: 'Imbalanced Flights', group: 'Understanding & Simulators', path: '/imbalanced' },
+    { id: 'cuped', label: 'CUPED Variance Reduction', group: 'Understanding & Simulators', path: '/cuped' },
+    { id: 'fwer', label: 'Family-Wise Error Rate', group: 'Understanding & Simulators', path: '/fwer' },
+    { id: 'winsorizing', label: 'Winsorizing Simulator', group: 'Understanding & Simulators', path: '/winsorizing' },
+    { id: 'normalisation', label: 'Normalisation Simulator', group: 'Understanding & Simulators', path: '/normalisation' },
+    { id: 'glossary', label: 'Glossary', group: null, path: '/glossary' },
+    { id: 'feedback', label: 'Feedback & Enquiries', group: null, path: '/feedback' },
   ];
+
+  const currentPath = location.pathname;
 
   return (
     <>
+      {/* Home Button */}
       <div className="fixed top-4 left-4 z-50">
         <button
-          onClick={() => onNavigate('landing')}
+          onClick={() => navigate('/')}
           className="bg-gray-800 border border-gray-700 rounded-lg shadow-lg p-3 hover:bg-[#0017D2] transition-colors"
           title="Go to Home"
         >
@@ -39,6 +40,7 @@ export function Navigation({ currentPage, onNavigate }: NavigationProps) {
         </button>
       </div>
 
+      {/* Menu Toggle */}
       <div className="fixed top-4 right-4 z-50">
         <button
           onClick={() => setIsOpen(!isOpen)}
@@ -52,6 +54,7 @@ export function Navigation({ currentPage, onNavigate }: NavigationProps) {
         </button>
       </div>
 
+      {/* Menu Drawer */}
       {isOpen && (
         <>
           <div
@@ -63,7 +66,7 @@ export function Navigation({ currentPage, onNavigate }: NavigationProps) {
             <h3 className="text-lg font-semibold text-white mb-3">Navigation</h3>
             <nav className="space-y-1">
               {pages.map((page) => {
-                const isGroupHeader = !page.id;
+                const isActive = currentPath === page.path;
                 if (page.group && pages[pages.indexOf(page) - 1]?.group !== page.group) {
                   return (
                     <div key={`group-${page.group}`}>
@@ -71,12 +74,9 @@ export function Navigation({ currentPage, onNavigate }: NavigationProps) {
                         {page.group}
                       </p>
                       <button
-                        onClick={() => {
-                          onNavigate(page.id);
-                          setIsOpen(false);
-                        }}
+                        onClick={() => { navigate(page.path); setIsOpen(false); }}
                         className={`w-full text-left px-4 py-2 rounded-md transition-colors ${
-                          currentPage === page.id
+                          isActive
                             ? 'bg-[#0017D2] text-white font-semibold'
                             : 'hover:bg-gray-700 text-gray-200'
                         }`}
@@ -87,34 +87,12 @@ export function Navigation({ currentPage, onNavigate }: NavigationProps) {
                   );
                 }
 
-                if (!page.group && (pages[pages.indexOf(page) - 1]?.group !== null || pages.indexOf(page) === 0)) {
-                  return (
-                    <button
-                      key={page.id}
-                      onClick={() => {
-                        onNavigate(page.id);
-                        setIsOpen(false);
-                      }}
-                      className={`w-full text-left px-4 py-2 rounded-md transition-colors ${
-                        currentPage === page.id
-                          ? 'bg-[#0017D2] text-white font-semibold'
-                          : 'hover:bg-gray-700 text-gray-200'
-                      }`}
-                    >
-                      {page.label}
-                    </button>
-                  );
-                }
-
                 return (
                   <button
                     key={page.id}
-                    onClick={() => {
-                      onNavigate(page.id);
-                      setIsOpen(false);
-                    }}
+                    onClick={() => { navigate(page.path); setIsOpen(false); }}
                     className={`w-full text-left px-4 py-2 rounded-md transition-colors ${
-                      currentPage === page.id
+                      isActive
                         ? 'bg-[#0017D2] text-white font-semibold'
                         : 'hover:bg-gray-700 text-gray-200'
                     }`}
