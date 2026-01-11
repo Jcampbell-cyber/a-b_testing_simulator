@@ -6,26 +6,27 @@ interface NavigationProps {
   currentPage: string;
 }
 
+// ✅ top-level exported pages array
+export const pages = [
+  { id: 'landing', label: 'Home', group: null },
+  { id: 'sample-size-calc', label: 'Sample Size Calculator', group: 'Calculators' },
+  { id: 'test-duration-calc', label: 'Test Duration Calculator', group: 'Calculators' },
+  { id: 'effect-detection-calc', label: 'Effect Detection Calculator', group: 'Calculators' },
+  { id: 'test-results-calc', label: 'Test Results Calculator', group: 'Calculators' },
+  { id: 'nhst', label: 'Significance Testing', group: 'Understanding & Simulators' },
+  { id: 'peeking', label: 'Peeking Simulator', group: 'Understanding & Simulators' },
+  { id: 'guardrails', label: 'Guardrails Simulator', group: 'Understanding & Simulators' },
+  { id: 'imbalanced', label: 'Imbalanced Flights', group: 'Understanding & Simulators' },
+  { id: 'cuped', label: 'CUPED Variance Reduction', group: 'Understanding & Simulators' },
+  { id: 'fwer', label: 'Family-Wise Error Rate', group: 'Understanding & Simulators' },
+  { id: 'winsorizing', label: 'Winsorizing Simulator', group: 'Understanding & Simulators' },
+  { id: 'normalisation', label: 'Normalisation Simulator', group: 'Understanding & Simulators' },
+  { id: 'glossary', label: 'Glossary', group: null },
+  { id: 'feedback', label: 'Feedback & Enquiries', group: null },
+];
+
 export function Navigation({ currentPage }: NavigationProps) {
   const [isOpen, setIsOpen] = useState(false);
-
-  const pages = [
-    { id: 'landing', label: 'Home', group: null },
-    { id: 'sample-size-calc', label: 'Sample Size Calculator', group: 'Calculators' },
-    { id: 'test-duration-calc', label: 'Test Duration Calculator', group: 'Calculators' },
-    { id: 'effect-detection-calc', label: 'Effect Detection Calculator', group: 'Calculators' },
-    { id: 'test-results-calc', label: 'Test Results Calculator', group: 'Calculators' },
-    { id: 'nhst', label: 'Significance Testing', group: 'Understanding & Simulators' },
-    { id: 'peeking', label: 'Peeking Simulator', group: 'Understanding & Simulators' },
-    { id: 'guardrails', label: 'Guardrails Simulator', group: 'Understanding & Simulators' },
-    { id: 'imbalanced', label: 'Imbalanced Flights', group: 'Understanding & Simulators' },
-    { id: 'cuped', label: 'CUPED Variance Reduction', group: 'Understanding & Simulators' },
-    { id: 'fwer', label: 'Family-Wise Error Rate', group: 'Understanding & Simulators' },
-    { id: 'winsorizing', label: 'Winsorizing Simulator', group: 'Understanding & Simulators' },
-    { id: 'normalisation', label: 'Normalisation Simulator', group: 'Understanding & Simulators' },
-    { id: 'glossary', label: 'Glossary', group: null },
-    { id: 'feedback', label: 'Feedback & Enquiries', group: null },
-  ];
 
   return (
     <>
