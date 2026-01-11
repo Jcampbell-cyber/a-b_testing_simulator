@@ -1,20 +1,25 @@
 import { useEffect, useRef } from 'react';
 import { useLocation } from 'react-router-dom';
 import { pageview } from './gtag';
-import { pages } from './components/Navigation';
+import { pages } from './Navigation';
 
 export function GAListener() {
   const location = useLocation();
   const lastPathRef = useRef<string | null>(null);
 
   useEffect(() => {
-    const path = location.pathname;
+    let path = location.pathname;
 
-    // Only fire if path actually changed
+    // normalize path: remove trailing slash except for root
+    if (path.endsWith('/') && path !== '/') {
+      path = path.slice(0, -1);
+    }
+
+    // skip duplicate pageviews
     if (lastPathRef.current === path) return;
     lastPathRef.current = path;
 
-    // Find page label from pages array
+    // find page label from pages array
     const page = pages.find(
       p =>
         p.id === path.replace('/', '') ||
@@ -23,10 +28,10 @@ export function GAListener() {
 
     const title = page ? page.label : 'A/B Test Guardrail Simulator';
 
-    // Update browser tab
+    // update browser tab
     document.title = title;
 
-    // Fire pageview only if GA4 is loaded
+    // fire GA4 pageview
     if (typeof window !== 'undefined' && window.gtag) {
       pageview(path, title);
     }
