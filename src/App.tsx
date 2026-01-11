@@ -1,6 +1,6 @@
 import { Routes, Route, Navigate, useLocation } from "react-router-dom";
 import { Navigation } from './components/Navigation';
-import { GAListener } from './components/GAListener';
+import { GAListener } from './GAListener';
 import { Breadcrumb } from './components/Breadcrumb';
 import { LandingPage } from './components/LandingPage';
 import { PeekingPage } from './components/PeekingPage';
