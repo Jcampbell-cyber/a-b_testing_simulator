@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { pageview } from './gtag';
-import { pages } from './navigation'; // optional: if you want automatic titles
+import { pages } from './components/Navigation';
 
 export function GAListener() {
   const location = useLocation();
