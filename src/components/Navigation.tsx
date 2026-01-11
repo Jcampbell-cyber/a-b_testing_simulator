@@ -59,22 +59,71 @@ export function Navigation({ currentPage }: NavigationProps) {
 
           <div className="fixed top-20 right-4 bg-gray-800 border border-gray-700 rounded-lg shadow-2xl p-4 z-50 w-64 max-h-[70vh] overflow-y-auto">
             <h3 className="text-lg font-semibold text-white mb-3">Navigation</h3>
-            <nav className="space-y-1">
-              {pages.map((page) => (
-                <Link
-                  key={page.id}
-                  to={page.id === 'landing' ? '/' : `/${page.id}`}
-                  className={`block w-full px-4 py-2 rounded-md transition-colors ${
-                    currentPage === page.id
-                      ? 'bg-[#0017D2] text-white font-semibold'
-                      : 'hover:bg-gray-700 text-gray-200'
-                  }`}
-                  onClick={() => setIsOpen(false)}
-                >
-                  {page.label}
-                </Link>
-              ))}
-            </nav>
+            <nav className="space-y-3">
+  {/* Ungrouped (top) */}
+  {pages
+    .filter(p => p.group === null)
+    .map((page) => (
+      <Link
+        key={page.id}
+        to={page.id === 'landing' ? '/' : `/${page.id}`}
+        className={`block w-full px-4 py-2 rounded-md transition-colors ${
+          currentPage === page.id
+            ? 'bg-[#0017D2] text-white font-semibold'
+            : 'hover:bg-gray-700 text-gray-200'
+        }`}
+        onClick={() => setIsOpen(false)}
+      >
+        {page.label}
+      </Link>
+    ))}
+
+  {/* Calculators */}
+  <div>
+    <p className="px-4 pt-3 pb-1 text-xs font-semibold text-gray-400 uppercase tracking-wide">
+      Calculators
+    </p>
+    {pages
+      .filter(p => p.group === 'Calculators')
+      .map((page) => (
+        <Link
+          key={page.id}
+          to={`/${page.id}`}
+          className={`block w-full px-4 py-2 rounded-md transition-colors ${
+            currentPage === page.id
+              ? 'bg-[#0017D2] text-white font-semibold'
+              : 'hover:bg-gray-700 text-gray-200'
+          }`}
+          onClick={() => setIsOpen(false)}
+        >
+          {page.label}
+        </Link>
+      ))}
+  </div>
+
+  {/* Understanding & Simulators */}
+  <div>
+    <p className="px-4 pt-3 pb-1 text-xs font-semibold text-gray-400 uppercase tracking-wide">
+      Understanding & Simulators
+    </p>
+    {pages
+      .filter(p => p.group === 'Understanding & Simulators')
+      .map((page) => (
+        <Link
+          key={page.id}
+          to={`/${page.id}`}
+          className={`block w-full px-4 py-2 rounded-md transition-colors ${
+            currentPage === page.id
+              ? 'bg-[#0017D2] text-white font-semibold'
+              : 'hover:bg-gray-700 text-gray-200'
+          }`}
+          onClick={() => setIsOpen(false)}
+        >
+          {page.label}
+        </Link>
+      ))}
+  </div>
+</nav>
           </div>
         </>
       )}
