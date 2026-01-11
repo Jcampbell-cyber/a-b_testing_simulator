@@ -1,4 +1,4 @@
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 import { LandingPage } from './components/LandingPage';
 import { PeekingPage } from './components/PeekingPage';
 import { GuardrailsPage } from './components/GuardrailsPage';
@@ -17,71 +17,31 @@ import { TestResultsCalculator } from './components/TestResultsCalculator';
 import { WinsorizingPage } from './components/WinsorizingPage';
 import { NormalisationPage } from './components/NormalisationPage';
 
-export default function App() {
+function App() {
   return (
     <>
+      <Navigation />
       <Routes>
-        <Route
-          path="/"
-          element={<LandingPage />}
-        />
-        <Route
-          path="/nhst"
-          element={<NHSTPage />}
-        />
-        <Route
-          path="/peeking"
-          element={<PeekingPage />}
-        />
-        <Route
-          path="/guardrails"
-          element={<GuardrailsPage />}
-        />
-        <Route
-          path="/imbalanced"
-          element={<ImbalancedFlightsPage />}
-        />
-        <Route
-          path="/cuped"
-          element={<CUPEDPage />}
-        />
-        <Route
-          path="/fwer"
-          element={<FWERPage />}
-        />
-        <Route
-          path="/winsorizing"
-          element={<WinsorizingPage />}
-        />
-        <Route
-          path="/normalisation"
-          element={<NormalisationPage />}
-        />
-        <Route
-          path="/feedback"
-          element={<FeedbackForm />}
-        />
-        <Route
-          path="/glossary"
-          element={<GlossaryPage />}
-        />
-        <Route
-          path="/sample-size-calc"
-          element={<SampleSizeCalculator />}
-        />
-        <Route
-          path="/test-duration-calc"
-          element={<TestDurationCalculator />}
-        />
-        <Route
-          path="/effect-detection-calc"
-          element={<EffectDetectionCalculator />}
-        />
-        <Route
-          path="/test-results-calc"
-          element={<TestResultsCalculator />}
-        />
+        <Route path="/" element={<LandingPage />} />
+        <Route path="/nhst" element={<NHSTPage />} />
+        <Route path="/peeking" element={<PeekingPage />} />
+        <Route path="/guardrails" element={<GuardrailsPage />} />
+        <Route path="/imbalanced" element={<ImbalancedFlightsPage />} />
+        <Route path="/cuped" element={<CUPEDPage />} />
+        <Route path="/fwer" element={<FWERPage />} />
+        <Route path="/winsorizing" element={<WinsorizingPage />} />
+        <Route path="/normalisation" element={<NormalisationPage />} />
+        <Route path="/feedback" element={<FeedbackForm />} />
+        <Route path="/glossary" element={<GlossaryPage />} />
+        <Route path="/sample-size-calc" element={<SampleSizeCalculator />} />
+        <Route path="/test-duration-calc" element={<TestDurationCalculator />} />
+        <Route path="/effect-detection-calc" element={<EffectDetectionCalculator />} />
+        <Route path="/test-results-calc" element={<TestResultsCalculator />} />
+        {/* fallback to home */}
+        <Route path="*" element={<Navigate to="/" />} />
       </Routes>
     </>
   );
 }
+
+export default App;
