@@ -1,24 +1,32 @@
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { useLocation } from 'react-router-dom';
 import { pageview } from './gtag';
-import { pages } from './components/Navigation'; // adjust if in same folder
+import { pages } from './components/Navigation';
 
 export function GAListener() {
   const location = useLocation();
+  const lastPathRef = useRef<string | null>(null);
 
   useEffect(() => {
+    const path = location.pathname;
+
+    // only fire if path changed
+    if (lastPathRef.current === path) return;
+
+    lastPathRef.current = path;
+
     const page = pages.find(
-      p => (location.pathname === '/' && p.id === 'landing') || p.id === location.pathname.replace('/', '')
+      p =>
+        p.id === path.replace('/', '') ||
+        (path === '/' && p.id === 'landing')
     );
 
     const title = page ? page.label : 'A/B Test Guardrail Simulator';
 
     document.title = title;
 
-    try {
-      pageview(location.pathname, title);
-    } catch {
-      console.warn('GA not initialized yet');
+    if (typeof window !== 'undefined' && window.gtag) {
+      pageview(path, title);
     }
   }, [location]);
 
