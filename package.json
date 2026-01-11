@@ -11,12 +11,12 @@
     "typecheck": "tsc --noEmit -p tsconfig.app.json"
   },
   "dependencies": {
+    "@formspree/react": "^2.1.1",
     "@supabase/supabase-js": "^2.57.4",
     "lucide-react": "^0.344.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-router-dom": "^6.30.3",
-    "@formspree/react": "^2.1.1",
     "recharts": "^3.3.0"
   },
   "devDependencies": {
