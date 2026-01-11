@@ -16,12 +16,15 @@ import { EffectDetectionCalculator } from './components/EffectDetectionCalculato
 import { TestResultsCalculator } from './components/TestResultsCalculator';
 import { WinsorizingPage } from './components/WinsorizingPage';
 import { NormalisationPage } from './components/NormalisationPage';
+import { GAListener } from './components/GAListener';
+
 
 function App() {
   return (
     <>
       <Navigation />
-      <Breadcrumb /> {/* If Breadcrumb relies on currentPage, you can adapt to use useLocation() */}
+      <Breadcrumb /> 
+      <GAListener /> 
       <Routes>
         <Route path="/" element={<LandingPage />} />
         <Route path="/nhst" element={<NHSTPage />} />
