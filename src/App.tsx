@@ -21,6 +21,7 @@ function App() {
   return (
     <>
       <Navigation />
+      <Breadcrumb /> {/* If Breadcrumb relies on currentPage, you can adapt to use useLocation() */}
       <Routes>
         <Route path="/" element={<LandingPage />} />
         <Route path="/nhst" element={<NHSTPage />} />
