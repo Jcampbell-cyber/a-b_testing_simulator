@@ -1,14 +1,15 @@
-import { Routes, Route, Navigate } from "react-router-dom";
+import { Routes, Route, Navigate, useLocation } from "react-router-dom";
+import { Navigation } from './components/Navigation';
+import { GAListener } from './components/GAListener';
+import { Breadcrumb } from './components/Breadcrumb';
 import { LandingPage } from './components/LandingPage';
 import { PeekingPage } from './components/PeekingPage';
 import { GuardrailsPage } from './components/GuardrailsPage';
 import { ImbalancedFlightsPage } from './components/ImbalancedFlightsPage';
 import { CUPEDPage } from './components/CUPEDPage';
 import { FeedbackForm } from './components/FeedbackForm';
-import { Navigation } from './components/Navigation';
 import { FWERPage } from './components/FWERPage';
 import NHSTPage from './components/NHSTPage';
-import { Breadcrumb } from './components/Breadcrumb';
 import { GlossaryPage } from './components/GlossaryPage';
 import { SampleSizeCalculator } from './components/SampleSizeCalculator';
 import { TestDurationCalculator } from './components/TestDurationCalculator';
@@ -16,15 +17,17 @@ import { EffectDetectionCalculator } from './components/EffectDetectionCalculato
 import { TestResultsCalculator } from './components/TestResultsCalculator';
 import { WinsorizingPage } from './components/WinsorizingPage';
 import { NormalisationPage } from './components/NormalisationPage';
-import { GAListener } from './components/GAListener';
-
+import { pages } from './components/Navigation';
 
 function App() {
+  const location = useLocation();
+  const currentPage = location.pathname.replace('/', '') || 'landing';
+
   return (
     <>
-      <Navigation />
-      <Breadcrumb /> 
-      <GAListener /> 
+      <GAListener />
+      <Navigation currentPage={currentPage} />
+      <Breadcrumb />
       <Routes>
         <Route path="/" element={<LandingPage />} />
         <Route path="/nhst" element={<NHSTPage />} />
@@ -41,7 +44,6 @@ function App() {
         <Route path="/test-duration-calc" element={<TestDurationCalculator />} />
         <Route path="/effect-detection-calc" element={<EffectDetectionCalculator />} />
         <Route path="/test-results-calc" element={<TestResultsCalculator />} />
-        {/* fallback to home */}
         <Route path="*" element={<Navigate to="/" />} />
       </Routes>
     </>
