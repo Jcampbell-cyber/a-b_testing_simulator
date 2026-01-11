@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { Routes, Route } from "react-router-dom";
 import { LandingPage } from './components/LandingPage';
 import { PeekingPage } from './components/PeekingPage';
 import { GuardrailsPage } from './components/GuardrailsPage';
@@ -17,86 +17,71 @@ import { TestResultsCalculator } from './components/TestResultsCalculator';
 import { WinsorizingPage } from './components/WinsorizingPage';
 import { NormalisationPage } from './components/NormalisationPage';
 
-type PageMode =
-  | 'nhst'
-  | 'landing'
-  | 'peeking'
-  | 'guardrails'
-  | 'imbalanced'
-  | 'cuped'
-  | 'fwer'
-  | 'winsorizing'
-  | 'normalisation'
-  | 'feedback'
-  | 'glossary'
-  | 'sample-size-calc'
-  | 'test-duration-calc'
-  | 'effect-detection-calc'
-  | 'test-results-calc';
-
-function App() {
-  const [currentPage, setCurrentPage] = useState<PageMode>('landing');
-
-  const handleNavigate = (page: string) => {
-    setCurrentPage(page as PageMode);
-  };
-
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, [currentPage]);
-
-  const renderPage = () => {
-    switch (currentPage) {
-      case 'nhst':
-        return <NHSTPage />;
-      case 'landing':
-        return (
-          <LandingPage
-            onGetStarted={(mode) => {
-              setCurrentPage(mode as PageMode);
-            }}
-          />
-        );
-      case 'peeking':
-        return <PeekingPage />;
-      case 'guardrails':
-        return <GuardrailsPage />;
-      case 'imbalanced':
-        return <ImbalancedFlightsPage />;
-      case 'cuped':
-        return <CUPEDPage />;
-      case 'fwer':
-        return <FWERPage />;
-      case 'winsorizing':
-        return <WinsorizingPage />;
-      case 'normalisation':
-        return <NormalisationPage onBack={() => setCurrentPage('landing')} />;
-      case 'feedback':
-        return <FeedbackForm />;
-      case 'glossary':
-        return <GlossaryPage />;
-      case 'sample-size-calc':
-        return <SampleSizeCalculator onBack={() => setCurrentPage('landing')} onNavigate={handleNavigate} />;
-      case 'test-duration-calc':
-        return <TestDurationCalculator onBack={() => setCurrentPage('landing')} onNavigate={handleNavigate} />;
-      case 'effect-detection-calc':
-        return <EffectDetectionCalculator onBack={() => setCurrentPage('landing')} onNavigate={handleNavigate} />;
-      case 'test-results-calc':
-        return <TestResultsCalculator onBack={() => setCurrentPage('landing')} onNavigate={handleNavigate} />;
-      default:
-        return <NHSTPage />;
-    }
-  };
-
+export default function App() {
   return (
     <>
-      {currentPage !== 'landing' && (
-        <Navigation currentPage={currentPage} onNavigate={handleNavigate} />
-      )}
-      <Breadcrumb currentPage={currentPage} />
-      {renderPage()}
+      <Routes>
+        <Route
+          path="/"
+          element={<LandingPage />}
+        />
+        <Route
+          path="/nhst"
+          element={<NHSTPage />}
+        />
+        <Route
+          path="/peeking"
+          element={<PeekingPage />}
+        />
+        <Route
+          path="/guardrails"
+          element={<GuardrailsPage />}
+        />
+        <Route
+          path="/imbalanced"
+          element={<ImbalancedFlightsPage />}
+        />
+        <Route
+          path="/cuped"
+          element={<CUPEDPage />}
+        />
+        <Route
+          path="/fwer"
+          element={<FWERPage />}
+        />
+        <Route
+          path="/winsorizing"
+          element={<WinsorizingPage />}
+        />
+        <Route
+          path="/normalisation"
+          element={<NormalisationPage />}
+        />
+        <Route
+          path="/feedback"
+          element={<FeedbackForm />}
+        />
+        <Route
+          path="/glossary"
+          element={<GlossaryPage />}
+        />
+        <Route
+          path="/sample-size-calc"
+          element={<SampleSizeCalculator />}
+        />
+        <Route
+          path="/test-duration-calc"
+          element={<TestDurationCalculator />}
+        />
+        <Route
+          path="/effect-detection-calc"
+          element={<EffectDetectionCalculator />}
+        />
+        <Route
+          path="/test-results-calc"
+          element={<TestResultsCalculator />}
+        />
+      </Routes>
     </>
   );
 }
-
-export default App;
