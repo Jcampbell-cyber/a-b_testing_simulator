@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Menu, Home, X } from "lucide-react";
 
@@ -25,13 +26,19 @@ export function Navigation() {
   return (
     <>
       <div className="fixed top-4 left-4 z-50">
-        <Link to="/" className="bg-gray-800 border border-gray-700 rounded-lg shadow-lg p-3 hover:bg-[#0017D2]">
+        <Link
+          to="/"
+          className="bg-gray-800 border border-gray-700 rounded-lg shadow-lg p-3 hover:bg-[#0017D2]"
+        >
           <Home className="w-6 h-6 text-white" />
         </Link>
       </div>
 
       <div className="fixed top-4 right-4 z-50">
-        <button onClick={() => setIsOpen(!isOpen)} className="bg-gray-800 p-3 rounded-lg">
+        <button
+          onClick={() => setIsOpen(!isOpen)}
+          className="bg-gray-800 p-3 rounded-lg"
+        >
           {isOpen ? <X className="w-6 h-6 text-white" /> : <Menu className="w-6 h-6 text-white" />}
         </button>
       </div>
