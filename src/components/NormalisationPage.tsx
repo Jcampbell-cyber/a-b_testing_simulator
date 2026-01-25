@@ -6,6 +6,8 @@ import { NormalisationResultsDisplay } from './NormalisationResultsDisplay';
 import { NormalisationHistogram } from './NormalisationHistogram';
 import { NormalisationImbalanceChart } from './NormalisationImbalanceChart';
 import { runNormalisationSimulation, NormalisationResults, GroupConfig } from '../utils/normalisationSimulation';
+import { Helmet } from 'react-helmet-async';
+import { Link } from 'react-router-dom';
 
 interface Props {
   onBack: () => void;
@@ -44,6 +46,14 @@ export function NormalisationPage({ onBack }: Props) {
 
   return (
     <div className="min-h-screen bg-gray-950 text-white">
+            <Helmet>
+        <title>Normalisation Simulator for A/B Testing</title>
+        <meta
+          name="description"
+          content="Simulate metric normalisation to reduce variance and improve insights in A/B tests across different groups or regions."
+        />
+      </Helmet>
+
       <div className="max-w-7xl mx-auto px-4 py-6">
         <Breadcrumb
           items={[
