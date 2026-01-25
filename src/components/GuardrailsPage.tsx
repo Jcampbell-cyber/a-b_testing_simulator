@@ -147,27 +147,30 @@ export function GuardrailsPage() {
                 This approach is far more robust: it's extremely unlikely for a metric to show a statistically significant -99% effect and then recover to become significantly positive. Statistical guardrails adapt to sample size—requiring stronger evidence when data is limited—making them ideal for continuous monitoring throughout your test.
               </p>
             </div>
-
             <div className="bg-gray-700 rounded p-4 mt-4">
               <p className="text-sm">
                 <strong>Recommendation:</strong> Use statistical guardrails for ongoing monitoring, as they balance safety with statistical rigor. Reserve manual guardrails only for absolute red-line thresholds where any breach—regardless of statistical significance—requires immediate action.
-             </p>
+              </p>
               <p className="text-sm">
                 <strong>Peeking frequency:</strong> Weekly guardrail checks reduce false early stops compared to daily monitoring. Daily peeks inflate volatility at low sample sizes, increasing noise-driven guardrail breaches without improving detection of genuinely harmful effects.
-             </p> 
+              </p>
             </div>
           </div>
         </div>
-<div className="bg-gray-700 rounded-lg p-6 text-center mt-12">
-  <p className="text-gray-300 mb-4">
-    See how imbalanced exposure can distort guardrail metrics in A/B tests
-  </p>
-  <Link
-    to="/imbalanced"
-    className="inline-block bg-blue-500 hover:bg-blue-600 text-white font-semibold px-6 py-3 rounded transition-colors"
-  >
-    Explore Imbalanced Experiments →
-  </Link> 
+
+        <div className="bg-gray-700 rounded-lg p-6 text-center mt-12">
+          <p className="text-gray-300 mb-4">
+            Imbalanced exposure can distort guardrail metrics in A/B tests
+          </p>
+          <Link
+            to="/imbalanced"
+            className="inline-block bg-blue-500 hover:bg-blue-600 text-white font-semibold px-6 py-3 rounded transition-colors"
+          >
+            Go to Imbalanced Experiments →
+          </Link>
+        </div>
+
+      </div>
     </div>
   );
 }
