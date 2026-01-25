@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import { Info } from 'lucide-react';
-import { Helmet } from 'react-helmet';
+import { Helmet } from 'react-helmet-async';
 import { Link } from 'react-router-dom';  
 import { Line, Area, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, ReferenceLine, ComposedChart } from 'recharts';
 
