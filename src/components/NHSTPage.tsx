@@ -577,8 +577,7 @@ const NHSTPage: React.FC = () => {
               >
                 Explore False Positives from Peeking →
               </Link>
-            </div>
-          </div> {/* closes bg-gray-800 rounded-xl wrapper */}
+            </div> 
         </div> {/* closes max-w-7xl */}
       </div> {/* closes min-h-screen */}
   );
