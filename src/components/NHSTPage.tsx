@@ -567,17 +567,18 @@ const NHSTPage: React.FC = () => {
                 <p><strong>Test Type:</strong> Two-sided tests split alpha between both tails, requiring slightly larger effect sizes than one-sided tests to achieve the same power.</p>
               </div>
             </div>
-        <div className="mt-12 bg-gray-700 rounded-lg p-6 text-center">
-          <p className="text-gray-300 mb-4">
-            See how frequent peeking can inflate false positives in A/B tests
-          </p>
-          <Link
-            to="/peeking"
-            className="inline-block bg-blue-500 hover:bg-blue-600 text-white font-semibold px-6 py-3 rounded transition-colors"
-          >
-              Explore False Positives from Peeking →
-            </Link>
-          </div>
+            <div className="mt-12 bg-gray-700 rounded-lg p-6 text-center">
+              <p className="text-gray-300 mb-4">
+                See how frequent peeking can inflate false positives in A/B tests
+              </p>
+              <Link
+                to="/peeking"
+                className="inline-block bg-blue-500 hover:bg-blue-600 text-white font-semibold px-6 py-3 rounded transition-colors"
+              >
+                Explore False Positives from Peeking →
+              </Link>
+            </div>
+          </div> {/* closes bg-gray-800 rounded-xl wrapper */}
         </div> {/* closes max-w-7xl */}
       </div> {/* closes min-h-screen */}
   );
