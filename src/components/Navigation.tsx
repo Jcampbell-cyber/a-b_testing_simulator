@@ -28,7 +28,7 @@ export const pages = [
   { id: 'glossary', label: 'Glossary', group: 'Other' },
   { id: 'feedback', label: 'Feedback & Enquiries', group: 'Other' },
 ];
- 
+
 interface NavigationProps {
   currentPage: string;
 }
@@ -66,24 +66,24 @@ export function Navigation({ currentPage }: NavigationProps) {
             onClick={() => setIsOpen(false)}
           />
 
-<div className="fixed top-20 right-4 bg-gray-800 border border-gray-700 rounded-lg shadow-2xl p-4 z-50 w-64 max-h-[calc(100vh-5rem)] overflow-y-auto">
-  <h3 className="text-lg font-semibold text-white mb-3">Navigation</h3>
-  <nav className="space-y-3">
-    {/* Ungrouped */}
-    {pages.filter(p => !p.group).map(p => (
-      <Link
-        key={p.id}
-        to={p.id === 'landing' ? '/' : `/${p.id}`}
-        className={`block w-full px-4 py-2 rounded-md transition-colors ${
-          currentPage === p.id
-            ? 'bg-[#0017D2] text-white font-semibold'
-            : 'hover:bg-gray-700 text-gray-200'
-        }`}
-        onClick={() => setIsOpen(false)}
-      >
-        {p.label}
-      </Link>
-    ))}
+          <div className="fixed top-20 right-4 bg-gray-800 border border-gray-700 rounded-lg shadow-2xl p-4 z-50 w-64 max-h-[calc(100vh-5rem)] overflow-y-auto">
+            <h3 className="text-lg font-semibold text-white mb-3">Navigation</h3>
+            <nav className="space-y-3">
+              {/* Ungrouped */}
+              {pages.filter(p => !p.group).map(p => (
+                <Link
+                  key={p.id}
+                  to={p.id === 'landing' ? '/' : `/${p.id}`}
+                  className={`block w-full px-4 py-2 rounded-md transition-colors ${
+                    currentPage === p.id
+                      ? 'bg-[#0017D2] text-white font-semibold'
+                      : 'hover:bg-gray-700 text-gray-200'
+                  }`}
+                  onClick={() => setIsOpen(false)}
+                >
+                  {p.label}
+                </Link>
+              ))}
 
               {/* Calculators */}
               <div>
@@ -108,13 +108,59 @@ export function Navigation({ currentPage }: NavigationProps) {
                   ))}
               </div>
 
-              {/* Understanding & Simulators */}
+              {/* Experiment Best Practices */}
               <div>
                 <p className="px-4 pt-3 pb-1 text-xs font-semibold text-gray-400 uppercase tracking-wide">
-                  Understanding & Simulators
+                  Experiment Best Practices
                 </p>
                 {pages
-                  .filter(p => p.group === 'Understanding & Simulators')
+                  .filter(p => p.group === 'Experiment Best Practices')
+                  .map(p => (
+                    <Link
+                      key={p.id}
+                      to={`/${p.id}`}
+                      className={`block w-full px-4 py-2 rounded-md transition-colors ${
+                        currentPage === p.id
+                          ? 'bg-[#0017D2] text-white font-semibold'
+                          : 'hover:bg-gray-700 text-gray-200'
+                      }`}
+                      onClick={() => setIsOpen(false)}
+                    >
+                      {p.label}
+                    </Link>
+                  ))}
+              </div>
+
+              {/* Advanced Experiment Techniques */}
+              <div>
+                <p className="px-4 pt-3 pb-1 text-xs font-semibold text-gray-400 uppercase tracking-wide">
+                  Advanced Experiment Techniques
+                </p>
+                {pages
+                  .filter(p => p.group === 'Advanced Experiment Techniques')
+                  .map(p => (
+                    <Link
+                      key={p.id}
+                      to={`/${p.id}`}
+                      className={`block w-full px-4 py-2 rounded-md transition-colors ${
+                        currentPage === p.id
+                          ? 'bg-[#0017D2] text-white font-semibold'
+                          : 'hover:bg-gray-700 text-gray-200'
+                      }`}
+                      onClick={() => setIsOpen(false)}
+                    >
+                      {p.label}
+                    </Link>
+                  ))}
+              </div>
+
+              {/* Other */}
+              <div>
+                <p className="px-4 pt-3 pb-1 text-xs font-semibold text-gray-400 uppercase tracking-wide">
+                  Other
+                </p>
+                {pages
+                  .filter(p => p.group === 'Other')
                   .map(p => (
                     <Link
                       key={p.id}
