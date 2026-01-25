@@ -1,5 +1,7 @@
 import { useState } from 'react';
 import { ArrowLeft, Info } from 'lucide-react';
+import { Helmet } from 'react-helmet';
+
 
 interface EffectDetectionCalculatorProps {
   onBack: () => void;
@@ -140,6 +142,13 @@ export function EffectDetectionCalculator({ onBack, onNavigate }: EffectDetectio
 
   return (
     <div className="min-h-screen bg-gray-900">
+         <Helmet>
+      <title>Effect Detection Calculator | Experiment Tools</title>
+      <meta
+        name="description"
+        content="Calculate the minimum detectable effect (MDE) for your experiments, considering sample size, power, significance level, and multiple comparisons."
+      />
+    </Helmet>
       <div className="max-w-5xl mx-auto px-4 py-8">
         <button
           onClick={onBack}
@@ -618,6 +627,18 @@ export function EffectDetectionCalculator({ onBack, onNavigate }: EffectDetectio
               </div>
             </div>
           </div>
+          <div className="mt-12 bg-gray-700 rounded-lg p-6 text-center">
+  <p className="text-gray-300 mb-4">
+    Want to see how this MDE affects your experiment’s duration?
+  </p>
+  <button
+    onClick={() => onNavigate('test-duration')} // or your page key
+    className="inline-block bg-blue-500 hover:bg-blue-600 text-white font-semibold px-6 py-3 rounded transition-colors"
+  >
+    Open Test Duration Calculator →
+  </button>
+</div>
+
         </div>
       </div>
     </div>
