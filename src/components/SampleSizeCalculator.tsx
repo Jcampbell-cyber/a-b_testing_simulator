@@ -126,7 +126,7 @@ export function SampleSizeCalculator({ onBack, onNavigate }: SampleSizeCalculato
     <div className="min-h-screen bg-gray-900">
       {/* SEO */}
       <Helmet>
-        <title>Sample Size Calculator | Advanced AB Testing</title>
+        <title>Sample Size Calculator | Advanced AB Testing </title>
         <meta name="description" content="Calculate the minimum sample size needed for your A/B test with continuous or binary metrics. Understand MDE, power, and significance." />
       </Helmet>
 
