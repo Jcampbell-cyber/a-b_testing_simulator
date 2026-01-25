@@ -672,9 +672,7 @@ export function TestResultsCalculator({ onBack, onNavigate }: TestResultsCalcula
             </div>
           </div>
           <div className="mt-12 bg-gray-700 rounded-lg p-6 text-center">
-  <p className="text-gray-300 mb-4">
-<div className="mt-12 bg-gray-700 rounded-lg p-6 text-center">
-  <p className="text-gray-300 mb-4">
+  <p className="text-gray-300 mb-4"> 
     Want to understand the theory behind these calculations?
   </p>
   <Link
