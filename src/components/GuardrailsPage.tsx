@@ -60,13 +60,14 @@ export function GuardrailsPage() {
 
   return (
     <div className="min-h-screen bg-gray-900">
-      <Helmet>
-        <title>Null Hypothesis Significance Testing | Guardrails</title>
-        <meta
-          name="description"
-          content="Interactive visualization of statistical power, Type I & II errors, effect sizes, and how they relate to experimental guardrails."
-        />
-      </Helmet>
+<Helmet>
+  <title>Statistical Guardrails for A/B Tests</title>
+  <meta
+    name="description"
+    content="Learn how to set up statistical guardrails in A/B tests to monitor experiment health, reduce false positives, and stop harmful experiments early."
+  />
+</Helmet>
+
       <div className="container mx-auto px-4 py-8">
         <div className="mb-8">
           <h1 className="text-4xl font-bold text-white mb-2">Guardrails Simulator</h1>
