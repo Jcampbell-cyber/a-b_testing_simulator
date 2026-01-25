@@ -579,8 +579,7 @@ const NHSTPage: React.FC = () => {
           </Link>
         </div>
       </div>
-    </div>
-  );
+    </div> 
 };
 export default NHSTPage;
 
