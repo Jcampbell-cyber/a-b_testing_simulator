@@ -538,7 +538,6 @@ export function SampleSizeCalculator({ onBack, onNavigate }: SampleSizeCalculato
               Open Test Duration Calculator →
             </button>
           </div>
-
         </div>
       </div>
     </div>
