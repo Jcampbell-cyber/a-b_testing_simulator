@@ -147,11 +147,49 @@ export function SampleSizeCalculator({ onBack, onNavigate }: SampleSizeCalculato
             Determine the required sample size for your experiment with clear MDE, power, and significance insights. 
           </p>
 
-          {/* --- KEEP ALL ORIGINAL CALCULATOR INPUTS, RESULTS, MDE, FORMULAS HERE --- */}
-          {/* Everything from your original code stays as-is */}
-          {/* Inputs, results, formulas, explanations */}
-          {/* ...all of your existing JSX for the calculator... */}
-          {/* Include Results panel, How Calculation Works section, etc. */}
+<div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+  <div>
+    <label className="block text-gray-300 mb-1">Metric Type</label>
+    <select
+      value={metricType}
+      onChange={(e) => setMetricType(e.target.value as 'continuous' | 'binary')}
+      className="w-full p-2 rounded bg-gray-700 text-white"
+    >
+      <option value="continuous">Continuous</option>
+      <option value="binary">Binary</option>
+    </select>
+  </div>
+
+  <div>
+    <label className="block text-gray-300 mb-1">Test Type</label>
+    <select
+      value={testType}
+      onChange={(e) => setTestType(e.target.value as 'two-sided' | 'one-sided')}
+      className="w-full p-2 rounded bg-gray-700 text-white"
+    >
+      <option value="two-sided">Two-sided</option>
+      <option value="one-sided">One-sided</option>
+    </select>
+  </div>
+
+  {/* Repeat for alpha, power, mde type, mean, stdev, proportion, numFlights, comparisonType */}
+</div>
+
+{/* Results */}
+<div className="bg-gray-700 rounded-lg p-6 text-white mb-8">
+  <h2 className="text-2xl font-bold mb-2">Results</h2>
+  <p>Samples per group: {result.samplesPerGroup}</p>
+  <p>Total samples needed: {result.totalSamples}</p>
+  <p>Absolute MDE: {result.absoluteMde.toFixed(2)}</p>
+  {metricType === 'binary' && <p>Targeted proportion: {result.targetedProportion.toFixed(2)}</p>}
+  {metricType === 'continuous' && <p>Targeted mean: {result.targetedMean.toFixed(2)}</p>}
+</div>
+
+{/* How Calculation Works / Explanations */}
+<div className="bg-gray-700 rounded-lg p-6 text-gray-300">
+  <h3 className="text-xl font-bold mb-2">How Calculation Works</h3>
+  <p>This calculator uses the standard normal approximation for continuous or binary metrics to determine the minimum sample size for your A/B test.</p>
+</div>
 
           {/* CTA at bottom */}
           <div className="mt-12 bg-gray-700 rounded-lg p-6 text-center">
