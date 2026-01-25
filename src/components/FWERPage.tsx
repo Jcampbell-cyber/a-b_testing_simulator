@@ -202,6 +202,18 @@ export function FWERPage() {
           </div>
         )}
       </div>
+      <div className="bg-gray-700 rounded-lg p-6 text-center mt-12">
+  <p className="text-gray-300 mb-4">
+    Outliers can inflate variance and reduce detecting effects
+  </p>
+  <Link
+    to="/winsorizing"
+    className="inline-block bg-blue-500 hover:bg-blue-600 text-white font-semibold px-6 py-3 rounded transition-colors"
+  >
+    Go to Winsorizing to learn how to handle outliers →
+  </Link>
+</div>
+
     </div>
   );
 }
