@@ -7,7 +7,7 @@ export const pages = [
   { id: 'landing', label: 'Home', group: null },
 
   // Calculators
-  { id: 'sample-size-calc', label: 'Sample Size Calculator', group: 'Calculators1' },
+  { id: 'sample-size-calc', label: 'Sample Size Calculator', group: 'Calculators' },
   { id: 'test-duration-calc', label: 'Test Duration Calculator', group: 'Calculators' },
   { id: 'effect-detection-calc', label: 'Effect Detection Calculator', group: 'Calculators' },
   { id: 'test-results-calc', label: 'Test Results Calculator', group: 'Calculators' },
