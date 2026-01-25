@@ -83,13 +83,14 @@ export function CUPEDPage() {
 
   return (
     <div className="min-h-screen bg-gray-900">
-            <Helmet>
-        <title>Null Hypothesis Significance Testing | Guardrails</title>
-        <meta
-          name="description"
-          content="Interactive visualization of statistical power, Type I & II errors, effect sizes, and how they relate to experimental guardrails."
-        />
-      </Helmet>
+<Helmet>
+  <title>CUPED Variance Reduction in A/B Testing</title>
+  <meta
+    name="description"
+    content="Learn how CUPED (Controlled Experiments Using Pre-Experiment Data) can reduce variance in A/B tests, allowing faster detection of treatment effects with fewer users."
+  />
+</Helmet>
+
       <div className="container mx-auto px-4 py-8">
         {/* Header */}
         <div className="flex items-center gap-3 mb-2">
