@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { ArrowLeft, Info } from 'lucide-react';
-import { Helmet } from 'react-helmet';
+import { Helmet, HelmetProvider } from "react-helmet-async";
 
 interface SampleSizeCalculatorProps {
   onBack: () => void;
