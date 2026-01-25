@@ -575,11 +575,11 @@ const NHSTPage: React.FC = () => {
             to="/peeking"
             className="inline-block bg-blue-500 hover:bg-blue-600 text-white font-semibold px-6 py-3 rounded transition-colors"
           >
-            Explore False Positives from Peeking →
-          </Link>
-        </div>
-      </div>
-    </div> 
+              Explore False Positives from Peeking →
+            </Link>
+          </div>
+        </div> {/* closes max-w-7xl */}
+      </div> {/* closes min-h-screen */}
   );
 };
 
