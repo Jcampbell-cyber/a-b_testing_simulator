@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import { ArrowLeft, Info } from 'lucide-react';
 import { Helmet } from "react-helmet-async";
-
+import { Link } from 'react-router-dom';
+  
 interface SampleSizeCalculatorProps {
   onBack: () => void;
   onNavigate: (page: string) => void;
@@ -531,12 +532,12 @@ export function SampleSizeCalculator({ onBack, onNavigate }: SampleSizeCalculato
             <p className="text-gray-300 mb-4">
               Want to know how long your experiment needs to run?
             </p>
-            <button
-  onClick={() => onNavigate('test-duration-calc')}
+            <Link
+  to="/test-duration-calc"
   className="inline-block bg-blue-500 hover:bg-blue-600 text-white font-semibold px-6 py-3 rounded transition-colors"
 >
   Open Test Duration Calculator →
-            </button>
+</Link>
           </div>
         </div>
       </div>
