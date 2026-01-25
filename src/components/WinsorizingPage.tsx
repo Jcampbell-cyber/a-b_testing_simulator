@@ -3,6 +3,8 @@ import { WinsorizingControls, type SimulationMode } from './WinsorizingControls'
 import { WinsorizingDistributionChart } from './WinsorizingDistributionChart';
 import { WinsorizingResultsDisplay } from './WinsorizingResultsDisplay';
 import { runWinsorizingSimulation, runABTestSimulation, type WinsorizingResults, type ABTestResults } from '../utils/winsorizingSimulation';
+import { Helmet } from 'react-helmet-async';
+import { Link } from 'react-router-dom';
 
 export function WinsorizingPage() {
   const [mode, setMode] = useState<SimulationMode>('single');
@@ -44,6 +46,13 @@ export function WinsorizingPage() {
 
   return (
     <div className="min-h-screen bg-gray-900">
+        <Helmet>
+    <title>Test Duration Calculator for A/B Testing</title>
+    <meta
+      name="description"
+      content="Estimate how long your A/B test needs to run to reach statistical significance. Adjust metric type, MDE, traffic, and flights for accurate test duration calculation."
+    />
+  </Helmet>
       <div className="container mx-auto px-4 py-8">
         <div className="mb-8">
           <h1 className="text-4xl font-bold text-white mb-2">Winsorizing Simulator</h1>
@@ -214,6 +223,18 @@ export function WinsorizingPage() {
             </p>
           </div>
         </div>
+        <div className="bg-gray-700 rounded-lg p-6 text-center mt-12">
+  <p className="text-gray-300 mb-4">
+    Normalisation helps make metrics comparable after outlier treatment
+  </p>
+  <Link
+    to="/normalisation"
+    className="inline-block bg-blue-500 hover:bg-blue-600 text-white font-semibold px-6 py-3 rounded transition-colors"
+  >
+    Go to Normalisation →
+  </Link>
+</div>
+
       </div>
     </div>
   );
