@@ -4,6 +4,8 @@ import { runPeekingSimulation, type PeekingSimulationResults } from '../utils/pe
 import { calculateMDE } from '../utils/mde';
 import { PeekingTimelineChart } from './PeekingTimelineChart';
 import { PeekingResultsDisplay } from './PeekingResultsDisplay';
+import { Helmet } from "react-helmet-async";
+import { Link } from 'react-router-dom';
 
 export function PeekingPage() {
   const [testType, setTestType] = useState<TestType>('AA');
@@ -53,7 +55,12 @@ export function PeekingPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-900">
+    <div className="min-h-screen bg-gray-900"> 
+      <Helmet>
+        <title>Peeking Analysis Tool | Your Brand</title>
+        <meta name="description" content="Explore how frequent checking of test results impacts false positive rates and experiment reliability." />
+      </Helmet>
+
       <div className="container mx-auto px-4 py-8">
         <div className="mb-8">
           <h1 className="text-4xl font-bold text-white mb-2">Peeking Simulator</h1>
@@ -120,6 +127,18 @@ export function PeekingPage() {
               <li>Apply multiple testing corrections (e.g., Bonferroni) to your significance threshold</li>
             </ul>
           </div>
+        </div>
+
+        <div className="mt-12 bg-gray-700 rounded-lg p-6 text-center">
+          <p className="text-gray-300 mb-4">
+            Want to understand the theory behind these calculations?
+          </p>
+          <Link
+            to="/nhst"
+            className="inline-block bg-blue-500 hover:bg-blue-600 text-white font-semibold px-6 py-3 rounded transition-colors"
+          >
+            Learn About the Null Hypothesis and Significance Testing →
+          </Link>
         </div>
       </div>
     </div>
