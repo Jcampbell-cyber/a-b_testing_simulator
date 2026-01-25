@@ -580,6 +580,7 @@ const NHSTPage: React.FC = () => {
         </div>
       </div>
     </div> 
+  );
 };
-export default NHSTPage;
 
+export default NHSTPage;
