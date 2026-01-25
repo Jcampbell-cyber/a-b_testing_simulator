@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { ArrowLeft, Info } from 'lucide-react';
+import { Helmet } from "react-helmet-async";
 
 interface SampleSizeCalculatorProps {
   onBack: () => void;
@@ -122,8 +123,18 @@ export function SampleSizeCalculator({ onBack, onNavigate }: SampleSizeCalculato
   const result = calculateSampleSize();
 
   return (
-    <div className="min-h-screen bg-gray-900">
-      <div className="max-w-5xl mx-auto px-4 py-8">
+    return (
+  <div className="min-h-screen bg-gray-900">
+    <Helmet>
+      <title>Sample Size Calculator for A/B Testing</title>
+      <meta
+        name="description"
+        content="Calculate the required sample size for A/B tests using MDE, power, significance level, and multiple variants."
+      />
+    </Helmet>
+
+    <div className="max-w-5xl mx-auto px-4 py-8">
+
         <button
           onClick={onBack}
           className="flex items-center gap-2 text-blue-400 hover:text-white mb-8 transition-colors"
