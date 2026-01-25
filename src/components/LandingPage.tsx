@@ -1,5 +1,6 @@
 import { Eye, Shield, Scale, Clock, GitMerge, TrendingUp, Mail } from 'lucide-react';
 import { Link } from "react-router-dom";
+import { Helmet } from 'react-helmet-async';
 
 function CardSection({ title, cards }: { title: string; cards: React.ReactNode[] }) {
   return (
@@ -30,15 +31,19 @@ function Card({ title, description, to }: { title: string; description: string; 
 }
 
 export function LandingPage() {
-  const understandingCards = [
+  // Cards grouped by our new categories
+  const experimentBestPracticeCards = [
     { title: "Significance Testing", desc: "Visualize the relationship between statistical power, effect size, sample size, and alpha level in hypothesis testing.", path: "/nhst" },
-    { title: "Peeking Simulator", desc: "Understand how frequently checking test results inflates false positive rates based on p-values.", path: "/peeking" },
-    { title: "Guardrails Simulator", desc: "Set manual or statistical guardrails to detect and stop tests when metrics fall below acceptable thresholds.", path: "/guardrails" },
+    { title: "Peeking Checks", desc: "Understand how frequently checking test results inflates false positive rates based on p-values.", path: "/peeking" },
+    { title: "Statistical Guardrails", desc: "Set manual or statistical guardrails to detect and stop tests when metrics fall below acceptable thresholds.", path: "/guardrails" },
     { title: "Imbalanced Flights", desc: "Explore how imbalanced sample splits affect statistical power and sample size requirements.", path: "/imbalanced" },
+  ];
+
+  const advancedExperimentTechniquesCards = [
     { title: "CUPED Variance Reduction", desc: "Learn how CUPED reduces variance using pre-experiment data to improve test sensitivity.", path: "/cuped" },
     { title: "Family‑Wise Error Rate", desc: "Simulate post‑hoc corrections like Bonferroni, Holm, Tukey, and Dunnett to explore their impact on false‑positive and false‑negative rates.", path: "/fwer" },
-    { title: "Winsorizing Simulator", desc: "Explore how winsorizing handles outliers by capping extreme values to reduce variance and improve statistical precision.", path: "/winsorizing" },
-    { title: "Normalisation Simulator", desc: "Learn how to normalise metrics across segments with different baselines to ensure comparable aggregation in experiments.", path: "/normalisation" },
+    { title: "Winsorizing", desc: "Explore how winsorizing handles outliers by capping extreme values to reduce variance and improve statistical precision.", path: "/winsorizing" },
+    { title: "Normalisation", desc: "Learn how to normalise metrics across segments with different baselines to ensure comparable aggregation in experiments.", path: "/normalisation" },
   ];
 
   const calculatorCards = [
@@ -48,8 +53,22 @@ export function LandingPage() {
     { title: "Test Results Calculator", desc: "Analyze your test results and calculate confidence intervals and statistical significance.", path: "/test-results-calc" },
   ];
 
+  const otherCards = [
+    { title: "Glossary", desc: "A reference guide for terms and concepts used in experimentation and statistical testing.", path: "/glossary" },
+    { title: "Feedback & Enquiries", desc: "Send us your questions or suggestions to help improve the platform.", path: "/feedback" },
+  ];
+
   return (
     <div className="min-h-screen bg-gray-900">
+      <Helmet>
+        <title>Advanced A/B Testing Concepts</title>
+        <meta
+          name="description"
+          content="Interactive A/B testing tools and simulators to help data scientists and product managers understand best practices, pitfalls, and advanced experiment techniques."
+        />
+        <link rel="canonical" href="https://www.advancedab.tech/" />
+      </Helmet>
+
       <div className="max-w-6xl mx-auto px-4 py-16">
         <div className="text-center mb-16">
           <h1 className="text-5xl font-bold text-white mb-4">
@@ -64,9 +83,20 @@ export function LandingPage() {
           title="Calculators"
           cards={calculatorCards.map(c => <Card key={c.path} title={c.title} description={c.desc} to={c.path} />)}
         />
+
         <CardSection
-          title="Understanding & Simulators"
-          cards={understandingCards.map(c => <Card key={c.path} title={c.title} description={c.desc} to={c.path} />)}
+          title="Experiment Best Practices"
+          cards={experimentBestPracticeCards.map(c => <Card key={c.path} title={c.title} description={c.desc} to={c.path} />)}
+        />
+
+        <CardSection
+          title="Advanced Experiment Techniques"
+          cards={advancedExperimentTechniquesCards.map(c => <Card key={c.path} title={c.title} description={c.desc} to={c.path} />)}
+        />
+
+        <CardSection
+          title="Other"
+          cards={otherCards.map(c => <Card key={c.path} title={c.title} description={c.desc} to={c.path} />)}
         />
 
         <div className="mt-12 text-center">
