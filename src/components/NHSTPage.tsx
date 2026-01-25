@@ -499,7 +499,58 @@ const NHSTPage: React.FC = () => {
                 </div>
               </div>
             </div> {/* closes bg-gray-900/50 p-6 */}
+        <div className="bg-gray-800 border border-gray-700 rounded-xl shadow-lg p-6 mt-6">
+          <h2 className="text-2xl font-bold text-white mb-4">Understanding the Visualization</h2>
+          <div className="space-y-4 text-gray-300">
+            <div>
+              <h3 className="font-semibold text-lg text-white mb-2">The Distributions</h3>
+              <p className="leading-relaxed mb-2">
+                The <span className="font-semibold text-blue-400">blue curve</span> (H₀) represents the sampling distribution
+                under the null hypothesis, centered at μ₀ = 0. The <span className="font-semibold text-red-400">red curve</span> (H₁) represents
+                the sampling distribution under the alternative hypothesis. Solid vertical lines mark each mean.
+              </p>
+              <p className="leading-relaxed text-sm bg-gray-900/50 p-3 rounded border border-gray-700">
+                <strong>Key insight:</strong> Changing <strong>alpha (α)</strong> moves the critical value, while adjusting <strong>power</strong> changes the effect size required.
+              </p>
+            </div>
 
+            <div>
+              <h3 className="font-semibold text-lg text-white mb-2">One-Sided vs Two-Sided Tests</h3>
+              <p className="leading-relaxed">
+                A <strong>one-sided test</strong> only rejects H₀ in one tail. A <strong>two-sided test</strong> splits alpha across both tails,
+                requiring slightly larger effect sizes for the same power.
+              </p>
+            </div>
+
+            <div>
+              <h3 className="font-semibold text-lg text-white mb-2">Type I Error (α)</h3>
+              <p className="leading-relaxed">
+                The <span className="font-semibold text-red-400">red shaded area</span> under H₀ represents Type I error (false positive). 
+                Lower α moves the critical value outward, making the test more conservative.
+              </p>
+            </div>
+
+            <div>
+              <h3 className="font-semibold text-lg text-white mb-2">Type II Error (β) and Power</h3>
+              <p className="leading-relaxed mb-2">
+                The <span className="font-semibold text-orange-400">orange shaded area</span> under H₁ (left of the critical value) is Type II error (false negative).
+              </p>
+              <p className="leading-relaxed">
+                The <span className="font-semibold text-green-400">green shaded area</span> represents power (1-β). Higher desired power increases the required effect size or sample size.
+              </p>
+            </div>
+
+            <div>
+              <h3 className="font-semibold text-lg text-white mb-2">How the Parameters Interact</h3>
+              <div className="space-y-2 leading-relaxed">
+                <p><strong>Power (1-β):</strong> Higher power requires larger effect sizes or larger samples.</p>
+                <p><strong>Sample Size (n):</strong> Larger samples reduce standard error, allowing smaller effects to be detected at the same power.</p>
+                <p><strong>Alpha (α):</strong> Lower α moves critical values outward, requiring larger effects to achieve the same power.</p>
+                <p><strong>Test Type:</strong> Two-sided tests split alpha, requiring slightly larger effects than one-sided tests for the same power.</p>
+              </div>
+            </div>
+          </div>
+        </div>
             {/* Explanation Section */}
             <div className="bg-gray-700 rounded-lg p-6 text-center mt-12">
               <p className="text-gray-300 mb-4">
