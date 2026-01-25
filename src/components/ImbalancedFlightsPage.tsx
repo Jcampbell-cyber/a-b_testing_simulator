@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import { GitBranch } from 'lucide-react';
 import { calculateMDE } from '../utils/mde';
+import { Helmet } from 'react-helmet-async';
+import { Link } from 'react-router-dom';
 
 export function ImbalancedFlightsPage() {
   const [baselineMean] = useState(1000);
@@ -126,6 +128,13 @@ export function ImbalancedFlightsPage() {
 
   return (
     <div className="min-h-screen bg-gray-900">
+            <Helmet>
+        <title>Null Hypothesis Significance Testing | Guardrails</title>
+        <meta
+          name="description"
+          content="Interactive visualization of statistical power, Type I & II errors, effect sizes, and how they relate to experimental guardrails."
+        />
+      </Helmet>
       <div className="container mx-auto px-4 py-8">
         <div className="mb-8">
           <div className="flex items-center gap-3 mb-2">
