@@ -583,5 +583,3 @@ const NHSTPage: React.FC = () => {
       </div> {/* closes min-h-screen */}
     );
 };
-
-export default NHSTPage;
