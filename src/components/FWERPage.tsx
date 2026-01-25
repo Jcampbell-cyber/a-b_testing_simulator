@@ -46,13 +46,14 @@ export function FWERPage() {
 
   return (
     <div className="min-h-screen bg-gray-900">
-                  <Helmet>
-        <title>Null Hypothesis Significance Testing | Guardrails</title>
-        <meta
-          name="description"
-          content="Interactive visualization of statistical power, Type I & II errors, effect sizes, and how they relate to experimental guardrails."
-        />
-      </Helmet>
+<Helmet>
+  <title>FWER Control in A/B Testing</title>
+  <meta
+    name="description"
+    content="Understand Family-Wise Error Rate (FWER) control in A/B testing. Learn how to adjust for multiple comparisons to avoid false positives when testing many variants."
+  />
+</Helmet>
+
       <div className="container mx-auto px-4 py-8">
         <div className="mb-8">
           <div className="flex items-center gap-3 mb-2">
