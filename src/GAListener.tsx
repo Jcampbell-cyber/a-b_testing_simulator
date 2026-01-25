@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react';
 import { useLocation } from 'react-router-dom';
 import { pageview } from './gtag';
-import { pages } from './Navigation';
+import { pages } from './components/Navigation';
 
 export function GAListener() {
   const location = useLocation();
