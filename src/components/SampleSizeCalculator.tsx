@@ -122,9 +122,8 @@ export function SampleSizeCalculator({ onBack, onNavigate }: SampleSizeCalculato
 
   const result = calculateSampleSize();
 
-  return (
-    return (
-  <div className="min-h-screen bg-gray-900">
+    return ( 
+      <div className="min-h-screen bg-gray-900">
     <Helmet>
       <title>Sample Size Calculator for A/B Testing</title>
       <meta
