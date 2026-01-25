@@ -144,7 +144,7 @@ export function SampleSizeCalculator({ onBack, onNavigate }: SampleSizeCalculato
         <div className="bg-gray-800 rounded-lg shadow-lg p-8">
           <h1 className="text-4xl font-bold text-white mb-2">Sample Size Calculator</h1>
           <p className="text-gray-300 mb-8">
-            Determine the required sample size for your experiment with clear MDE, power, and significance insights.
+            Determine the required sample size for your experiment with clear MDE, power, and significance insights. 
           </p>
 
           {/* --- KEEP ALL ORIGINAL CALCULATOR INPUTS, RESULTS, MDE, FORMULAS HERE --- */}
