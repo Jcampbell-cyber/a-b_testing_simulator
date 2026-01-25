@@ -46,13 +46,13 @@ export function WinsorizingPage() {
 
   return (
     <div className="min-h-screen bg-gray-900">
-        <Helmet>
-    <title>Test Duration Calculator for A/B Testing</title>
-    <meta
-      name="description"
-      content="Estimate how long your A/B test needs to run to reach statistical significance. Adjust metric type, MDE, traffic, and flights for accurate test duration calculation."
-    />
-  </Helmet>
+<Helmet>
+  <title>Winsorising in A/B Testing</title>
+  <meta
+    name="description"
+    content="Learn how Winsorising can reduce the impact of extreme values in your A/B tests, leading to more robust metrics and more reliable experiment results."
+  />
+</Helmet>
       <div className="container mx-auto px-4 py-8">
         <div className="mb-8">
           <h1 className="text-4xl font-bold text-white mb-2">Winsorizing Simulator</h1>
