@@ -225,13 +225,13 @@ export function WinsorizingPage() {
         </div>
         <div className="bg-gray-700 rounded-lg p-6 text-center mt-12">
   <p className="text-gray-300 mb-4">
-    Normalisation helps make metrics comparable after outlier treatment
+    Normalisation helps make metrics comparable across different groups and noisy data
   </p>
   <Link
     to="/normalisation"
     className="inline-block bg-blue-500 hover:bg-blue-600 text-white font-semibold px-6 py-3 rounded transition-colors"
   >
-    Go to Normalisation →
+    Make your metrics comparable with Normalisation →
   </Link>
 </div>
 
