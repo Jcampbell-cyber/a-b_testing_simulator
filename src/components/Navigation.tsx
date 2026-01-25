@@ -28,9 +28,7 @@ export const pages = [
   { id: 'glossary', label: 'Glossary', group: 'Other' },
   { id: 'feedback', label: 'Feedback & Enquiries', group: 'Other' },
 ];
-
-
-
+ 
 interface NavigationProps {
   currentPage: string;
 }
@@ -68,24 +66,24 @@ export function Navigation({ currentPage }: NavigationProps) {
             onClick={() => setIsOpen(false)}
           />
 
-          <div className="fixed top-20 right-4 bg-gray-800 border border-gray-700 rounded-lg shadow-2xl p-4 z-50 w-64 max-h-[70vh] overflow-y-auto">
-            <h3 className="text-lg font-semibold text-white mb-3">Navigation</h3>
-            <nav className="space-y-3">
-              {/* Ungrouped */}
-              {pages.filter(p => !p.group).map(p => (
-                <Link
-                  key={p.id}
-                  to={p.id === 'landing' ? '/' : `/${p.id}`}
-                  className={`block w-full px-4 py-2 rounded-md transition-colors ${
-                    currentPage === p.id
-                      ? 'bg-[#0017D2] text-white font-semibold'
-                      : 'hover:bg-gray-700 text-gray-200'
-                  }`}
-                  onClick={() => setIsOpen(false)}
-                >
-                  {p.label}
-                </Link>
-              ))}
+<div className="fixed top-20 right-4 bg-gray-800 border border-gray-700 rounded-lg shadow-2xl p-4 z-50 w-64 max-h-[calc(100vh-5rem)] overflow-y-auto">
+  <h3 className="text-lg font-semibold text-white mb-3">Navigation</h3>
+  <nav className="space-y-3">
+    {/* Ungrouped */}
+    {pages.filter(p => !p.group).map(p => (
+      <Link
+        key={p.id}
+        to={p.id === 'landing' ? '/' : `/${p.id}`}
+        className={`block w-full px-4 py-2 rounded-md transition-colors ${
+          currentPage === p.id
+            ? 'bg-[#0017D2] text-white font-semibold'
+            : 'hover:bg-gray-700 text-gray-200'
+        }`}
+        onClick={() => setIsOpen(false)}
+      >
+        {p.label}
+      </Link>
+    ))}
 
               {/* Calculators */}
               <div>
