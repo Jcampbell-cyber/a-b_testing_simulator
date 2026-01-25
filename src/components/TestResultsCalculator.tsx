@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { ArrowLeft, Info } from 'lucide-react';
 import { Helmet } from 'react-helmet-async';
+import { Link } from 'react-router-dom';
 
 interface TestResultsCalculatorProps {
   onBack: () => void;
@@ -672,14 +673,16 @@ export function TestResultsCalculator({ onBack, onNavigate }: TestResultsCalcula
           </div>
           <div className="mt-12 bg-gray-700 rounded-lg p-6 text-center">
   <p className="text-gray-300 mb-4">
-    Want to plan your experiment before collecting data?
+<div className="mt-12 bg-gray-700 rounded-lg p-6 text-center">
+  <p className="text-gray-300 mb-4">
+    Want to understand the theory behind these calculations?
   </p>
-  <button
-    onClick={() => onNavigate('sample-size-calculator')}
+  <Link
+    to="/nhst"
     className="inline-block bg-blue-500 hover:bg-blue-600 text-white font-semibold px-6 py-3 rounded transition-colors"
   >
-    Open Sample Size Calculator →
-  </button>
+    Learn About NHST →
+  </Link>
 </div>
 
         </div>
