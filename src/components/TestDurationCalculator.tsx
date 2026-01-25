@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { ArrowLeft, Info } from 'lucide-react';
+import { Helmet } from 'react-helmet';
 
 interface TestDurationCalculatorProps {
   onBack: () => void;
@@ -123,6 +124,14 @@ export function TestDurationCalculator({ onBack, onNavigate }: TestDurationCalcu
 
   return (
     <div className="min-h-screen bg-gray-900">
+  <Helmet>
+    <title>Test Duration Calculator for A/B Testing</title>
+    <meta
+      name="description"
+      content="Estimate how long your A/B test needs to run to reach statistical significance. Adjust metric type, MDE, traffic, and flights for accurate test duration calculation."
+    />
+  </Helmet>
+      
       <div className="max-w-5xl mx-auto px-4 py-8">
         <button
           onClick={onBack}
@@ -563,6 +572,18 @@ export function TestDurationCalculator({ onBack, onNavigate }: TestDurationCalcu
               </div>
             </div>
           </div>
+          {/* CTA */}
+<div className="mt-12 bg-gray-700 rounded-lg p-6 text-center">
+  <p className="text-gray-300 mb-4">
+    Want to detect the smallest effect your experiment can reliably measure?
+  </p>
+  <Link
+    to="/effect-detection-calc"
+    className="inline-block bg-blue-500 hover:bg-blue-600 text-white font-semibold px-6 py-3 rounded transition-colors"
+  >
+    Open Effect Detection Calculator →
+  </Link>
+</div>
         </div>
       </div>
     </div>
