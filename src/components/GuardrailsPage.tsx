@@ -1,6 +1,8 @@
 import { useState, useMemo } from 'react';
 import { GuardrailsControls, type TestType, type PeekingMode, type GuardrailType } from './GuardrailsControls';
 import { runGuardrailsSimulation, type GuardrailsSimulationResults } from '../utils/guardrailsSimulation';
+import { Helmet } from 'react-helmet-async';
+import { Link } from 'react-router-dom';
 import { calculateMDE } from '../utils/mde';
 import { GuardrailsTimelineChart } from './GuardrailsTimelineChart';
 import { GuardrailsResultsDisplay } from './GuardrailsResultsDisplay';
@@ -58,6 +60,13 @@ export function GuardrailsPage() {
 
   return (
     <div className="min-h-screen bg-gray-900">
+      <Helmet>
+        <title>Null Hypothesis Significance Testing | Guardrails</title>
+        <meta
+          name="description"
+          content="Interactive visualization of statistical power, Type I & II errors, effect sizes, and how they relate to experimental guardrails."
+        />
+      </Helmet>
       <div className="container mx-auto px-4 py-8">
         <div className="mb-8">
           <h1 className="text-4xl font-bold text-white mb-2">Guardrails Simulator</h1>
