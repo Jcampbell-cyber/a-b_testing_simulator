@@ -131,13 +131,13 @@ export function PeekingPage() {
 
         <div className="mt-12 bg-gray-700 rounded-lg p-6 text-center">
           <p className="text-gray-300 mb-4">
-            Want to understand the theory behind these calculations?
+            Learn how peeking and frequent checks relate to experimental guardrails.
           </p>
           <Link
-            to="/nhst"
+            to="/guardrails"
             className="inline-block bg-blue-500 hover:bg-blue-600 text-white font-semibold px-6 py-3 rounded transition-colors"
           >
-            Learn About the Null Hypothesis and Significance Testing →
+            Learn About Setting Statistical Guardrails →
           </Link>
         </div>
       </div>
