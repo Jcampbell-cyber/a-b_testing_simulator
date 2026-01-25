@@ -157,16 +157,15 @@ export function GuardrailsPage() {
              </p> 
             </div>
           </div>
-        </div>
 <div className="bg-gray-700 rounded-lg p-6 text-center mt-12">
   <p className="text-gray-300 mb-4">
     See how imbalanced exposure can distort guardrail metrics in A/B tests
   </p>
   <Link
-    to="/imbalanced-cta"
+    to="/imbalanced"
     className="inline-block bg-blue-500 hover:bg-blue-600 text-white font-semibold px-6 py-3 rounded transition-colors"
   >
-    Explore Imbalanced CTA Experiments →
+    Explore Imbalanced Experiments →
   </Link>
       </div>
     </div>
