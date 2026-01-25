@@ -534,13 +534,13 @@ export function ImbalancedFlightsPage() {
           </div>
           <div className="bg-gray-700 rounded-lg p-6 text-center mt-12">
   <p className="text-gray-300 mb-4">
-    CUPED can reduce variance introduced by imbalanced exposure
+    CUPED can reduce variance introduced by imbalanced flights
   </p>
   <Link
     to="/cuped"
     className="inline-block bg-blue-500 hover:bg-blue-600 text-white font-semibold px-6 py-3 rounded transition-colors"
   >
-    Go to CUPED →
+    Go to CUPED Variance Reduction →
   </Link>
 </div>
         </div>
