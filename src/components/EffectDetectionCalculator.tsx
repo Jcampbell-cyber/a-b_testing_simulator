@@ -631,12 +631,12 @@ export function EffectDetectionCalculator({ onBack, onNavigate }: EffectDetectio
   <p className="text-gray-300 mb-4">
     Want to see how this MDE affects your experiment’s duration?
   </p>
-  <button
-    onClick={() => onNavigate('test-duration')} // or your page key
-    className="inline-block bg-blue-500 hover:bg-blue-600 text-white font-semibold px-6 py-3 rounded transition-colors"
-  >
-    Open Test Duration Calculator →
-  </button>
+<Link
+  to="/test-duration"
+  className="inline-block bg-blue-500 hover:bg-blue-600 text-white font-semibold px-6 py-3 rounded transition-colors"
+>
+  Open Test Duration Calculator →
+</Link>
 </div>
 
         </div>
