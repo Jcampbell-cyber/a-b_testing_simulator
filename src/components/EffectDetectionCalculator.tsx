@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { ArrowLeft, Info } from 'lucide-react';
-import { Helmet } from 'react-helmet';
-
+import { Helmet } from 'react-helmet-async';
 
 interface EffectDetectionCalculatorProps {
   onBack: () => void;
