@@ -1,87 +1,78 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-
-  <!-- Landing Page -->
   <url>
     <loc>https://advancedab.tech/</loc>
-    <priority>1.0</priority>
     <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
   </url>
-
-  <!-- Calculators -->
   <url>
     <loc>https://advancedab.tech/sample-size-calc</loc>
-    <priority>0.9</priority>
-    <changefreq>monthly</changefreq>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
   </url>
   <url>
     <loc>https://advancedab.tech/test-duration-calc</loc>
-    <priority>0.9</priority>
-    <changefreq>monthly</changefreq>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
   </url>
   <url>
     <loc>https://advancedab.tech/effect-detection-calc</loc>
-    <priority>0.9</priority>
-    <changefreq>monthly</changefreq>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
   </url>
   <url>
     <loc>https://advancedab.tech/test-results-calc</loc>
-    <priority>0.9</priority>
-    <changefreq>monthly</changefreq>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
   </url>
-
-  <!-- Understanding & Simulators -->
   <url>
     <loc>https://advancedab.tech/nhst</loc>
-    <priority>0.8</priority>
-    <changefreq>monthly</changefreq>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
   </url>
   <url>
     <loc>https://advancedab.tech/peeking</loc>
-    <priority>0.8</priority>
-    <changefreq>monthly</changefreq>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
   </url>
   <url>
     <loc>https://advancedab.tech/guardrails</loc>
-    <priority>0.8</priority>
-    <changefreq>monthly</changefreq>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
   </url>
   <url>
     <loc>https://advancedab.tech/imbalanced</loc>
-    <priority>0.8</priority>
-    <changefreq>monthly</changefreq>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
   </url>
   <url>
     <loc>https://advancedab.tech/cuped</loc>
-    <priority>0.8</priority>
-    <changefreq>monthly</changefreq>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
   </url>
   <url>
     <loc>https://advancedab.tech/fwer</loc>
-    <priority>0.8</priority>
-    <changefreq>monthly</changefreq>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
   </url>
   <url>
     <loc>https://advancedab.tech/winsorizing</loc>
-    <priority>0.8</priority>
-    <changefreq>monthly</changefreq>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
   </url>
   <url>
     <loc>https://advancedab.tech/normalisation</loc>
-    <priority>0.8</priority>
-    <changefreq>monthly</changefreq>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
   </url>
-
-  <!-- Other Pages -->
   <url>
     <loc>https://advancedab.tech/glossary</loc>
+    <changefreq>weekly</changefreq>
     <priority>0.6</priority>
-    <changefreq>yearly</changefreq>
   </url>
   <url>
     <loc>https://advancedab.tech/feedback</loc>
-    <priority>0.5</priority>
-    <changefreq>yearly</changefreq>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
   </url>
-
 </urlset>
