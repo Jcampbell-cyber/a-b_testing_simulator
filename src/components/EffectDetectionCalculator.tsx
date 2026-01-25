@@ -632,7 +632,7 @@ export function EffectDetectionCalculator({ onBack, onNavigate }: EffectDetectio
     Want to see how this MDE affects your experiment’s duration?
   </p>
 <Link
-  to="/test-duration-calc"
+  to="/test-results-calc"
   className="inline-block bg-blue-500 hover:bg-blue-600 text-white font-semibold px-6 py-3 rounded transition-colors"
 >
   Open Test Duration Calculator →
