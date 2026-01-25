@@ -216,29 +216,52 @@ export function CUPEDPage() {
             <text x={80 + barMaxWidth * effectiveRSquared + 6} y="74" className="fill-emerald-400 text-sm font-semibold">{effectiveRSquared.toFixed(2)}</text>
           </svg>
         </div>
+{/* How CUPED Works */}
+<div className="mt-6 bg-gray-800 rounded-lg shadow-md border border-gray-700 p-6">
+  <h2 className="text-xl font-semibold text-white mb-4">How CUPED Works</h2>
+  <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm text-gray-300">
 
-        {/* How CUPED Works */}
-        <div className="mt-6 bg-gray-800 rounded-lg shadow-md border border-gray-700 p-6">
-          <h2 className="text-xl font-semibold text-white mb-4">How CUPED Works</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm text-gray-300">
-            <div>
-              <h3 className="font-semibold text-white mb-2">1. Collect Pre-Experiment Data</h3>
-              <p>Collect the same metric from a historical period before running your A/B test.</p>
-            </div>
-            <div>
-              <h3 className="font-semibold text-white mb-2">2. Calculate Correlation</h3>
-              <p>Measure how well the pre-experiment metric predicts the experiment metric (R²).</p>
-            </div>
-            <div>
-              <h3 className="font-semibold text-white mb-2">3. Adjust for Covariates</h3>
-              <p>CUPED adjusts each user's metric by subtracting their expected value based on history.</p>
-            </div>
-            <div>
-              <h3 className="font-semibold text-white mb-2">4. Reduced Variance</h3>
-              <p>This reduces predictable variance by correcting individual metrics: users below their historical average are adjusted upward, and users above their average are adjusted downward, wherever pre-experiment data is available.</p>
-            </div>
-          </div>
-        </div>
+    <div>
+      <h3 className="font-semibold text-white mb-2">1. Collect Pre-Experiment Data</h3>
+      <p>Collect the same metric from a historical period before running your A/B test.</p>
+    </div>
+
+    <div>
+      <h3 className="font-semibold text-white mb-2">2. Calculate Correlation</h3>
+      <p>Measure how well the pre-experiment metric predicts the experiment metric (R²).</p>
+    </div>
+
+    <div>
+      <h3 className="font-semibold text-white mb-2">3. Adjust for Covariates</h3>
+      <p>CUPED adjusts each user's metric by subtracting their expected value based on history.</p>
+    </div>
+
+    <div>
+      <h3 className="font-semibold text-white mb-2">4. Reduced Variance</h3>
+      <p>
+        This reduces predictable variance by correcting individual metrics: users below their historical average are adjusted upward, and users above their average are adjusted downward, wherever pre-experiment data is available.
+      </p>
+
+      {/* CUPED Math Explanation */}
+      <p className="text-sm text-gray-300 mt-2">
+        Mathematically, CUPED adjusts each user's metric using the formula:
+        <br />
+        <code className="bg-gray-700 px-1 rounded">Y<sub>i</sub><sup>CUPED</sup> = Y<sub>i</sub> - θ × (X<sub>i</sub> - X̄)</code>
+        <br />
+        where:
+        <ul className="list-disc ml-5 mt-1">
+          <li><code>Y<sub>i</sub></code> = observed metric for user <em>i</em></li>
+          <li><code>X<sub>i</sub></code> = pre-experiment metric for user <em>i</em></li>
+          <li><code>X̄</code> = mean of the pre-experiment metric across all users</li>
+          <li><code>θ = Cov(X,Y) / Var(X)</code> = coefficient capturing how much pre-experiment behavior predicts the metric</li>
+        </ul>
+        This ensures variance is reduced while keeping the overall mean intact, so business impact and uplift remain interpretable.
+      </p>
+    </div>
+
+  </div>
+</div>
+
 
         {/* Key Insight */}
         <div className="mb-6 bg-emerald-900/50 border border-emerald-700 rounded-lg p-4">
