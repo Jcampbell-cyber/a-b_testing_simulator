@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import { Info } from 'lucide-react';
-import { Helmet } from 'react-helmet-async';
+import { Helmet } from 'react-helmet';
 import { Link } from 'react-router-dom';
 import {
   LineChart,
@@ -22,6 +22,7 @@ const NHSTPage: React.FC = () => {
   const [alpha, setAlpha] = useState(0.05);
   const [testType, setTestType] = useState<'one-sided' | 'two-sided'>('two-sided');
 
+  // Memoized distribution calculations
   const calculateDistributions = useMemo(() => {
     const standardError = 1 / Math.sqrt(sampleSize);
     const mean0 = 0;
@@ -81,16 +82,19 @@ const NHSTPage: React.FC = () => {
     };
   }, [power, sampleSize, alpha, testType]);
 
+  // Normal PDF
   function normalPDF(x: number, mean: number, sd: number) {
     const exponent = -0.5 * Math.pow((x - mean) / sd, 2);
     return (1 / (sd * Math.sqrt(2 * Math.PI))) * Math.exp(exponent);
   }
 
+  // Normal CDF
   function normalCDF(x: number, mean: number, sd: number) {
     const z = (x - mean) / sd;
     return 0.5 * (1 + erf(z / Math.sqrt(2)));
   }
 
+  // Error function approximation
   function erf(x: number) {
     const sign = x >= 0 ? 1 : -1;
     x = Math.abs(x);
@@ -170,7 +174,7 @@ const NHSTPage: React.FC = () => {
         <div className="mb-8">
           <h1 className="text-4xl font-bold text-white mb-3">Understanding Null Hypothesis Significance Testing</h1>
           <p className="text-lg text-gray-300 leading-relaxed">
-            An interactive visualization of statistical power, Type I and Type II errors, and effect sizes
+            An interactive visualization of statistical power, Type I and Type II errors, and effect sizes.
           </p>
         </div>
 
@@ -195,7 +199,7 @@ const NHSTPage: React.FC = () => {
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-            {/* Power */}
+            {/* Power Control */}
             <div>
               <label className="block text-sm font-semibold text-gray-200 mb-2">
                 Statistical Power (1-β): {(power * 100).toFixed(0)}%
@@ -215,7 +219,7 @@ const NHSTPage: React.FC = () => {
               </div>
             </div>
 
-            {/* Sample Size */}
+            {/* Sample Size Control */}
             <div>
               <label className="block text-sm font-semibold text-gray-200 mb-2">
                 Sample Size (n): {sampleSize}
@@ -235,7 +239,7 @@ const NHSTPage: React.FC = () => {
               </div>
             </div>
 
-            {/* Alpha */}
+            {/* Alpha Control */}
             <div>
               <label className="block text-sm font-semibold text-gray-200 mb-2">
                 Significance Level (α): {(alpha * 100).toFixed(1)}%
@@ -246,7 +250,7 @@ const NHSTPage: React.FC = () => {
                 max="0.15"
                 step="0.001"
                 value={alpha}
-                onChange={e => setAlpha(parseFloat(e.target.value))}
+                onChange={(e) => setAlpha(parseFloat(e.target.value))}
                 className="w-full h-2 bg-gray-600 rounded-lg appearance-none cursor-pointer accent-red-500"
               />
               <div className="flex justify-between text-xs text-gray-400 mt-1">
@@ -255,9 +259,11 @@ const NHSTPage: React.FC = () => {
               </div>
             </div>
 
-            {/* Test Type */}
+            {/* Test Type Buttons */}
             <div>
-              <label className="block text-sm font-semibold text-gray-200 mb-2">Test Type</label>
+              <label className="block text-sm font-semibold text-gray-200 mb-2">
+                Test Type
+              </label>
               <div className="flex gap-3 mt-3">
                 <button
                   onClick={() => setTestType('one-sided')}
@@ -281,9 +287,9 @@ const NHSTPage: React.FC = () => {
                 </button>
               </div>
             </div>
-          </div>
+          </div> {/* closes grid of controls */}
 
-          {/* Chart goes here */}
+          {/* Sampling Distributions Chart */}
           <div className="bg-gray-900/50 p-6 rounded-lg border border-gray-700">
             <h3 className="text-lg font-semibold text-white mb-4">Sampling Distributions</h3>
             <ResponsiveContainer width="100%" height={450}>
@@ -293,7 +299,7 @@ const NHSTPage: React.FC = () => {
                   dataKey="x"
                   stroke="#9ca3af"
                   label={{ value: 'Test Statistic', position: 'insideBottom', offset: -5, fill: '#d1d5db' }}
-                  tickFormatter={val => val.toFixed(1)}
+                  tickFormatter={(val) => val.toFixed(1)}
                   tick={{ fill: '#d1d5db' }}
                 />
                 <YAxis
@@ -308,37 +314,354 @@ const NHSTPage: React.FC = () => {
                 />
                 <Legend wrapperStyle={{ paddingTop: '20px' }} />
 
-                {/* H0 and H1 Reference Lines */}
-                <ReferenceLine x={calculateDistributions.mean0} stroke="#1e40af" strokeWidth={3} label={{ value: 'μ₀', position: 'top', fill: '#1e40af', fontWeight: 'bold', fontSize: 13 }} />
-                {calculateDistributions.effectSize > 0 && (
-                  <ReferenceLine x={calculateDistributions.mean1} stroke="#dc2626" strokeWidth={3} label={{ value: 'μ₁', position: 'top', fill: '#dc2626', fontWeight: 'bold', fontSize: 13 }} />
-                )}
+                {/* Reference lines */}
+                <ReferenceLine
+                  x={calculateDistributions.mean0}
+                  stroke="#1e40af"
+                  strokeWidth={3}
+                  label={{
+                    value: 'μ₀',
+                    position: 'top',
+                    fill: '#1e40af',
+                    fontWeight: 'bold',
+                    fontSize: 13,
+                  }}
+                  ifOverflow="extendDomain"
+                />
 
-                {/* Critical Values */}
-                <ReferenceLine x={calculateDistributions.criticalValue} stroke="#0ea5e9" strokeWidth={2.5} strokeDasharray="6 3" label={{ value: testType === 'two-sided' ? 'Upper' : 'Critical', position: 'insideTopRight', fill: '#0ea5e9', fontWeight: 'bold', fontSize: 12 }} />
-                {testType === 'two-sided' && calculateDistributions.criticalValueLower !== null && (
-                  <ReferenceLine x={calculateDistributions.criticalValueLower} stroke="#0ea5e9" strokeWidth={2.5} strokeDasharray="6 3" label={{ value: 'Lower', position: 'insideTopLeft', fill: '#0ea5e9', fontWeight: 'bold', fontSize: 12 }} />
-                )}
-
-                {/* Areas */}
-                <Area type="step" dataKey="h0Reject" fill="#ef4444" fillOpacity={0.25} stroke="none" name="α (Type I Error)" isAnimationActive={false} />
                 {calculateDistributions.effectSize > 0 && (
                   <>
-                    <Area type="step" dataKey="h1Accept" fill="#f97316" fillOpacity={0.25} stroke="none" name="β (Type II Error)" isAnimationActive={false} />
-                    <Area type="step" dataKey="h1Reject" fill="#22c55e" fillOpacity={0.25} stroke="none" name="Power (1-β)" isAnimationActive={false} />
+                    <ReferenceLine
+                      x={calculateDistributions.mean1}
+                      stroke="#dc2626"
+                      strokeWidth={3}
+                      label={{
+                        value: `μ₁`,
+                        position: 'top',
+                        fill: '#dc2626',
+                        fontWeight: 'bold',
+                        fontSize: 13,
+                      }}
+                      ifOverflow="extendDomain"
+                    />
+                    <ReferenceLine
+                      segment={[
+                        { x: calculateDistributions.mean0, y: calculateDistributions.maxDensity * 0.15 },
+                        { x: calculateDistributions.mean1, y: calculateDistributions.maxDensity * 0.15 },
+                      ]}
+                      stroke="#a78bfa"
+                      strokeWidth={4}
+                      label={{
+                        value: `Cohen's d = ${calculateDistributions.effectSize.toFixed(3)}`,
+                        position: 'center',
+                        fill: '#c4b5fd',
+                        fontWeight: 'bold',
+                        fontSize: 12,
+                        offset: -15,
+                      }}
+                      ifOverflow="extendDomain"
+                    />
+                  </>
+                )}
+
+                <ReferenceLine
+                  x={calculateDistributions.criticalValue}
+                  stroke="#0ea5e9"
+                  strokeWidth={2.5}
+                  strokeDasharray="6 3"
+                  label={{
+                    value: testType === 'two-sided' ? 'Upper' : 'Critical',
+                    position: 'insideTopRight',
+                    fill: '#0ea5e9',
+                    fontWeight: 'bold',
+                    fontSize: 12,
+                  }}
+                  ifOverflow="extendDomain"
+                />
+
+                {testType === 'two-sided' && calculateDistributions.criticalValueLower !== null && (
+                  <ReferenceLine
+                    x={calculateDistributions.criticalValueLower}
+                    stroke="#0ea5e9"
+                    strokeWidth={2.5}
+                    strokeDasharray="6 3"
+                    label={{
+                      value: 'Lower',
+                      position: 'insideTopLeft',
+                      fill: '#0ea5e9',
+                      fontWeight: 'bold',
+                      fontSize: 12,
+                    }}
+                    ifOverflow="extendDomain"
+                  />
+                )}
+
+                {/* Shaded areas */}
+                <Area
+                  type="step"
+                  dataKey="h0Reject"
+                  fill="#ef4444"
+                  fillOpacity={0.25}
+                  stroke="none"
+                  name="α (Type I Error)"
+                  isAnimationActive={false}
+                />
+                {calculateDistributions.effectSize > 0 && (
+                  <>
+                    <Area
+                      type="step"
+                      dataKey="h1Accept"
+                      fill="#f97316"
+                      fillOpacity={0.25}
+                      stroke="none"
+                      name="β (Type II Error)"
+                      isAnimationActive={false}
+                    />
+                    <Area
+                      type="step"
+                      dataKey="h1Reject"
+                      fill="#22c55e"
+                      fillOpacity={0.25}
+                      stroke="none"
+                      name="Power (1-β)"
+                      isAnimationActive={false}
+                    />
                   </>
                 )}
 
                 {/* Lines */}
-                <Line type="monotone" dataKey="h0" stroke="#1e40af" strokeWidth={3.5} dot={false} name="H₀: μ = 0" isAnimationActive={false} />
-                {calculateDistributions.effectSize > 0 && <Line type="monotone" dataKey="h1" stroke="#dc2626" strokeWidth={3.5} dot={false} name={`H₁: μ = ${calculateDistributions.effectSize.toFixed(2)}`} isAnimationActive={false} />}
+                <Line
+                  type="monotone"
+                  dataKey="h0"
+                  stroke="#1e40af"
+                  strokeWidth={3.5}
+                  dot={false}
+                  name="H₀: μ = 0"
+                  isAnimationActive={false}
+                />
+                {calculateDistributions.effectSize > 0 && (
+                  <Line
+                    type="monotone"
+                    dataKey="h1"
+                    stroke="#dc2626"
+                    strokeWidth={3.5}
+                    dot={false}
+                    name={`H₁: μ = ${calculateDistributions.effectSize.toFixed(2)}`}
+                    isAnimationActive={false}
+                  />
+                )}
               </ComposedChart>
             </ResponsiveContainer>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-};
+            {/* Alpha Control */}
+            <div>
+              <label className="block text-sm font-semibold text-gray-200 mb-2">
+                Significance Level (α): {(alpha * 100).toFixed(1)}%
+              </label>
+              <input
+                type="range"
+                min="0.001"
+                max="0.15"
+                step="0.001"
+                value={alpha}
+                onChange={(e) => setAlpha(parseFloat(e.target.value))}
+                className="w-full h-2 bg-gray-600 rounded-lg appearance-none cursor-pointer accent-red-500"
+              />
+              <div className="flex justify-between text-xs text-gray-400 mt-1">
+                <span>0.1%</span>
+                <span>15.0%</span>
+              </div>
+            </div>
 
-export default NHSTPage;
+            {/* Test Type Buttons */}
+            <div>
+              <label className="block text-sm font-semibold text-gray-200 mb-2">
+                Test Type
+              </label>
+              <div className="flex gap-3 mt-3">
+                <button
+                  onClick={() => setTestType('one-sided')}
+                  className={`flex-1 py-2 px-4 rounded-lg font-medium transition-colors ${
+                    testType === 'one-sided'
+                      ? 'bg-[#0017D2] text-white'
+                      : 'bg-gray-700 text-gray-200 hover:bg-gray-600'
+                  }`}
+                >
+                  One-Sided
+                </button>
+                <button
+                  onClick={() => setTestType('two-sided')}
+                  className={`flex-1 py-2 px-4 rounded-lg font-medium transition-colors ${
+                    testType === 'two-sided'
+                      ? 'bg-[#0017D2] text-white'
+                      : 'bg-gray-700 text-gray-200 hover:bg-gray-600'
+                  }`}
+                >
+                  Two-Sided
+                </button>
+              </div>
+            </div>
+          </div> {/* closes grid of controls */}
+
+          {/* Sampling Distributions Chart */}
+          <div className="bg-gray-900/50 p-6 rounded-lg border border-gray-700">
+            <h3 className="text-lg font-semibold text-white mb-4">Sampling Distributions</h3>
+            <ResponsiveContainer width="100%" height={450}>
+              <ComposedChart data={calculateDistributions.points} margin={{ top: 20, right: 30, left: 0, bottom: 0 }}>
+                <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
+                <XAxis
+                  dataKey="x"
+                  stroke="#9ca3af"
+                  label={{ value: 'Test Statistic', position: 'insideBottom', offset: -5, fill: '#d1d5db' }}
+                  tickFormatter={(val) => val.toFixed(1)}
+                  tick={{ fill: '#d1d5db' }}
+                />
+                <YAxis
+                  stroke="#9ca3af"
+                  label={{ value: 'Probability Density', angle: -90, position: 'insideLeft', fill: '#d1d5db' }}
+                  tick={{ fill: '#d1d5db' }}
+                />
+                <Tooltip
+                  contentStyle={{ backgroundColor: 'rgba(31, 41, 55, 0.95)', border: '1px solid #4b5563', borderRadius: '8px' }}
+                  cursor={false}
+                  isAnimationActive={false}
+                />
+                <Legend wrapperStyle={{ paddingTop: '20px' }} />
+
+                {/* Reference lines */}
+                <ReferenceLine
+                  x={calculateDistributions.mean0}
+                  stroke="#1e40af"
+                  strokeWidth={3}
+                  label={{
+                    value: 'μ₀',
+                    position: 'top',
+                    fill: '#1e40af',
+                    fontWeight: 'bold',
+                    fontSize: 13,
+                  }}
+                  ifOverflow="extendDomain"
+                />
+
+                {calculateDistributions.effectSize > 0 && (
+                  <>
+                    <ReferenceLine
+                      x={calculateDistributions.mean1}
+                      stroke="#dc2626"
+                      strokeWidth={3}
+                      label={{
+                        value: `μ₁`,
+                        position: 'top',
+                        fill: '#dc2626',
+                        fontWeight: 'bold',
+                        fontSize: 13,
+                      }}
+                      ifOverflow="extendDomain"
+                    />
+                    <ReferenceLine
+                      segment={[
+                        { x: calculateDistributions.mean0, y: calculateDistributions.maxDensity * 0.15 },
+                        { x: calculateDistributions.mean1, y: calculateDistributions.maxDensity * 0.15 },
+                      ]}
+                      stroke="#a78bfa"
+                      strokeWidth={4}
+                      label={{
+                        value: `Cohen's d = ${calculateDistributions.effectSize.toFixed(3)}`,
+                        position: 'center',
+                        fill: '#c4b5fd',
+                        fontWeight: 'bold',
+                        fontSize: 12,
+                        offset: -15,
+                      }}
+                      ifOverflow="extendDomain"
+                    />
+                  </>
+                )}
+
+                <ReferenceLine
+                  x={calculateDistributions.criticalValue}
+                  stroke="#0ea5e9"
+                  strokeWidth={2.5}
+                  strokeDasharray="6 3"
+                  label={{
+                    value: testType === 'two-sided' ? 'Upper' : 'Critical',
+                    position: 'insideTopRight',
+                    fill: '#0ea5e9',
+                    fontWeight: 'bold',
+                    fontSize: 12,
+                  }}
+                  ifOverflow="extendDomain"
+                />
+
+                {testType === 'two-sided' && calculateDistributions.criticalValueLower !== null && (
+                  <ReferenceLine
+                    x={calculateDistributions.criticalValueLower}
+                    stroke="#0ea5e9"
+                    strokeWidth={2.5}
+                    strokeDasharray="6 3"
+                    label={{
+                      value: 'Lower',
+                      position: 'insideTopLeft',
+                      fill: '#0ea5e9',
+                      fontWeight: 'bold',
+                      fontSize: 12,
+                    }}
+                    ifOverflow="extendDomain"
+                  />
+                )}
+
+                {/* Shaded areas */}
+                <Area
+                  type="step"
+                  dataKey="h0Reject"
+                  fill="#ef4444"
+                  fillOpacity={0.25}
+                  stroke="none"
+                  name="α (Type I Error)"
+                  isAnimationActive={false}
+                />
+                {calculateDistributions.effectSize > 0 && (
+                  <>
+                    <Area
+                      type="step"
+                      dataKey="h1Accept"
+                      fill="#f97316"
+                      fillOpacity={0.25}
+                      stroke="none"
+                      name="β (Type II Error)"
+                      isAnimationActive={false}
+                    />
+                    <Area
+                      type="step"
+                      dataKey="h1Reject"
+                      fill="#22c55e"
+                      fillOpacity={0.25}
+                      stroke="none"
+                      name="Power (1-β)"
+                      isAnimationActive={false}
+                    />
+                  </>
+                )}
+
+                {/* Lines */}
+                <Line
+                  type="monotone"
+                  dataKey="h0"
+                  stroke="#1e40af"
+                  strokeWidth={3.5}
+                  dot={false}
+                  name="H₀: μ = 0"
+                  isAnimationActive={false}
+                />
+                {calculateDistributions.effectSize > 0 && (
+                  <Line
+                    type="monotone"
+                    dataKey="h1"
+                    stroke="#dc2626"
+                    strokeWidth={3.5}
+                    dot={false}
+                    name={`H₁: μ = ${calculateDistributions.effectSize.toFixed(2)}`}
+                    isAnimationActive={false}
+                  />
+                )}
+              </ComposedChart>
+            </ResponsiveContainer>
