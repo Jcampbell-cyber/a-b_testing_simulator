@@ -3,13 +3,17 @@ import { TrendingUp } from "lucide-react";
 
 export function CUPEDPage() {
   const [rSquared, setRSquared] = useState(0.7);
+  const [coverage, setCoverage] = useState(0.8); // Users with historical data
 
   const avgValue = 1000;
   const sampleSize = 1000;
 
-  // --- Variance Calculations ---
+  // Effective CUPED strength
+  const effectiveRSquared = rSquared * coverage;
+
+  // Variance Calculations
   const baselineStd = avgValue * 0.25;
-  const cupedStd = baselineStd * Math.sqrt(1 - rSquared);
+  const cupedStd = baselineStd * Math.sqrt(1 - effectiveRSquared);
 
   const stdErrorBaseline = baselineStd / Math.sqrt(sampleSize / 2);
   const stdErrorCuped = cupedStd / Math.sqrt(sampleSize / 2);
@@ -17,10 +21,10 @@ export function CUPEDPage() {
   const mdeBaseline = (1.96 * 2 * stdErrorBaseline / avgValue) * 100;
   const mdeCuped = (1.96 * 2 * stdErrorCuped / avgValue) * 100;
 
-  const sampleReductionPercent = (rSquared * 100).toFixed(1);
+  const mdeReduction = ((mdeBaseline - mdeCuped) / mdeBaseline) * 100;
 
-  // --- Distribution Generators ---
-  const generateNormalDistribution = (mean, std) => {
+  // Distribution generator
+  const generateNormalDistribution = (mean: number, std: number) => {
     const points = [];
     const range = 4 * std;
     const steps = 120;
@@ -34,14 +38,13 @@ export function CUPEDPage() {
     return points;
   };
 
-  // --- Distributions ---
   const baselineDist = generateNormalDistribution(avgValue, baselineStd);
   const cupedDist = generateNormalDistribution(avgValue, cupedStd);
 
-  // --- Axis and path for distribution chart ---
+  // Distribution chart scales
   const distChartWidth = 560;
   const distChartHeight = 300;
-  const distChartPadding = { left: 60, bottom: 50, top: 30, right: 30 };
+  const padding = { left: 60, bottom: 50, top: 30, right: 30 };
 
   const distMinX = avgValue - baselineStd * 2.3;
   const distMaxX = avgValue + baselineStd * 2.3;
@@ -52,58 +55,47 @@ export function CUPEDPage() {
     ...cupedDist.map(p => p.y)
   );
 
-  const xScaleDist = x =>
-    distChartPadding.left +
+  const xScale = (x: number) =>
+    padding.left +
     ((x - distMinX) / distXRange) *
-      (distChartWidth - distChartPadding.left - distChartPadding.right);
+      (distChartWidth - padding.left - padding.right);
 
-  const yScaleDist = y =>
+  const yScale = (y: number) =>
     distChartHeight -
-    distChartPadding.bottom -
+    padding.bottom -
     (y / distMaxY) *
-      (distChartHeight - distChartPadding.top - distChartPadding.bottom);
+      (distChartHeight - padding.top - padding.bottom);
 
-  const createDistPath = dist => {
-    if (dist.length === 0) return "";
-    let path = `M ${xScaleDist(dist[0].x)} ${yScaleDist(dist[0].y)}`;
+  const createPath = (dist: any[]) => {
+    let path = `M ${xScale(dist[0].x)} ${yScale(dist[0].y)}`;
     for (let i = 1; i < dist.length; i++) {
-      path += ` L ${xScaleDist(dist[i].x)} ${yScaleDist(dist[i].y)}`;
+      path += ` L ${xScale(dist[i].x)} ${yScale(dist[i].y)}`;
     }
     return path;
   };
 
-  const mdeReduction = ((mdeBaseline - mdeCuped) / mdeBaseline * 100);
-
-  // --------------------------------
-  // Render
-  // --------------------------------
+  // R² bar chart
+  const r2ChartWidth = 360;
+  const barHeight = 26;
+  const barMaxWidth = 260;
 
   return (
     <div className="min-h-screen bg-gray-900">
       <div className="container mx-auto px-4 py-8">
-
         {/* Header */}
         <div className="flex items-center gap-3 mb-2">
           <TrendingUp className="w-8 h-8 text-emerald-300" />
           <h1 className="text-4xl font-bold text-white">CUPED Variance Reduction</h1>
         </div>
         <p className="text-lg text-gray-400 mb-6">
-          CUPED (Controlled-experiment Using Pre-Experiment Data) reduces variance in A/B tests by leveraging pre-experiment metrics.
+          CUPED reduces variance in A/B tests using pre-experiment data. Its real-world impact depends on both <strong>correlation strength</strong> and <strong>how many users actually have historical data</strong>.
         </p>
 
-        {/* What is CUPED? */}
-        <div className="mb-6 bg-gray-800 rounded-lg border border-gray-700 p-4">
-          <h2 className="text-xl font-semibold text-white mb-2">What is CUPED?</h2>
-          <p className="text-gray-300 text-sm">
-            CUPED (Controlled-experiment Using Pre-Experiment Data) is a technique used in A/B testing to reduce variance by leveraging historical data. 
-            By adjusting metrics based on pre-experiment behavior, it allows you to detect smaller effects with fewer samples, speeding up experiments and improving statistical power.
-          </p>
-        </div>
-
         {/* Parameters */}
-        <div className="bg-gray-800 rounded-lg shadow-md border border-gray-700 p-6 mb-6">
+        <div className="bg-gray-800 rounded-lg border border-gray-700 p-6 mb-6">
           <h2 className="text-xl font-semibold text-white mb-4">Parameters</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {/* R² */}
             <div>
               <label className="block text-sm font-medium text-gray-300 mb-2">
                 R² (Correlation Strength)
@@ -117,142 +109,115 @@ export function CUPEDPage() {
                 onChange={e => setRSquared(Number(e.target.value))}
                 className="w-full"
               />
-              <div className="text-center text-sm text-gray-400 mt-1">
-                R² = {rSquared.toFixed(2)}
-              </div>
+              <div className="text-center text-sm text-gray-400 mt-1">R² = {rSquared.toFixed(2)}</div>
               <p className="text-xs text-gray-500 mt-1">
-                How well pre-experiment data predicts current values.
+                How predictive pre-experiment data is for in-experiment behavior.
               </p>
             </div>
-            <div className="bg-emerald-900 border border-emerald-700 rounded-md p-3">
-              <p className="text-sm font-medium text-white">Variance Reduction</p>
-              <p className="text-2xl font-bold text-emerald-400">
-                {(rSquared * 100).toFixed(1)}%
+
+            {/* Coverage */}
+            <div>
+              <label className="block text-sm font-medium text-gray-300 mb-2">
+                Users with Pre-Experiment Data
+              </label>
+              <input
+                type="range"
+                min="0"
+                max="1"
+                step="0.05"
+                value={coverage}
+                onChange={e => setCoverage(Number(e.target.value))}
+                className="w-full"
+              />
+              <div className="text-center text-sm text-gray-400 mt-1">{(coverage * 100).toFixed(0)}%</div>
+              <p className="text-xs text-gray-500 mt-1">
+                Fraction of users eligible for CUPED adjustment.
               </p>
+            </div>
+
+            {/* Effective Result */}
+            <div className="bg-emerald-900 border border-emerald-700 rounded-md p-3">
+              <p className="text-sm font-medium text-white">Effective Variance Reduction</p>
+              <p className="text-2xl font-bold text-emerald-400">{(effectiveRSquared * 100).toFixed(1)}%</p>
+              <p className="text-xs text-emerald-200 mt-1">R² × Coverage</p>
             </div>
           </div>
         </div>
 
-        {/* --- Combined Visualization Section --- */}
-        <div className="bg-gray-800 rounded-lg border border-gray-700 shadow-md mb-6 p-6">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            {/* Left: Variance Reduction Visualization */}
-            <div>
-              <h2 className="text-xl font-semibold text-white mb-2">Variance Reduction</h2>
-              <p className="text-sm text-gray-400 mb-4">
-                CUPED narrows the distribution by removing predictable variance.
-              </p>
-              <svg
-                width="100%"
-                height={distChartHeight}
-                viewBox={`0 0 ${distChartWidth} ${distChartHeight}`}
-                preserveAspectRatio="xMidYMid meet"
-              >
-                <path
-                  d={createDistPath(baselineDist)}
-                  fill="#94a3b8"
-                  fillOpacity="0.3"
-                  stroke="#94a3b8"
-                  strokeWidth="2"
-                />
-                <path
-                  d={createDistPath(cupedDist)}
-                  fill="#10b981"
-                  fillOpacity="0.4"
-                  stroke="#10b981"
-                  strokeWidth="2"
-                />
-                <text
-                  x={distChartWidth / 2}
-                  y={distChartHeight - 4}
-                  textAnchor="middle"
-                  className="text-base fill-gray-300 font-semibold"
-                >
-                  Metric Value
-                </text>
-                <text
-                  x={26}
-                  y={distChartHeight / 2}
-                  textAnchor="middle"
-                  transform={`rotate(-90, 26, ${distChartHeight / 2})`}
-                  className="text-base fill-gray-300 font-semibold"
-                >
-                  Density
-                </text>
-                <rect x={distChartWidth - 180} y={40} width="22" height="12" fill="#94a3b8" fillOpacity="0.3" />
-                <text x={distChartWidth - 150} y={50} className="text-sm fill-gray-200">Standard</text>
-                <rect x={distChartWidth - 180} y={60} width="22" height="12" fill="#10b981" fillOpacity="0.4" />
-                <text x={distChartWidth - 150} y={70} className="text-sm fill-gray-200">CUPED</text>
-              </svg>
-            </div>
+        {/* Distribution + MDE */}
+        <div className="bg-gray-800 rounded-lg border border-gray-700 p-6 mb-6 grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <div>
+            <h2 className="text-xl font-semibold text-white mb-2">Variance Reduction</h2>
+            <p className="text-sm text-gray-400 mb-4">
+              CUPED narrows the distribution by removing predictable variance.
+            </p>
+            <svg
+              width="100%"
+              height={distChartHeight}
+              viewBox={`0 0 ${distChartWidth} ${distChartHeight}`}
+              preserveAspectRatio="xMidYMid meet"
+            >
+              <path d={createPath(baselineDist)} fill="#94a3b8" fillOpacity="0.3" stroke="#94a3b8" strokeWidth="2" />
+              <path d={createPath(cupedDist)} fill="#10b981" fillOpacity="0.4" stroke="#10b981" strokeWidth="2" />
+            </svg>
+          </div>
 
-            {/* Right: MDE Comparison Bar Chart */}
-            <div>
-              <h2 className="text-xl font-semibold text-white mb-2">Minimum Detectable Effect</h2>
-              <p className="text-sm text-gray-400 mb-4">
-                Lower MDE means you can detect smaller effects with the same sample size.
-              </p>
-              <div className="flex flex-col justify-center h-[260px]">
-                <div className="space-y-6">
-                  {/* Standard MDE Bar */}
-                  <div>
-                    <div className="flex justify-between items-center mb-2">
-                      <span className="text-sm font-medium text-gray-300">Standard A/B</span>
-                      <span className="text-lg font-bold text-gray-300">{mdeBaseline.toFixed(2)}%</span>
-                    </div>
-                    <div className="h-10 bg-gray-700 rounded-lg overflow-hidden relative">
-                      <div
-                        className="h-full bg-gradient-to-r from-gray-500 to-gray-400 rounded-lg transition-all duration-500"
-                        style={{ width: '100%' }}
-                      />
-                    </div>
-                  </div>
-
-                  {/* CUPED MDE Bar */}
-                  <div>
-                    <div className="flex justify-between items-center mb-2">
-                      <span className="text-sm font-medium text-emerald-400">With CUPED</span>
-                      <span className="text-lg font-bold text-emerald-400">{mdeCuped.toFixed(2)}%</span>
-                    </div>
-                    <div className="h-10 bg-gray-700 rounded-lg overflow-hidden relative">
-                      <div
-                        className="h-full bg-gradient-to-r from-emerald-600 to-emerald-400 rounded-lg transition-all duration-500"
-                        style={{ width: `${(mdeCuped / mdeBaseline) * 100}%` }}
-                      />
-                    </div>
-                  </div>
-
-                  {/* MDE Reduction Summary */}
-                  <div className="flex items-center justify-center gap-2 pt-2">
-                    <div className="h-px flex-1 bg-gray-600" />
-                    <span className="text-emerald-400 font-semibold text-sm px-3">
-                      {mdeReduction.toFixed(1)}% smaller MDE
-                    </span>
-                    <div className="h-px flex-1 bg-gray-600" />
-                  </div>
+          <div>
+            <h2 className="text-xl font-semibold text-white mb-2">Minimum Detectable Effect</h2>
+            <p className="text-sm text-gray-400 mb-4">
+              Lower MDE means you can detect smaller effects with the same sample size.
+            </p>
+            <div className="flex flex-col justify-center h-[260px] space-y-6">
+              {/* Standard MDE Bar */}
+              <div>
+                <div className="flex justify-between items-center mb-2">
+                  <span className="text-sm font-medium text-gray-300">Standard A/B</span>
+                  <span className="text-lg font-bold text-gray-300">{mdeBaseline.toFixed(2)}%</span>
+                </div>
+                <div className="h-10 bg-gray-700 rounded-lg overflow-hidden relative">
+                  <div className="h-full bg-gradient-to-r from-gray-500 to-gray-400 rounded-lg transition-all duration-500" style={{ width: '100%' }} />
                 </div>
               </div>
+
+              {/* CUPED MDE Bar */}
+              <div>
+                <div className="flex justify-between items-center mb-2">
+                  <span className="text-sm font-medium text-emerald-400">With CUPED</span>
+                  <span className="text-lg font-bold text-emerald-400">{mdeCuped.toFixed(2)}%</span>
+                </div>
+                <div className="h-10 bg-gray-700 rounded-lg overflow-hidden relative">
+                  <div className="h-full bg-gradient-to-r from-emerald-600 to-emerald-400 rounded-lg transition-all duration-500" style={{ width: `${(mdeCuped / mdeBaseline) * 100}%` }} />
+                </div>
+              </div>
+
+              <div className="flex items-center justify-center gap-2 pt-2">
+                <div className="h-px flex-1 bg-gray-600" />
+                <span className="text-emerald-400 font-semibold text-sm px-3">{mdeReduction.toFixed(1)}% smaller MDE</span>
+                <div className="h-px flex-1 bg-gray-600" />
+              </div>
             </div>
           </div>
         </div>
 
-        {/* --- Key Insight --- */}
-        <div className="mb-6 bg-emerald-900/50 border border-emerald-700 rounded-lg p-4">
-          <h3 className="font-semibold text-white mb-2">Key Insight</h3>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
-            <div className="text-emerald-200">
-              <span className="text-emerald-400 font-semibold">Std Dev:</span> {baselineStd.toFixed(0)} → {cupedStd.toFixed(0)} ({((1 - cupedStd / baselineStd) * 100).toFixed(1)}% reduction)
-            </div>
-            <div className="text-emerald-200">
-              <span className="text-emerald-400 font-semibold">Sample Savings:</span> {sampleReductionPercent}% fewer samples needed
-            </div>
-            <div className="text-emerald-200">
-              <span className="text-emerald-400 font-semibold">MDE Improvement:</span> {mdeBaseline.toFixed(2)}% → {mdeCuped.toFixed(2)}%
-            </div>
-          </div>
+        {/* How Coverage Dampens CUPED */}
+        <div className="bg-gray-800 rounded-lg border border-gray-700 p-6 mb-6">
+          <h2 className="text-xl font-semibold text-white mb-3">How Coverage Dampens CUPED</h2>
+          <p className="text-sm text-gray-400 mb-4">
+            Even with strong correlation, CUPED’s real-world impact shrinks if historical data is missing for many users.
+          </p>
+          <svg width="100%" height="120" viewBox={`0 0 ${r2ChartWidth} 120`}>
+            {/* Raw R² */}
+            <text x="0" y="24" className="fill-gray-300 text-sm">Raw R²</text>
+            <rect x="80" y="10" height={barHeight} width={barMaxWidth * rSquared} fill="#94a3b8" rx="6" />
+            <text x={80 + barMaxWidth * rSquared + 6} y="28" className="fill-gray-300 text-sm">{rSquared.toFixed(2)}</text>
+            {/* Effective R² */}
+            <text x="0" y="70" className="fill-emerald-400 text-sm">Effective R²</text>
+            <rect x="80" y="56" height={barHeight} width={barMaxWidth * effectiveRSquared} fill="#10b981" rx="6" />
+            <text x={80 + barMaxWidth * effectiveRSquared + 6} y="74" className="fill-emerald-400 text-sm font-semibold">{effectiveRSquared.toFixed(2)}</text>
+          </svg>
         </div>
 
-        {/* --- How CUPED Works --- */}
+        {/* How CUPED Works */}
         <div className="mt-6 bg-gray-800 rounded-lg shadow-md border border-gray-700 p-6">
           <h2 className="text-xl font-semibold text-white mb-4">How CUPED Works</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm text-gray-300">
@@ -270,39 +235,64 @@ export function CUPEDPage() {
             </div>
             <div>
               <h3 className="font-semibold text-white mb-2">4. Reduced Variance</h3>
-              <p>This removes variance explained by pre-experiment behavior, clarifying treatment effects.</p>
+              <p>This reduces predictable variance by correcting individual metrics: users below their historical average are adjusted upward, and users above their average are adjusted downward, wherever pre-experiment data is available.</p>
+            </div>
+          </div>
+        </div>
+{/* --- CUPED Math --- */}
+<div className="mt-4 bg-gray-800 rounded-lg shadow-md border border-gray-700 p-6">
+  <h3 className="text-lg font-semibold text-white mb-3">CUPED Formula</h3>
+  <p className="text-gray-300 mb-2">
+    CUPED adjusts each user's metric to reduce predictable variance while preserving the overall mean:
+  </p>
+  <p className="text-sm text-gray-300 mb-3">
+    <code className="bg-gray-700 px-1 rounded">Y<sub>i</sub><sup>CUPED</sup> = Y<sub>i</sub> - θ × (X<sub>i</sub> - X̄)</code>
+  </p>
+  <ul className="list-disc ml-5 text-gray-300">
+    <li><code>Y<sub>i</sub></code> = observed metric for user <em>i</em></li>
+    <li><code>X<sub>i</sub></code> = pre-experiment metric for user <em>i</em></li>
+    <li><code>X̄</code> = mean of the pre-experiment metric across all users</li>
+    <li><code>θ = Cov(X,Y) / Var(X)</code> = coefficient capturing how much pre-experiment behavior predicts the metric</li>
+  </ul>
+  <p className="text-gray-300 mt-3">
+    This adjustment reduces variance while keeping the mean intact, allowing the test results to remain interpretable in real business terms.
+  </p>
+</div>
+
+        {/* Key Insight */}
+        <div className="mb-6 bg-emerald-900/50 border border-emerald-700 rounded-lg p-4">
+          <h3 className="font-semibold text-white mb-2">Key Insight</h3>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
+            <div className="text-emerald-200">
+              <span className="text-emerald-400 font-semibold">Std Dev:</span> {baselineStd.toFixed(0)} → {cupedStd.toFixed(0)} ({((1 - cupedStd / baselineStd) * 100).toFixed(1)}% reduction)
+            </div>
+            <div className="text-emerald-200">
+              <span className="text-emerald-400 font-semibold">Sample Savings:</span> {(effectiveRSquared * 100).toFixed(1)}% fewer samples needed
+            </div>
+            <div className="text-emerald-200">
+              <span className="text-emerald-400 font-semibold">MDE Improvement:</span> {mdeBaseline.toFixed(2)}% → {mdeCuped.toFixed(2)}%
             </div>
           </div>
         </div>
 
-        {/* --- Benefits of CUPED --- */}
+        {/* Why Use CUPED */}
         <div className="mt-6 bg-gray-800 rounded-lg shadow-md border border-gray-700 p-6">
           <h2 className="text-xl font-semibold text-white mb-4">Why Use CUPED?</h2>
           <div className="text-gray-300 space-y-3">
             <p>
-              CUPED's effectiveness depends entirely on <strong>how well your pre-experiment data correlates with in-experiment behavior</strong>. When R² is high (strong correlation), CUPED delivers substantial benefits:
+              CUPED's effectiveness depends on <strong>how well your pre-experiment data correlates with in-experiment behavior</strong>. When R² is high (strong correlation) and coverage is high, CUPED delivers substantial benefits:
             </p>
             <ul className="list-disc ml-6 space-y-2">
-              <li>
-                <strong>Faster Test Results:</strong> With reduced variance, you reach statistical significance sooner—potentially cutting test duration in half or more when R² is high.
-              </li>
-              <li>
-                <strong>Smaller Sample Requirements:</strong> Achieve the same statistical power with fewer samples. For example, R² = 0.7 means you need ~70% fewer samples to detect the same effect size.
-              </li>
-              <li>
-                <strong>Detect Smaller Effects:</strong> Lower variance means you can reliably detect more subtle changes in user behavior, making tests more sensitive.
-              </li>
-              <li>
-                <strong>Better ROI on Experimentation:</strong> Run more tests with the same traffic, iterate faster, and make data-driven decisions with greater confidence.
-              </li>
+              <li><strong>Faster Test Results:</strong> Reduced variance allows faster detection of significant effects.</li>
+              <li><strong>Smaller Sample Requirements:</strong> Achieve the same power with fewer users.</li>
+              <li><strong>Detect Smaller Effects:</strong> Variance reduction makes tests more sensitive.</li>
+              <li><strong>Fair Comparison Across Users:</strong> Reduces bias when some flights are dominated by high- or low-value users, making results more reliable.</li>
+              <li><strong>Maintain Real-World Meaning:</strong> Adjusts for variance while keeping the true mean intact, ensuring business impact and uplift remain understandable.</li>
+              <li><strong>Better ROI:</strong> Run more experiments with the same traffic.</li>
             </ul>
-            <div className="bg-emerald-900/30 border border-emerald-700 rounded p-4 mt-4">
-              <p className="text-sm">
-                <strong>Key Principle:</strong> The stronger the relationship between past and present behavior (higher R²), the more predictive power CUPED provides. Metrics like revenue, engagement time, or conversion rates often show strong correlations, making them ideal candidates for CUPED. However, even moderate correlations (R² = 0.3-0.5) can meaningfully accelerate your testing program.
-              </p>
-            </div>
           </div>
         </div>
+
       </div>
     </div>
   );
