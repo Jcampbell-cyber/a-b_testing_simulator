@@ -128,13 +128,14 @@ export function ImbalancedFlightsPage() {
 
   return (
     <div className="min-h-screen bg-gray-900">
-            <Helmet>
-        <title>Null Hypothesis Significance Testing | Guardrails</title>
-        <meta
-          name="description"
-          content="Interactive visualization of statistical power, Type I & II errors, effect sizes, and how they relate to experimental guardrails."
-        />
-      </Helmet>
+<Helmet>
+  <title>Imbalanced Exposure in A/B Tests</title>
+  <meta
+    name="description"
+    content="Understand how imbalanced traffic or user allocation can distort A/B test metrics and learn best practices to prevent misleading results from exposure imbalance."
+  />
+</Helmet>
+
       <div className="container mx-auto px-4 py-8">
         <div className="mb-8">
           <div className="flex items-center gap-3 mb-2">
