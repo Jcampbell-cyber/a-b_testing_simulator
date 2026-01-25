@@ -532,10 +532,10 @@ export function SampleSizeCalculator({ onBack, onNavigate }: SampleSizeCalculato
               Want to know how long your experiment needs to run?
             </p>
             <button
-              onClick={() => onNavigate('test-duration-calc')}
-              className="inline-block bg-blue-500 hover:bg-blue-600 text-white font-semibold px-6 py-3 rounded transition-colors"
-            >
-              Open Test Duration Calculator →
+  onClick={() => onNavigate('test-duration-calc')}
+  className="inline-block bg-blue-500 hover:bg-blue-600 text-white font-semibold px-6 py-3 rounded transition-colors"
+>
+  Open Test Duration Calculator →
             </button>
           </div>
         </div>
