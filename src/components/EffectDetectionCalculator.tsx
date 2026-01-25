@@ -629,13 +629,13 @@ export function EffectDetectionCalculator({ onBack, onNavigate }: EffectDetectio
           </div>
           <div className="mt-12 bg-gray-700 rounded-lg p-6 text-center">
   <p className="text-gray-300 mb-4">
-    Want to see how this MDE affects your experiment’s duration?
+    Ready to analyse the results of your experiment? 
   </p>
 <Link
   to="/test-results-calc"
   className="inline-block bg-blue-500 hover:bg-blue-600 text-white font-semibold px-6 py-3 rounded transition-colors"
 >
-  Open Test Duration Calculator →
+  Open Test Results Calculator →
 </Link>
 </div>
 
