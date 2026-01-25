@@ -207,6 +207,18 @@ export function NormalisationPage({ onBack }: Props) {
             </div>
           </div>
         </div>
+        <div className="bg-gray-700 rounded-lg p-6 text-center mt-12">
+  <p className="text-gray-300 mb-4">
+    Understand guardrails to see how monitoring choices impact experiment safety
+  </p>
+  <Link
+    to="/guardrails"
+    className="inline-block bg-blue-500 hover:bg-blue-600 text-white font-semibold px-6 py-3 rounded transition-colors"
+  >
+    Explore Guardrails →
+  </Link>
+</div>
+
       </div>
     </div>
   );
