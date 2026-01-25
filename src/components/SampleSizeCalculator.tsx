@@ -525,6 +525,20 @@ export function SampleSizeCalculator({ onBack, onNavigate }: SampleSizeCalculato
               </div>
             </div>
           </div>
+
+          {/* CTA */}
+          <div className="mt-12 bg-gray-700 rounded-lg p-6 text-center">
+            <p className="text-gray-300 mb-4">
+              Want to know how long your experiment needs to run?
+            </p>
+            <button
+              onClick={() => onNavigate('test-duration-calc')}
+              className="inline-block bg-blue-500 hover:bg-blue-600 text-white font-semibold px-6 py-3 rounded transition-colors"
+            >
+              Open Test Duration Calculator →
+            </button>
+          </div>
+
         </div>
       </div>
     </div>
