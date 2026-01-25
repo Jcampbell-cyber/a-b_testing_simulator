@@ -235,7 +235,7 @@ export function CUPEDPage() {
             </div>
             <div>
               <h3 className="font-semibold text-white mb-2">4. Reduced Variance</h3>
-              <p>This removes variance explained by pre-experiment behavior, clarifying treatment effects.</p>
+              <p>This reduces predictable variance by correcting individual metrics: users below their historical average are adjusted upward, and users above their average are adjusted downward, wherever pre-experiment data is available.</p>
             </div>
           </div>
         </div>
@@ -267,6 +267,8 @@ export function CUPEDPage() {
               <li><strong>Faster Test Results:</strong> Reduced variance allows faster detection of significant effects.</li>
               <li><strong>Smaller Sample Requirements:</strong> Achieve the same power with fewer users.</li>
               <li><strong>Detect Smaller Effects:</strong> Variance reduction makes tests more sensitive.</li>
+              <li><strong>Fair Comparison Across Users:</strong> Reduces bias when some flights are dominated by high- or low-value users, making results more reliable.</li>
+              <li><strong>Maintain Real-World Meaning:</strong> Adjusts for variance while keeping the true mean intact, ensuring business impact and uplift remain understandable.</li>
               <li><strong>Better ROI:</strong> Run more experiments with the same traffic.</li>
             </ul>
           </div>
