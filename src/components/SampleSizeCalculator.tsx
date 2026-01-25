@@ -161,7 +161,7 @@ export function SampleSizeCalculator({ onBack, onNavigate }: SampleSizeCalculato
                 onClick={() => onNavigate('test-duration-calc')}
                 className="text-blue-400 hover:text-blue-300 ml-1 underline"
               >
-                Test Duration Calculator
+                Test Duration Calculator 
               </button>
               .
             </p>
