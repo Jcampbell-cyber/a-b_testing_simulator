@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://advancedab.tech/sitemap.xml
+Disallow: /feedback
