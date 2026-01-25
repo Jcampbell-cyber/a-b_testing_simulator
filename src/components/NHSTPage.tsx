@@ -514,8 +514,7 @@ const NHSTPage: React.FC = () => {
             </div>
           </div> {/* closes max-w-7xl */}
         </div> {/* closes min-h-screen */}
-      </div>
-    </div>  
+      </div> 
   );
 };
 
