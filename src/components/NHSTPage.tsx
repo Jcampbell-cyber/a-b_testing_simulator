@@ -1,5 +1,7 @@
 import React, { useState, useMemo } from 'react';
 import { Info } from 'lucide-react';
+import { Helmet } from 'react-helmet';
+import { Link } from 'react-router-dom';  
 import { LineChart, Line, Area, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, ReferenceLine, ComposedChart } from 'recharts';
 
 const NHSTPage: React.FC = () => {
@@ -137,7 +139,11 @@ const NHSTPage: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-900">
+    <div className="min-h-screen bg-gray-900"> 
+      <Helmet>
+        <title>Null Hypothesis Significance Testing | Guardrails</title>
+        <meta name="description" content="Interactive visualization of statistical power, Type I & II errors, effect sizes, and how they relate to experimental guardrails." />
+      </Helmet>
       <div className="max-w-7xl mx-auto px-4 py-8 sm:px-6 lg:px-8">
         <div className="mb-8">
           <h1 className="text-4xl font-bold text-white mb-3">
@@ -561,12 +567,20 @@ const NHSTPage: React.FC = () => {
                 <p><strong>Test Type:</strong> Two-sided tests split alpha between both tails, requiring slightly larger effect sizes than one-sided tests to achieve the same power.</p>
               </div>
             </div>
-          </div>
+        <div className="mt-12 bg-gray-700 rounded-lg p-6 text-center">
+          <p className="text-gray-300 mb-4">
+            See how frequent peeking can inflate false positives in A/B tests
+          </p>
+          <Link
+            to="/peeking"
+            className="inline-block bg-blue-500 hover:bg-blue-600 text-white font-semibold px-6 py-3 rounded transition-colors"
+          >
+            Explore False Positives from Peeking →
+          </Link>
         </div>
       </div>
     </div>
   );
 };
-
 export default NHSTPage;
 
