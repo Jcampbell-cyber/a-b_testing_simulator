@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { TrendingUp } from "lucide-react";
+import { Helmet } from 'react-helmet-async';
+import { Link } from 'react-router-dom';
 
 export function CUPEDPage() {
   const [rSquared, setRSquared] = useState(0.7);
@@ -81,6 +83,13 @@ export function CUPEDPage() {
 
   return (
     <div className="min-h-screen bg-gray-900">
+            <Helmet>
+        <title>Null Hypothesis Significance Testing | Guardrails</title>
+        <meta
+          name="description"
+          content="Interactive visualization of statistical power, Type I & II errors, effect sizes, and how they relate to experimental guardrails."
+        />
+      </Helmet>
       <div className="container mx-auto px-4 py-8">
         {/* Header */}
         <div className="flex items-center gap-3 mb-2">
