@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { ArrowLeft, Info } from 'lucide-react';
+import { Helmet } from 'react-helmet';
 
 interface TestResultsCalculatorProps {
   onBack: () => void;
@@ -187,6 +188,14 @@ export function TestResultsCalculator({ onBack, onNavigate }: TestResultsCalcula
 
   return (
     <div className="min-h-screen bg-gray-900">
+      <Helmet>
+  <title>Test Results Calculator | Experiment Tools</title>
+  <meta
+    name="description"
+    content="Analyze your test results for continuous or binary metrics, calculate p-values, confidence intervals, and determine statistical significance."
+  />
+</Helmet>
+
       <div className="max-w-5xl mx-auto px-4 py-8">
         <button
           onClick={onBack}
@@ -661,6 +670,18 @@ export function TestResultsCalculator({ onBack, onNavigate }: TestResultsCalcula
               </div>
             </div>
           </div>
+          <div className="mt-12 bg-gray-700 rounded-lg p-6 text-center">
+  <p className="text-gray-300 mb-4">
+    Want to plan your experiment before collecting data?
+  </p>
+  <button
+    onClick={() => onNavigate('sample-size-calculator')}
+    className="inline-block bg-blue-500 hover:bg-blue-600 text-white font-semibold px-6 py-3 rounded transition-colors"
+  >
+    Open Sample Size Calculator →
+  </button>
+</div>
+
         </div>
       </div>
     </div>
