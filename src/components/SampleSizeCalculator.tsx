@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { ArrowLeft, Info } from 'lucide-react';
-import { Helmet, HelmetProvider } from "react-helmet-async";
+import { Helmet } from "react-helmet-async";
 
 interface SampleSizeCalculatorProps {
   onBack: () => void;
@@ -21,6 +21,7 @@ export function SampleSizeCalculator({ onBack, onNavigate }: SampleSizeCalculato
   const [stdev, setStdev] = useState(20);
   const [proportion, setProportion] = useState(0.5);
 
+  // Standard normal inverse function
   const normalInverse = (p: number): number => {
     if (p <= 0 || p >= 1) return 0;
     if (p === 0.5) return 0;
@@ -76,6 +77,7 @@ export function SampleSizeCalculator({ onBack, onNavigate }: SampleSizeCalculato
     }
   };
 
+  // Sample size calculation
   const calculateSampleSize = () => {
     const numComparisons = comparisonType === 'none' ? 1 :
       comparisonType === 'control' ? numFlights - 1 :
@@ -92,29 +94,18 @@ export function SampleSizeCalculator({ onBack, onNavigate }: SampleSizeCalculato
     let targetedMean = 0;
 
     if (metricType === 'continuous') {
-      if (mdeType === 'absolute') {
-        absoluteMde = mdeValue;
-      } else {
-        absoluteMde = (mdeValue / 100) * mean;
-      }
+      absoluteMde = mdeType === 'absolute' ? mdeValue : (mdeValue / 100) * mean;
       effectSize = absoluteMde / stdev;
       variance = 2;
       targetedMean = mean + absoluteMde;
     } else {
-      if (mdeType === 'absolute') {
-        absoluteMde = mdeValue / 100;
-      } else {
-        absoluteMde = (mdeValue / 100) * proportion;
-      }
+      absoluteMde = mdeType === 'absolute' ? mdeValue / 100 : (mdeValue / 100) * proportion;
       effectSize = absoluteMde;
       variance = 2 * proportion * (1 - proportion);
       targetedProportion = Math.min(1, proportion + absoluteMde);
     }
 
-    const samplesPerGroup = Math.ceil(
-      (variance * Math.pow(zAlpha + zBeta, 2)) / Math.pow(effectSize, 2)
-    );
-
+    const samplesPerGroup = Math.ceil((variance * Math.pow(zAlpha + zBeta, 2)) / Math.pow(effectSize, 2));
     const totalSamples = samplesPerGroup * numFlights;
 
     return { samplesPerGroup, totalSamples, absoluteMde, effectSize, targetedProportion, targetedMean, adjustedAlpha };
@@ -126,7 +117,7 @@ export function SampleSizeCalculator({ onBack, onNavigate }: SampleSizeCalculato
     <div className="min-h-screen bg-gray-900">
       {/* SEO */}
       <Helmet>
-        <title>Sample Size Calculator | Advanced AB Testing </title>
+        <title>Sample Size Calculator | Advanced AB Testing</title>
         <meta name="description" content="Calculate the minimum sample size needed for your A/B test with continuous or binary metrics. Understand MDE, power, and significance." />
       </Helmet>
 
@@ -144,54 +135,143 @@ export function SampleSizeCalculator({ onBack, onNavigate }: SampleSizeCalculato
         <div className="bg-gray-800 rounded-lg shadow-lg p-8">
           <h1 className="text-4xl font-bold text-white mb-2">Sample Size Calculator</h1>
           <p className="text-gray-300 mb-8">
-            Determine the required sample size for your experiment with clear MDE, power, and significance insights. 
+            Determine the required sample size for your experiment with clear MDE, power, and significance insights.
           </p>
 
-<div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-  <div>
-    <label className="block text-gray-300 mb-1">Metric Type</label>
-    <select
-      value={metricType}
-      onChange={(e) => setMetricType(e.target.value as 'continuous' | 'binary')}
-      className="w-full p-2 rounded bg-gray-700 text-white"
-    >
-      <option value="continuous">Continuous</option>
-      <option value="binary">Binary</option>
-    </select>
-  </div>
+          {/* Inputs */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+            <div>
+              <label className="block text-gray-300 mb-1">Metric Type</label>
+              <select
+                value={metricType}
+                onChange={(e) => setMetricType(e.target.value as 'continuous' | 'binary')}
+                className="w-full p-2 rounded bg-gray-700 text-white"
+              >
+                <option value="continuous">Continuous</option>
+                <option value="binary">Binary</option>
+              </select>
+            </div>
 
-  <div>
-    <label className="block text-gray-300 mb-1">Test Type</label>
-    <select
-      value={testType}
-      onChange={(e) => setTestType(e.target.value as 'two-sided' | 'one-sided')}
-      className="w-full p-2 rounded bg-gray-700 text-white"
-    >
-      <option value="two-sided">Two-sided</option>
-      <option value="one-sided">One-sided</option>
-    </select>
-  </div>
+            <div>
+              <label className="block text-gray-300 mb-1">Test Type</label>
+              <select
+                value={testType}
+                onChange={(e) => setTestType(e.target.value as 'two-sided' | 'one-sided')}
+                className="w-full p-2 rounded bg-gray-700 text-white"
+              >
+                <option value="two-sided">Two-sided</option>
+                <option value="one-sided">One-sided</option>
+              </select>
+            </div>
 
-  {/* Repeat for alpha, power, mde type, mean, stdev, proportion, numFlights, comparisonType */}
-</div>
+            <div>
+              <label className="block text-gray-300 mb-1">Alpha (Significance)</label>
+              <input
+                type="number"
+                step={0.01}
+                value={alpha}
+                onChange={(e) => setAlpha(parseFloat(e.target.value))}
+                className="w-full p-2 rounded bg-gray-700 text-white"
+              />
+            </div>
 
-{/* Results */}
-<div className="bg-gray-700 rounded-lg p-6 text-white mb-8">
-  <h2 className="text-2xl font-bold mb-2">Results</h2>
-  <p>Samples per group: {result.samplesPerGroup}</p>
-  <p>Total samples needed: {result.totalSamples}</p>
-  <p>Absolute MDE: {result.absoluteMde.toFixed(2)}</p>
-  {metricType === 'binary' && <p>Targeted proportion: {result.targetedProportion.toFixed(2)}</p>}
-  {metricType === 'continuous' && <p>Targeted mean: {result.targetedMean.toFixed(2)}</p>}
-</div>
+            <div>
+              <label className="block text-gray-300 mb-1">Power</label>
+              <input
+                type="number"
+                step={0.01}
+                value={power}
+                onChange={(e) => setPower(parseFloat(e.target.value))}
+                className="w-full p-2 rounded bg-gray-700 text-white"
+              />
+            </div>
 
-{/* How Calculation Works / Explanations */}
-<div className="bg-gray-700 rounded-lg p-6 text-gray-300">
-  <h3 className="text-xl font-bold mb-2">How Calculation Works</h3>
-  <p>This calculator uses the standard normal approximation for continuous or binary metrics to determine the minimum sample size for your A/B test.</p>
-</div>
+            <div>
+              <label className="block text-gray-300 mb-1">MDE Type</label>
+              <select
+                value={mdeType}
+                onChange={(e) => setMdeType(e.target.value as 'relative' | 'absolute')}
+                className="w-full p-2 rounded bg-gray-700 text-white"
+              >
+                <option value="relative">Relative (%)</option>
+                <option value="absolute">Absolute</option>
+              </select>
+            </div>
 
-          {/* CTA at bottom */}
+            <div>
+              <label className="block text-gray-300 mb-1">MDE Value</label>
+              <input
+                type="number"
+                value={mdeValue}
+                onChange={(e) => setMdeValue(parseFloat(e.target.value))}
+                className="w-full p-2 rounded bg-gray-700 text-white"
+              />
+            </div>
+
+            <div>
+              <label className="block text-gray-300 mb-1">Mean / Proportion</label>
+              <input
+                type="number"
+                value={metricType === 'continuous' ? mean : proportion}
+                onChange={(e) => metricType === 'continuous' ? setMean(parseFloat(e.target.value)) : setProportion(parseFloat(e.target.value))}
+                className="w-full p-2 rounded bg-gray-700 text-white"
+              />
+            </div>
+
+            <div>
+              <label className="block text-gray-300 mb-1">Standard Deviation (if continuous)</label>
+              <input
+                type="number"
+                value={stdev}
+                onChange={(e) => setStdev(parseFloat(e.target.value))}
+                className="w-full p-2 rounded bg-gray-700 text-white"
+              />
+            </div>
+
+            <div>
+              <label className="block text-gray-300 mb-1">Number of Flights / Groups</label>
+              <input
+                type="number"
+                value={numFlights}
+                onChange={(e) => setNumFlights(parseInt(e.target.value))}
+                className="w-full p-2 rounded bg-gray-700 text-white"
+              />
+            </div>
+
+            <div>
+              <label className="block text-gray-300 mb-1">Comparison Type</label>
+              <select
+                value={comparisonType}
+                onChange={(e) => setComparisonType(e.target.value as 'none' | 'control' | 'pairwise')}
+                className="w-full p-2 rounded bg-gray-700 text-white"
+              >
+                <option value="none">None</option>
+                <option value="control">Control</option>
+                <option value="pairwise">Pairwise</option>
+              </select>
+            </div>
+          </div>
+
+          {/* Results */}
+          <div className="bg-gray-700 rounded-lg p-6 text-white mb-8">
+            <h2 className="text-2xl font-bold mb-2">Results</h2>
+            <p>Samples per group: {result.samplesPerGroup}</p>
+            <p>Total samples needed: {result.totalSamples}</p>
+            <p>Absolute MDE: {result.absoluteMde.toFixed(2)}</p>
+            {metricType === 'binary' && <p>Targeted proportion: {result.targetedProportion.toFixed(2)}</p>}
+            {metricType === 'continuous' && <p>Targeted mean: {result.targetedMean.toFixed(2)}</p>}
+          </div>
+
+          {/* How Calculation Works */}
+          <div className="bg-gray-700 rounded-lg p-6 text-gray-300">
+            <h3 className="text-xl font-bold mb-2">How Calculation Works</h3>
+            <p>
+              This calculator uses standard normal approximation for continuous or binary metrics to determine the minimum sample size
+              required for your A/B test, factoring in MDE, power, and significance adjustments.
+            </p>
+          </div>
+
+          {/* CTA */}
           <div className="mt-12 bg-gray-700 rounded-lg p-6 text-center">
             <p className="text-gray-300 mb-4">
               Ready to see how long your experiment should run? Check out the
@@ -199,7 +279,7 @@ export function SampleSizeCalculator({ onBack, onNavigate }: SampleSizeCalculato
                 onClick={() => onNavigate('test-duration-calc')}
                 className="text-blue-400 hover:text-blue-300 ml-1 underline"
               >
-                Test Duration Calculator 
+                Test Duration Calculator
               </button>
               .
             </p>
