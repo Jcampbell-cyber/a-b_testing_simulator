@@ -145,12 +145,12 @@ export function GuardrailsPage() {
                 Statistical guardrails account for variance by requiring <strong>statistical significance</strong> of the negative effect before triggering. They use confidence intervals (e.g., 99% confidence) to determine if the observed drop is likely real or just noise.
               </p>
               <p className="mt-2">
-                This approach is far more robust: it's extremely unlikely for a metric to show a statistically significant -99% effect and then recover to become significantly positive. Statistical guardrails adapt to sample size—requiring stronger evidence when data is limited—making them ideal for continuous monitoring throughout your test.
+                This approach is far more robust: it's extremely unlikely for a metric to show a statistically significant -99% effect and then recover to become significantly positive. Statistical guardrails adapt to sample size - requiring stronger evidence when data is limited - making them ideal for continuous monitoring throughout your test.
               </p>
             </div>
             <div className="bg-gray-700 rounded p-4 mt-4">
               <p className="text-sm">
-                <strong>Recommendation:</strong> Use statistical guardrails for ongoing monitoring, as they balance safety with statistical rigor. Reserve manual guardrails only for absolute red-line thresholds where any breach—regardless of statistical significance—requires immediate action.
+                <strong>Recommendation:</strong> Use statistical guardrails for ongoing monitoring, as they balance safety with statistical rigor. Reserve manual guardrails only for absolute red-line thresholds where any breach - regardless of statistical significance - requires immediate action.
               </p>
               <p className="text-sm">
                 <strong>Peeking frequency:</strong> Weekly guardrail checks reduce false early stops compared to daily monitoring. Daily peeks inflate volatility at low sample sizes, increasing noise-driven guardrail breaches without improving detection of genuinely harmful effects.
