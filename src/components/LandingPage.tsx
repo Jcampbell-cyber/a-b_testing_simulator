@@ -1,7 +1,7 @@
 import { Eye, Shield, Scale, Clock, GitMerge, TrendingUp, Mail } from 'lucide-react';
 import { Link } from "react-router-dom";
 import { Helmet } from 'react-helmet-async';
-
+ 
 function CardSection({ title, cards }: { title: string; cards: React.ReactNode[] }) {
   return (
     <div className="mb-16">
