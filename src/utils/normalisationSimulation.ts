@@ -157,16 +157,36 @@ function standardize(values: number[], pooledMean: number, pooledStd: number): n
   return values.map(v => (v - pooledMean) / pooledStd);
 }
 
+function normalizeValues(values: number[], method: NormalisationMethod, groupData: { min: number; max: number; mean: number; std: number }): number[] {
+  switch (method) {
+    case 'zscore':
+      return standardize(values, groupData.mean, groupData.std);
+    case 'minmax':
+      return values.map(v => (v - groupData.min) / (groupData.max - groupData.min));
+    case 'dividebymax':
+      return values.map(v => v / groupData.max);
+    case 'percentofmean':
+      return values.map(v => v / groupData.mean);
+    case 'postadhoc':
+      return values.map(v => (v - groupData.mean) / groupData.std);
+    default:
+      return standardize(values, groupData.mean, groupData.std);
+  }
+}
+
 export interface GroupConfig {
   name: string;
   baselineMean: number;
   baselineStd: number;
 }
 
+export type NormalisationMethod = 'zscore' | 'minmax' | 'dividebymax' | 'percentofmean' | 'postadhoc';
+
 export function runNormalisationSimulation(
   groupConfigs: GroupConfig[],
   sampleSizePerGroup: number,
-  trueEffectPercent: number
+  trueEffectPercent: number,
+  method: NormalisationMethod = 'zscore'
 ): NormalisationResults {
   const groups: GroupData[] = [];
 
@@ -183,9 +203,11 @@ export function runNormalisationSimulation(
     const pooledData = [...controlRaw, ...treatmentRaw];
     const pooledMean = mean(pooledData);
     const pooledStd = std(pooledData);
+    const pooledMin = Math.min(...pooledData);
+    const pooledMax = Math.max(...pooledData);
 
-    const controlNorm = standardize(controlRaw, pooledMean, pooledStd);
-    const treatmentNorm = standardize(treatmentRaw, pooledMean, pooledStd);
+    const controlNorm = normalizeValues(controlRaw, method, { min: pooledMin, max: pooledMax, mean: pooledMean, std: pooledStd });
+    const treatmentNorm = normalizeValues(treatmentRaw, method, { min: pooledMin, max: pooledMax, mean: pooledMean, std: pooledStd });
 
     const rawControlMean = mean(controlRaw);
     const rawTreatmentMean = mean(treatmentRaw);

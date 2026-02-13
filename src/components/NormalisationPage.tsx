@@ -5,7 +5,7 @@ import { NormalisationControls } from './NormalisationControls';
 import { NormalisationResultsDisplay } from './NormalisationResultsDisplay';
 import { NormalisationHistogram } from './NormalisationHistogram';
 import { NormalisationImbalanceChart } from './NormalisationImbalanceChart';
-import { runNormalisationSimulation, NormalisationResults, GroupConfig } from '../utils/normalisationSimulation';
+import { runNormalisationSimulation, NormalisationResults, GroupConfig, NormalisationMethod } from '../utils/normalisationSimulation';
 import { Helmet } from 'react-helmet-async';
 import { Link } from 'react-router-dom';
 
@@ -24,6 +24,7 @@ export function NormalisationPage({ onBack }: Props) {
   const [trueEffectPercent, setTrueEffectPercent] = useState(5);
   const [results, setResults] = useState<NormalisationResults | null>(null);
   const [isRunning, setIsRunning] = useState(false);
+  const [selectedMethod, setSelectedMethod] = useState<NormalisationMethod>('zscore');
 
   const handleGroupConfigChange = (index: number, field: 'baselineMean' | 'baselineStd', value: number) => {
     const newConfigs = [...groupConfigs];
@@ -34,7 +35,7 @@ export function NormalisationPage({ onBack }: Props) {
   const runSimulation = () => {
     setIsRunning(true);
     setTimeout(() => {
-      const newResults = runNormalisationSimulation(groupConfigs, sampleSizePerGroup, trueEffectPercent);
+      const newResults = runNormalisationSimulation(groupConfigs, sampleSizePerGroup, trueEffectPercent, selectedMethod);
       setResults(newResults);
       setIsRunning(false);
     }, 100);
@@ -43,6 +44,10 @@ export function NormalisationPage({ onBack }: Props) {
   useEffect(() => {
     runSimulation();
   }, []);
+
+  useEffect(() => {
+    runSimulation();
+  }, [selectedMethod]);
 
   return (
     <div className="min-h-screen bg-gray-950 text-white">
@@ -97,19 +102,47 @@ export function NormalisationPage({ onBack }: Props) {
               Ideally, you would run separate experiments within each region and randomise within region to ensure balanced allocation. However, this isn't always practical - you may lack sufficient sample size per region, or operational constraints may prevent stratified randomisation.
             </p>
             <p className="text-sm text-gray-300 mb-3">
-              When you must pool across regions, Z-score normalisation transforms each region's data to have mean 0 and standard deviation 1. This:
+              When you must pool across regions, normalisation methods transform each region's data to a common scale. By removing scale differences between regions, normalisation:
             </p>
             <ul className="space-y-1.5 text-sm text-gray-300">
-              <li>Removes the scale differences between regions</li>
+              <li>Puts all regions on the same footing for comparison</li>
               <li>Dramatically reduces overall variance in the pooled data</li>
               <li>Produces tighter confidence intervals for the same sample size</li>
               <li>Prevents regional imbalances from creating false positives</li>
             </ul>
+            <p className="text-sm text-gray-300 mt-3">
+              Select a method below to see how different normalisation techniques compare in reducing variance while preserving the true treatment effect.
+            </p>
           </div>
         </div>
 
         <div className="bg-gray-900 rounded-xl border border-gray-800 p-5 mb-6">
           <h3 className="text-lg font-semibold text-white mb-4">Normalisation Methods</h3>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+            {[
+              { id: 'zscore', name: 'Z-score', label: 'Z-score (Standardisation)' },
+              { id: 'minmax', name: 'Min-Max', label: 'Min-Max Scaling' },
+              { id: 'dividebymax', name: 'Divide by Max', label: 'Divide by Max' },
+              { id: 'percentofmean', name: 'Percent-of-Mean', label: 'Percent-of-Mean' },
+              { id: 'postadhoc', name: 'Post-hoc Covariate', label: 'Post-hoc Covariate Adjusted' }
+            ].map((method) => (
+              <button
+                key={method.id}
+                onClick={() => setSelectedMethod(method.id as NormalisationMethod)}
+                className={`text-left p-3 rounded-lg border transition-colors ${
+                  selectedMethod === method.id
+                    ? 'bg-blue-900/40 border-blue-500'
+                    : 'bg-gray-800 border-gray-700 hover:border-gray-600'
+                }`}
+              >
+                <div className={`font-medium ${selectedMethod === method.id ? 'text-blue-400' : 'text-white'}`}>
+                  {method.label}
+                </div>
+              </button>
+            ))}
+          </div>
+
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
               <thead>
@@ -121,36 +154,39 @@ export function NormalisationPage({ onBack }: Props) {
                 </tr>
               </thead>
               <tbody>
-                <tr className="border-b border-gray-800 bg-blue-900/20">
-                  <td className="py-2 px-3 text-blue-400 font-medium">Z-score (Standardisation)</td>
+                <tr className="border-b border-gray-800">
+                  <td className="py-2 px-3 text-white font-medium">Z-score (Standardisation)</td>
                   <td className="py-2 px-3 text-gray-300 font-mono text-xs">x' = (x - mean) / std</td>
-                  <td className="py-2 px-3 text-gray-300">Aggregation across regions</td>
+                  <td className="py-2 px-3 text-gray-300">Aggregation across regions with different scales</td>
                   <td className="py-2 px-3 text-gray-400">Widely used; centers and scales distribution</td>
                 </tr>
                 <tr className="border-b border-gray-800">
                   <td className="py-2 px-3 text-white font-medium">Min-Max Scaling</td>
                   <td className="py-2 px-3 text-gray-300 font-mono text-xs">x' = (x - min) / (max - min)</td>
-                  <td className="py-2 px-3 text-gray-300">Fixed, bounded range</td>
+                  <td className="py-2 px-3 text-gray-300">When you need bounded range [0, 1]</td>
                   <td className="py-2 px-3 text-gray-400">Fast and intuitive; sensitive to outliers</td>
                 </tr>
                 <tr className="border-b border-gray-800">
                   <td className="py-2 px-3 text-white font-medium">Divide by Max</td>
                   <td className="py-2 px-3 text-gray-300 font-mono text-xs">x' = x / max</td>
-                  <td className="py-2 px-3 text-gray-300">Quick comparison, values greater than or equal to 0</td>
+                  <td className="py-2 px-3 text-gray-300">Quick comparison with non-negative values</td>
                   <td className="py-2 px-3 text-gray-400">Simpler; depends on max stability</td>
                 </tr>
                 <tr className="border-b border-gray-800">
                   <td className="py-2 px-3 text-white font-medium">Percent-of-Mean</td>
                   <td className="py-2 px-3 text-gray-300 font-mono text-xs">x' = x / mean</td>
-                  <td className="py-2 px-3 text-gray-300">Relative effect matters more</td>
+                  <td className="py-2 px-3 text-gray-300">When relative effect matters more</td>
                   <td className="py-2 px-3 text-gray-400">More interpretable in business settings</td>
+                </tr>
+                <tr className="border-b border-gray-800">
+                  <td className="py-2 px-3 text-white font-medium">Post-hoc Covariate Adjusted</td>
+                  <td className="py-2 px-3 text-gray-300 font-mono text-xs">x' = (x - mean) / std (by group)</td>
+                  <td className="py-2 px-3 text-gray-300">Post-experiment analysis with covariate adjustment</td>
+                  <td className="py-2 px-3 text-gray-400">Adjusts for group means; no variance reduction</td>
                 </tr>
               </tbody>
             </table>
           </div>
-          <p className="text-xs text-gray-500 mt-3">
-            This simulator uses Z-score standardisation, highlighted above.
-          </p>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
