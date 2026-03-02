@@ -88,7 +88,11 @@ export function EffectDetectionCalculator({ onBack, onNavigate }: EffectDetectio
 
     let variance = 1;
     let effectSizeCohen = 0;
-    const totalN = sampleSizeMode === 'per-group' ? sampleSizePerGroup * numFlights / 2 : sampleSizePerGroup / (numFlights * 2);
+    // ✅ Correct handling for both modes
+    const totalN =
+      sampleSizeMode === 'per-group'
+      ? sampleSizePerGroup                // user entered samples per group
+      : sampleSizePerGroup / 2;           // user entered combined across both groups
 
     if (metricType === 'continuous') {
       variance = 2;
