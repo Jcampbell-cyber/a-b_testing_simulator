@@ -3,12 +3,14 @@ import { ArrowLeft, Info } from 'lucide-react';
 import { Helmet } from "react-helmet-async";
 import { Link } from 'react-router-dom';
   
-interface SampleSizeCalculatorProps {
-  onBack: () => void;
+interface SampleSizeCalculatorProps { 
   onNavigate: (page: string) => void;
 }
 
-export function SampleSizeCalculator({ onBack, onNavigate }: SampleSizeCalculatorProps) {
+export function SampleSizeCalculator({ onNavigate }: SampleSizeCalculatorProps) {
+  const onBack = () => {
+  window.location.href = '/'; // go straight to home page
+  };
   const [metricType, setMetricType] = useState<'continuous' | 'binary'>('continuous');
   const [testType, setTestType] = useState<'two-sided' | 'one-sided'>('two-sided');
   const [alpha, setAlpha] = useState(0.05);
