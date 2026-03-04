@@ -7,7 +7,7 @@ interface TestResultsCalculatorProps {
   onNavigate: (page: string) => void;
 }
 
-export function TestResultsCalculator({ onBack, onNavigate }: TestResultsCalculatorProps) {
+export function TestResultsCalculator({ onNavigate }: TestResultsCalculatorProps) {
   const onBack = () => {
   window.location.href = '/'; // go to home page
   };
