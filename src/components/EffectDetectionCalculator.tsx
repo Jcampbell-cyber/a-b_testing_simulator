@@ -7,7 +7,7 @@ interface EffectDetectionCalculatorProps {
   onNavigate: (page: string) => void;
 }
 
-export function EffectDetectionCalculator({ onBack, onNavigate }: EffectDetectionCalculatorProps) {
+export function EffectDetectionCalculator({ onNavigate }: EffectDetectionCalculatorProps) {
   const onBack = () => {
   window.location.href = '/'; // go to home page
   };
