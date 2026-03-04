@@ -177,6 +177,22 @@ export function ImbalancedFlightsPage() {
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
+
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6"> 
+        {/* --- Explanation of variance --- */}
+        <div className="lg:col-span-3 bg-gray-800 rounded-lg shadow-md border border-gray-700 p-6 mb-6">
+          <h2 className="text-xl font-semibold text-white mb-4">Why Imbalance Increases Variance</h2>
+          <p className="text-base text-gray-400 mb-4">
+            The standard error of the difference between two groups is calculated as:
+          </p>
+          <p className="text-base text-gray-200 mb-2">
+            SE = σ × √(1/n<sub>control</sub> + 1/n<sub>treatment</sub>)
+          </p>
+          <p className="text-base text-gray-400">
+            As one group becomes smaller, its 1/n term gets larger, increasing the overall standard error and reducing statistical power.
+          </p>
+        </div>
+            
           {/* --- Distribution visualization --- */}
           <div className="bg-gray-800 rounded-lg shadow-md border border-gray-700 p-6">
             <h2 className="text-xl font-semibold text-white mb-4">Distribution Visualization</h2>
