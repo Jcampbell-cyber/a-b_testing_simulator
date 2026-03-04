@@ -3,12 +3,14 @@ import { ArrowLeft, Info } from 'lucide-react';
 import { Helmet } from 'react-helmet-async';
 import { Link } from 'react-router-dom';
 
-interface TestDurationCalculatorProps {
-  onBack: () => void;
+interface TestDurationCalculatorProps { 
   onNavigate: (page: string) => void;
 }
 
 export function TestDurationCalculator({ onBack, onNavigate }: TestDurationCalculatorProps) {
+  const onBack = () => {
+  window.location.href = '/'; // go to home page
+  };
   const [metricType, setMetricType] = useState<'continuous' | 'binary'>('continuous');
   const [testType, setTestType] = useState<'two-sided' | 'one-sided'>('two-sided');
   const [alpha, setAlpha] = useState(0.05);
