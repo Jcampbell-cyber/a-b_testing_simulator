@@ -7,7 +7,7 @@ interface TestDurationCalculatorProps {
   onNavigate: (page: string) => void;
 }
 
-export function TestDurationCalculator({ onBack, onNavigate }: TestDurationCalculatorProps) {
+export function TestDurationCalculator({ onNavigate }: TestDurationCalculatorProps) {
   const onBack = () => {
   window.location.href = '/'; // go to home page
   };
