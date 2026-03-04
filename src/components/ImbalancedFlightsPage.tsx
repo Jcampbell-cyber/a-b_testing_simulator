@@ -175,9 +175,7 @@ export function ImbalancedFlightsPage() {
             </div>
           </div>
         </div>
-
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
-
+ 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6"> 
         {/* --- Explanation of variance --- */}
         <div className="lg:col-span-3 bg-gray-800 rounded-lg shadow-md border border-gray-700 p-6 mb-6">
