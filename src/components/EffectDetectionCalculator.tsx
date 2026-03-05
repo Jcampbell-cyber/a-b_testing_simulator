@@ -411,16 +411,15 @@ const calculateMDE = () => {
                         <Link
                           to="/fwer"
                           className="flex items-center gap-1 text-blue-400 hover:text-blue-300 text-xs transition-colors"
-                          >
+                        >
                           <Info className="w-3 h-3" />
                           <span>Learn more about FWER</span>
                         </Link>
                       </div>
                     )}
-                  </div>
                 </div>
               </div>
-            </div>
+              </div> 
 
             <div className="bg-gray-700 rounded-lg p-6 flex flex-col justify-start h-fit sticky top-8">
               <h2 className="text-2xl font-bold text-white mb-6">Minimum Detectable Effects</h2>
