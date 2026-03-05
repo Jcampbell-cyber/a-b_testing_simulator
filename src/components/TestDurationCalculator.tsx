@@ -3,14 +3,15 @@ import { ArrowLeft, Info } from 'lucide-react';
 import { Helmet } from 'react-helmet-async';
 import { Link } from 'react-router-dom';
 
-interface TestDurationCalculatorProps { 
+interface TestDurationCalculatorProps {
   onNavigate: (page: string) => void;
 }
 
 export function TestDurationCalculator({ onNavigate }: TestDurationCalculatorProps) {
   const onBack = () => {
-  window.location.href = '/'; // go to home page
+    window.location.href = '/';
   };
+
   const [metricType, setMetricType] = useState<'continuous' | 'binary'>('continuous');
   const [testType, setTestType] = useState<'two-sided' | 'one-sided'>('two-sided');
   const [alpha, setAlpha] = useState(0.05);
@@ -21,7 +22,6 @@ export function TestDurationCalculator({ onNavigate }: TestDurationCalculatorPro
   const [trafficSplit, setTrafficSplit] = useState<'both' | 'one'>('both');
   const [numFlights, setNumFlights] = useState(2);
   const [comparisonType, setComparisonType] = useState<'none' | 'control' | 'pairwise'>('none');
-
   const [mean, setMean] = useState(100);
   const [stdev, setStdev] = useState(20);
   const [proportion, setProportion] = useState(0.5);
@@ -29,20 +29,19 @@ export function TestDurationCalculator({ onNavigate }: TestDurationCalculatorPro
   const normalInverse = (p: number): number => {
     if (p <= 0 || p >= 1) return 0;
     if (p === 0.5) return 0;
-
     const a = [
       -3.969683028665376e+01,
-       2.209460984245205e+02,
+      2.209460984245205e+02,
       -2.759285104469687e+02,
-       1.383577518672690e+02,
+      1.383577518672690e+02,
       -3.066479806614716e+01,
-       2.506628277459239e+00
+      2.506628277459239e+00
     ];
     const b = [
       -5.447609879822406e+01,
-       1.615858368580409e+02,
+      1.615858368580409e+02,
       -1.556989798598866e+02,
-       6.680131188771972e+01,
+      6.680131188771972e+01,
       -1.328068155288572e+01
     ];
     const c = [
@@ -50,21 +49,18 @@ export function TestDurationCalculator({ onNavigate }: TestDurationCalculatorPro
       -3.223964580411365e-01,
       -2.400758277161838e+00,
       -2.549732539343734e+00,
-       4.374664141464968e+00,
-       2.938163982698783e+00
+      4.374664141464968e+00,
+      2.938163982698783e+00
     ];
     const d = [
-       7.784695709041462e-03,
-       3.224671290700398e-01,
-       2.445134137142996e+00,
-       3.754408661907416e+00
+      7.784695709041462e-03,
+      3.224671290700398e-01,
+      2.445134137142996e+00,
+      3.754408661907416e+00
     ];
-
     const pLow = 0.02425;
     const pHigh = 1 - pLow;
-
     let q: number, r: number;
-
     if (p < pLow) {
       q = Math.sqrt(-2 * Math.log(p));
       return (((((c[0]*q + c[1])*q + c[2])*q + c[3])*q + c[4])*q + c[5]) /
@@ -85,6 +81,7 @@ export function TestDurationCalculator({ onNavigate }: TestDurationCalculatorPro
     const numComparisons = comparisonType === 'none' ? 1 :
       comparisonType === 'control' ? numFlights - 1 :
       (numFlights * (numFlights - 1)) / 2;
+
     const adjustedAlpha = alpha / numComparisons;
     const alphaTwoSided = testType === 'two-sided' ? adjustedAlpha / 2 : adjustedAlpha;
     const zAlpha = normalInverse(1 - alphaTwoSided);
@@ -117,24 +114,42 @@ export function TestDurationCalculator({ onNavigate }: TestDurationCalculatorPro
     );
 
     const totalSamples = samplesPerGroup * numFlights;
-    const samplesPerDay = trafficSplit === 'both' ? dailyUnits / numFlights : dailyUnits;
+    
+    // Calculate samples per day based on traffic split
+    const samplesPerDay = trafficSplit === 'both' 
+      ? dailyUnits / numFlights 
+      : dailyUnits;
+    
     const daysNeeded = totalSamples / samplesPerDay;
+    
+    // Calculate per-flight samples per day
+    const perFlightSamplesPerDay = trafficSplit === 'both'
+      ? dailyUnits / numFlights
+      : dailyUnits;
 
-    return { daysNeeded, totalSamples, samplesPerDay, absoluteMde, effectSize, adjustedAlpha };
+    return { 
+      daysNeeded, 
+      totalSamples, 
+      samplesPerDay, 
+      perFlightSamplesPerDay,
+      samplesPerGroup,
+      absoluteMde, 
+      effectSize, 
+      adjustedAlpha 
+    };
   };
 
   const result = calculateDuration();
 
   return (
     <div className="min-h-screen bg-gray-900">
-  <Helmet>
-    <title>Test Duration Calculator for A/B Testing</title>
-    <meta
-      name="description"
-      content="Estimate how long your A/B test needs to run to reach statistical significance. Adjust metric type, MDE, traffic, and flights for accurate test duration calculation."
-    />
-  </Helmet>
-      
+      <Helmet>
+        <title>Test Duration Calculator for A/B Testing</title>
+        <meta
+          name="description"
+          content="Estimate how long your A/B test needs to run to reach statistical significance. Adjust metric type, MDE, traffic, and flights for accurate test duration calculation."
+        />
+      </Helmet>
       <div className="max-w-5xl mx-auto px-4 py-8">
         <button
           onClick={onBack}
@@ -143,13 +158,11 @@ export function TestDurationCalculator({ onNavigate }: TestDurationCalculatorPro
           <ArrowLeft className="w-4 h-4" />
           Back to Tools
         </button>
-
         <div className="bg-gray-800 rounded-lg shadow-lg p-8">
           <h1 className="text-4xl font-bold text-white mb-2">Test Duration Calculator</h1>
           <p className="text-gray-300 mb-8">
             Estimate how long your test needs to run to reach statistical significance
           </p>
-
           <div className="grid lg:grid-cols-3 gap-8">
             <div className="lg:col-span-2 space-y-6">
               <div className="grid grid-cols-2 gap-4">
@@ -176,7 +189,6 @@ export function TestDurationCalculator({ onNavigate }: TestDurationCalculatorPro
                     </label>
                   </div>
                 </div>
-
                 <div>
                   <label className="block text-white font-semibold mb-3">Test Type</label>
                   <div className="space-y-2">
@@ -201,7 +213,6 @@ export function TestDurationCalculator({ onNavigate }: TestDurationCalculatorPro
                   </div>
                 </div>
               </div>
-
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <label className="block text-white font-semibold mb-3">
@@ -217,7 +228,6 @@ export function TestDurationCalculator({ onNavigate }: TestDurationCalculatorPro
                     className="w-full"
                   />
                 </div>
-
                 <div>
                   <label className="block text-white font-semibold mb-3">
                     Power (1 - β): {power.toFixed(2)}
@@ -233,7 +243,6 @@ export function TestDurationCalculator({ onNavigate }: TestDurationCalculatorPro
                   />
                 </div>
               </div>
-
               {metricType === 'continuous' && (
                 <div className="grid grid-cols-2 gap-4">
                   <div>
@@ -261,7 +270,6 @@ export function TestDurationCalculator({ onNavigate }: TestDurationCalculatorPro
                   </div>
                 </div>
               )}
-
               {metricType === 'binary' && (
                 <div>
                   <label className="block text-white font-semibold mb-2">
@@ -278,7 +286,6 @@ export function TestDurationCalculator({ onNavigate }: TestDurationCalculatorPro
                   />
                 </div>
               )}
-
               <div className="border-t border-gray-700 pt-6">
                 <label className="block text-white font-semibold mb-3">Minimum Detectable Effect (MDE)</label>
                 <div className="grid grid-cols-2 gap-4">
@@ -319,11 +326,10 @@ export function TestDurationCalculator({ onNavigate }: TestDurationCalculatorPro
                   </div>
                 </div>
               </div>
-
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <label className="block text-white font-semibold mb-3">
-                    Daily Traffic: {result.samplesPerDay.toLocaleString()}
+                    Daily Traffic: {Math.round(trafficSplit === 'both' ? dailyUnits : dailyUnits * numFlights).toLocaleString()}
                   </label>
                   <input
                     type="number"
@@ -333,10 +339,9 @@ export function TestDurationCalculator({ onNavigate }: TestDurationCalculatorPro
                     className="w-full bg-gray-700 text-white px-3 py-2 rounded"
                   />
                   <p className="text-xs text-gray-400 mt-1">
-                    {trafficSplit === 'both' ? 'across all flights' : 'per flight'}
+                    {trafficSplit === 'both' ? 'total across all flights' : 'per flight'}
                   </p>
                 </div>
-
                 <div>
                   <label className="block text-white font-semibold mb-3">Traffic Distribution</label>
                   <div className="space-y-2">
@@ -361,7 +366,6 @@ export function TestDurationCalculator({ onNavigate }: TestDurationCalculatorPro
                   </div>
                 </div>
               </div>
-
               <div>
                 <label className="block text-white font-semibold mb-3">
                   Number of Flights: {numFlights}
@@ -387,7 +391,6 @@ export function TestDurationCalculator({ onNavigate }: TestDurationCalculatorPro
                     +
                   </button>
                 </div>
-
                 <div className="mt-4">
                   <label className="block text-white font-semibold mb-3">Comparison Type</label>
                   <div className="space-y-2">
@@ -437,34 +440,32 @@ export function TestDurationCalculator({ onNavigate }: TestDurationCalculatorPro
                 </div>
               </div>
             </div>
-
             <div className="bg-gray-700 rounded-lg p-6 flex flex-col justify-start h-fit sticky top-8">
               <h2 className="text-2xl font-bold text-white mb-6">Results</h2>
               <div className="space-y-6">
                 <div>
                   <p className="text-gray-300 text-sm mb-1">Test Duration</p>
-                  <p className="text-3xl font-bold text-blue-400">{(result.daysNeeded).toFixed(1)}</p>
+                  <p className="text-3xl font-bold text-blue-400">{result.daysNeeded.toFixed(1)}</p>
                   <p className="text-gray-400 text-xs mt-1">days</p>
                 </div>
-
                 <div className="border-t border-gray-600 pt-6">
                   <p className="text-gray-300 text-sm mb-1">
                     {result.daysNeeded > 30 ? '~' : ''} {(result.daysNeeded / 7).toFixed(1)} weeks
                   </p>
                   <p className="text-gray-400 text-xs">estimated duration</p>
                 </div>
-
                 <div className="border-t border-gray-600 pt-6">
                   <p className="text-gray-300 text-sm mb-1">Total Samples Needed (all flights)</p>
                   <p className="text-2xl font-bold text-gray-200">
                     {result.totalSamples.toLocaleString()}
                   </p>
-                  <p className="text-gray-400 text-xs mt-1">at {Math.round(result.samplesPerDay).toLocaleString()} per day</p>
+                  <p className="text-gray-400 text-xs mt-1">
+                    at {Math.round(result.samplesPerDay).toLocaleString()} per day
+                  </p>
                   <p className="text-gray-400 text-xs mt-2">
-                    {Math.ceil(result.totalSamples / numFlights).toLocaleString()} per flight
+                    {result.samplesPerGroup.toLocaleString()} per flight
                   </p>
                 </div>
-
                 <div className="bg-gray-600 rounded p-4 text-sm text-gray-200 border-t border-gray-600">
                   <p className="font-semibold mb-2">MDE Details</p>
                   <p className="text-sm text-gray-200 mb-1">
@@ -493,10 +494,8 @@ export function TestDurationCalculator({ onNavigate }: TestDurationCalculatorPro
               </div>
             </div>
           </div>
-
           <div className="mt-12 bg-gray-700 rounded-lg p-8">
             <h2 className="text-2xl font-bold text-white mb-6">How the Calculation Works</h2>
-
             <div className="space-y-6 text-gray-300">
               <div>
                 <h3 className="text-lg font-semibold text-emerald-400 mb-2">Sample Size Calculation</h3>
@@ -510,32 +509,29 @@ export function TestDurationCalculator({ onNavigate }: TestDurationCalculatorPro
                   Where z_α and z_β are the critical values for your significance level and power. Variance depends on metric type (continuous uses 2, binary uses 2p(1-p)). The effect size is calculated from your MDE and metric parameters.
                 </p>
               </div>
-
               <div>
                 <h3 className="text-lg font-semibold text-emerald-400 mb-2">Duration Formula</h3>
                 <p className="mb-3">
                   Test duration is determined by how long it takes to collect the required sample size:
                 </p>
                 <div className="bg-gray-900 rounded p-4 font-mono text-sm mb-3">
-                  Days Needed = (Sample Size per Group × Number of Flights) / Daily Traffic
+                  Days Needed = (Sample Size per Group × Number of Flights) / Daily Traffic per Flight
                 </div>
                 <p className="text-sm text-gray-400">
-                  The total sample size is calculated from the per-group requirement multiplied by the number of variants (flights) in your test. Then we divide by your daily traffic to estimate how many days the test must run.
+                  The total sample size is calculated from the per-group requirement multiplied by the number of variants (flights) in your test. Then we divide by your daily traffic per flight to estimate how many days the test must run.
                 </p>
               </div>
-
               <div>
                 <h3 className="text-lg font-semibold text-emerald-400 mb-2">Traffic Distribution Options</h3>
                 <ul className="space-y-3 ml-4">
                   <li className="text-sm">
-                    <strong>Across All Flights:</strong> Daily traffic value is split evenly among all variants. For example, 10,000 daily users with 3 flights means ~3,333 per flight per day.
+                    <strong>Across All Flights:</strong> Daily traffic value is the total split evenly among all variants. For example, 10,000 daily users with 3 flights means ~3,333 per flight per day.
                   </li>
                   <li className="text-sm">
-                    <strong>Per Flight Only:</strong> Daily traffic value applies to each flight individually. Use this when you have dedicated traffic pools for each variant.
+                    <strong>Per Flight Only:</strong> Daily traffic value applies to each flight individually. Use this when you have dedicated traffic pools for each variant. 10,000 per flight with 3 flights = 30,000 total daily users.
                   </li>
                 </ul>
               </div>
-
               <div>
                 <h3 className="text-lg font-semibold text-emerald-400 mb-2">Key Factors Affecting Duration</h3>
                 <ul className="space-y-2 ml-4 text-sm text-gray-400">
@@ -553,7 +549,6 @@ export function TestDurationCalculator({ onNavigate }: TestDurationCalculatorPro
                   </li>
                 </ul>
               </div>
-
               <div>
                 <h3 className="text-lg font-semibold text-emerald-400 mb-2">Multiple Comparison Impact</h3>
                 <p className="text-sm mb-2">
@@ -563,7 +558,6 @@ export function TestDurationCalculator({ onNavigate }: TestDurationCalculatorPro
                   Example: Testing 3 variants with pairwise comparisons (3 comparisons total) roughly triples your duration compared to a 2-variant test.
                 </p>
               </div>
-
               <div>
                 <h3 className="text-lg font-semibold text-emerald-400 mb-2">Practical Considerations</h3>
                 <ul className="space-y-2 ml-4 text-sm text-gray-400">
@@ -575,18 +569,17 @@ export function TestDurationCalculator({ onNavigate }: TestDurationCalculatorPro
               </div>
             </div>
           </div>
-          {/* CTA */}
-<div className="mt-12 bg-gray-700 rounded-lg p-6 text-center">
-  <p className="text-gray-300 mb-4">
-    Want to detect the smallest effect your experiment can reliably measure?
-  </p>
-  <Link
-    to="/effect-detection-calc"
-    className="inline-block bg-blue-500 hover:bg-blue-600 text-white font-semibold px-6 py-3 rounded transition-colors"
-  >
-    Open Effect Detection Calculator →
-  </Link>
-</div>
+          <div className="mt-12 bg-gray-700 rounded-lg p-6 text-center">
+            <p className="text-gray-300 mb-4">
+              Want to detect the smallest effect your experiment can reliably measure?
+            </p>
+            <Link
+              to="/effect-detection-calc"
+              className="inline-block bg-blue-500 hover:bg-blue-600 text-white font-semibold px-6 py-3 rounded transition-colors"
+            >
+              Open Effect Detection Calculator →
+            </Link>
+          </div>
         </div>
       </div>
     </div>
