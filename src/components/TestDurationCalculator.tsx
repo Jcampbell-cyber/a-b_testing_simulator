@@ -118,7 +118,7 @@ export function TestDurationCalculator({ onNavigate }: TestDurationCalculatorPro
 
     const totalSamples = samplesPerGroup * numFlights;
     const samplesPerDay = trafficSplit === 'both' ? dailyUnits / numFlights : dailyUnits;
-    const daysNeeded = Math.ceil(totalSamples / samplesPerDay);
+    const daysNeeded = totalSamples / samplesPerDay;
 
     return { daysNeeded, totalSamples, samplesPerDay, absoluteMde, effectSize, adjustedAlpha };
   };
@@ -459,7 +459,7 @@ export function TestDurationCalculator({ onNavigate }: TestDurationCalculatorPro
                   <p className="text-2xl font-bold text-gray-200">
                     {result.totalSamples.toLocaleString()}
                   </p>
-                  <p className="text-gray-400 text-xs mt-1">at {result.samplesPerDay.toLocaleString()} per day</p>
+                  <p className="text-gray-400 text-xs mt-1">at {Math.round(result.samplesPerDay).toLocaleString()} per day</p>
                   <p className="text-gray-400 text-xs mt-2">
                     {Math.ceil(result.totalSamples / numFlights).toLocaleString()} per flight
                   </p>
