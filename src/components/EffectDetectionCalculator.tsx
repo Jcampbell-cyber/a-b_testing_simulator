@@ -408,14 +408,13 @@ const calculateMDE = () => {
                         <p className="text-xs text-gray-400">
                           Bonferroni adjusted α: {(alpha / (comparisonType === 'control' ? numFlights - 1 : (numFlights * (numFlights - 1)) / 2)).toFixed(4)}
                         </p>
-                        <button
-                          onClick={() => onNavigate('fwer')}
+                        <Link
+                          to="/fwer"
                           className="flex items-center gap-1 text-blue-400 hover:text-blue-300 text-xs transition-colors"
-                          title="Learn more about FWER correction"
-                        >
+                          >
                           <Info className="w-3 h-3" />
-                          <span>Learn more</span>
-                        </button>
+                          <span>Learn more about FWER</span>
+                        </Link>
                       </div>
                     )}
                   </div>
@@ -559,13 +558,13 @@ const calculateMDE = () => {
                     {comparisonType !== 'none' && <li>{comparisonType === 'control' ? `${numFlights - 1} comparisons to control` : `${(numFlights * (numFlights - 1)) / 2} pairwise comparisons`} (Bonferroni)</li>}
                   </ul>
                   {comparisonType !== 'none' && (
-                    <button
-                      onClick={() => onNavigate('fwer')}
-                      className="flex items-center gap-1 text-blue-400 hover:text-blue-300 text-xs mt-2 transition-colors"
-                    >
-                      <Info className="w-3 h-3" />
-                      <span>Learn about FWER</span>
-                    </button>
+                      <Link
+                        to="/fwer"
+                        className="flex items-center gap-1 text-blue-400 hover:text-blue-300 text-xs transition-colors"
+                        >
+                        <Info className="w-3 h-3" />
+                        <span>Learn more about FWER</span>
+                      </Link>
                   )}
                 </div>
               </div>
