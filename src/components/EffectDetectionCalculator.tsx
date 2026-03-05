@@ -79,70 +79,79 @@ export function EffectDetectionCalculator({ onNavigate }: EffectDetectionCalcula
     }
   };
 
-  const calculateMDE = () => {
-    const numComparisons = comparisonType === 'none' ? 1 :
-      comparisonType === 'control' ? numFlights - 1 :
-      (numFlights * (numFlights - 1)) / 2;
-    const adjustedAlpha = alpha / numComparisons;
-    const alphaTwoSided = testType === 'two-sided' ? adjustedAlpha / 2 : adjustedAlpha;
-    const zAlpha = normalInverse(1 - alphaTwoSided);
-    const zBeta = normalInverse(power);
+const calculateMDE = () => {
+  const numComparisons = comparisonType === 'none' ? 1 :
+    comparisonType === 'control' ? numFlights - 1 :
+    (numFlights * (numFlights - 1)) / 2;
 
-    let variance = 1;
-    let effectSizeCohen = 0;
-    // ✅ Correct handling for both modes
-    const totalN =
-      sampleSizeMode === 'per-group'
-      ? sampleSizePerGroup                // user entered samples per group
-      : sampleSizePerGroup / 2;           // user entered combined across both groups
+  const adjustedAlpha = alpha / numComparisons;
+  const alphaTwoSided = testType === 'two-sided' ? adjustedAlpha / 2 : adjustedAlpha;
+  const zAlpha = normalInverse(1 - alphaTwoSided);
+  const zBeta = normalInverse(power);
 
-    if (metricType === 'continuous') {
-      variance = 2;
-      effectSizeCohen = Math.sqrt(
-        (variance * Math.pow(zAlpha + zBeta, 2)) / totalN
-      );
-    } else {
-      variance = 2 * proportion * (1 - proportion);
-      effectSizeCohen = Math.sqrt(
-        (variance * Math.pow(zAlpha + zBeta, 2)) / totalN
-      );
-    }
+  let variance = 1;
+  let effectSizeCohen = 0;
 
-    const absoluteMde = metricType === 'continuous'
-      ? effectSizeCohen * stdev
-      : effectSizeCohen;
+  // Calculate effective sample size per group accounting for flight split
+  let totalN;
+  if (sampleSizeMode === 'per-group') {
+    // User entered samples per group, but with multiple flights, 
+    // each flight gets (sampleSizePerGroup / numFlights) samples
+    totalN = sampleSizePerGroup / numFlights;
+  } else {
+    // User entered combined total across both groups
+    totalN = (sampleSizePerGroup / 2) / numFlights;
+  }
 
-    const relativeMde = metricType === 'continuous'
-      ? (absoluteMde / mean) * 100
-      : (absoluteMde / proportion) * 100;
+  if (metricType === 'continuous') {
+    variance = 2;
+    effectSizeCohen = Math.sqrt(
+      (variance * Math.pow(zAlpha + zBeta, 2)) / totalN
+    );
+  } else {
+    variance = 2 * proportion * (1 - proportion);
+    effectSizeCohen = Math.sqrt(
+      (variance * Math.pow(zAlpha + zBeta, 2)) / totalN
+    );
+  }
 
-    const mdeHalf = effectSizeCohen * Math.sqrt(2);
-    const mdeDouble = effectSizeCohen / Math.sqrt(2);
+  const absoluteMde = metricType === 'continuous'
+    ? effectSizeCohen * stdev
+    : effectSizeCohen;
 
-    const absoluteMdeHalf = metricType === 'continuous'
-      ? mdeHalf * stdev
-      : mdeHalf;
-    const relativeMdeHalf = metricType === 'continuous'
-      ? (absoluteMdeHalf / mean) * 100
-      : (absoluteMdeHalf / proportion) * 100;
+  const relativeMde = metricType === 'continuous'
+    ? (absoluteMde / mean) * 100
+    : (absoluteMde / proportion) * 100;
 
-    const absoluteMdeDouble = metricType === 'continuous'
-      ? mdeDouble * stdev
-      : mdeDouble;
-    const relativeMdeDouble = metricType === 'continuous'
-      ? (absoluteMdeDouble / mean) * 100
-      : (absoluteMdeDouble / proportion) * 100;
+  const mdeHalf = effectSizeCohen * Math.sqrt(2);
+  const mdeDouble = effectSizeCohen / Math.sqrt(2);
 
-    return {
-      relativeMde,
-      absoluteMde,
-      relativeMdeHalf,
-      absoluteMdeHalf,
-      relativeMdeDouble,
-      absoluteMdeDouble,
-      adjustedAlpha,
-    };
+  const absoluteMdeHalf = metricType === 'continuous'
+    ? mdeHalf * stdev
+    : mdeHalf;
+
+  const relativeMdeHalf = metricType === 'continuous'
+    ? (absoluteMdeHalf / mean) * 100
+    : (absoluteMdeHalf / proportion) * 100;
+
+  const absoluteMdeDouble = metricType === 'continuous'
+    ? mdeDouble * stdev
+    : mdeDouble;
+
+  const relativeMdeDouble = metricType === 'continuous'
+    ? (absoluteMdeDouble / mean) * 100
+    : (absoluteMdeDouble / proportion) * 100;
+
+  return {
+    relativeMde,
+    absoluteMde,
+    relativeMdeHalf,
+    absoluteMdeHalf,
+    relativeMdeDouble,
+    absoluteMdeDouble,
+    adjustedAlpha,
   };
+};
 
   const result = calculateMDE();
 
