@@ -347,12 +347,12 @@ export function TestResultsCalculator({ onNavigate }: TestResultsCalculatorProps
                         <Link
                           to="/fwer"
                           className="flex items-center gap-1 text-blue-400 hover:text-blue-300 text-xs transition-colors"
-                          >
+                        >
                           <Info className="w-3 h-3" />
                           <span>Learn more about FWER</span>
                         </Link>
+                      </div>
                     )}
-                  </div>
                 </div>
               </div>
 
