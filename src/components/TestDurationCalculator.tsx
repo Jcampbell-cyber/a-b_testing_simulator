@@ -17,13 +17,13 @@ export function TestDurationCalculator({ onNavigate }: TestDurationCalculatorPro
   const [alpha, setAlpha] = useState(0.05);
   const [power, setPower] = useState(0.8);
   const [mdeType, setMdeType] = useState<'relative' | 'absolute'>('relative');
-  const [mdeValue, setMdeValue] = useState(5);
-  const [dailyUnits, setDailyUnits] = useState(10000);
+  const [mdeValue, setMdeValue] = useState(3);
+  const [dailyUnits, setDailyUnits] = useState(1000);
   const [trafficSplit, setTrafficSplit] = useState<'both' | 'one'>('both');
   const [numFlights, setNumFlights] = useState(2);
   const [comparisonType, setComparisonType] = useState<'none' | 'control' | 'pairwise'>('none');
-  const [mean, setMean] = useState(100);
-  const [stdev, setStdev] = useState(20);
+  const [mean, setMean] = useState(400);
+  const [stdev, setStdev] = useState(200);
   const [proportion, setProportion] = useState(0.5);
 
   const normalInverse = (p: number): number => {
@@ -427,14 +427,13 @@ export function TestDurationCalculator({ onNavigate }: TestDurationCalculatorPro
                       <p className="text-xs text-gray-400">
                         Bonferroni adjusted α: {(alpha / (comparisonType === 'control' ? numFlights - 1 : (numFlights * (numFlights - 1)) / 2)).toFixed(4)}
                       </p>
-                      <button
-                        onClick={() => onNavigate('fwer')}
-                        className="flex items-center gap-1 text-blue-400 hover:text-blue-300 text-xs transition-colors"
-                        title="Learn more about FWER correction"
+                      <Link
+                      to="/fwer"
+                      className="flex items-center gap-1 text-blue-400 hover:text-blue-300 text-xs transition-colors"
                       >
-                        <Info className="w-3 h-3" />
-                        <span>Learn more</span>
-                      </button>
+                      <Info className="w-3 h-3" />
+                      <span>Learn more</span>
+                      </Link>
                     </div>
                   )}
                 </div>
