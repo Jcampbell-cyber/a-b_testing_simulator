@@ -344,15 +344,13 @@ export function TestResultsCalculator({ onNavigate }: TestResultsCalculatorProps
                         <p className="text-xs text-gray-400">
                           Bonferroni adjusted α: {(alpha / (comparisonType === 'control' ? numFlights - 1 : (numFlights * (numFlights - 1)) / 2)).toFixed(4)}
                         </p>
-                        <button
-                          onClick={() => onNavigate('fwer')}
+                        <Link
+                          to="/fwer"
                           className="flex items-center gap-1 text-blue-400 hover:text-blue-300 text-xs transition-colors"
-                          title="Learn more about FWER correction"
-                        >
+                          >
                           <Info className="w-3 h-3" />
-                          <span>Learn more</span>
-                        </button>
-                      </div>
+                          <span>Learn more about FWER</span>
+                        </Link>
                     )}
                   </div>
                 </div>
@@ -572,13 +570,13 @@ export function TestResultsCalculator({ onNavigate }: TestResultsCalculatorProps
                       <p className="text-gray-400 mt-1">
                         {comparisonType === 'control' ? `${numFlights - 1} comparisons to control` : `${(numFlights * (numFlights - 1)) / 2} pairwise comparisons`}
                       </p>
-                      <button
-                        onClick={() => onNavigate('fwer')}
-                        className="flex items-center gap-1 text-blue-400 hover:text-blue-300 text-xs mt-1 transition-colors"
-                      >
-                        <Info className="w-3 h-3" />
-                        <span>Learn about FWER</span>
-                      </button>
+                        <Link
+                          to="/fwer"
+                          className="flex items-center gap-1 text-blue-400 hover:text-blue-300 text-xs transition-colors"
+                          >
+                          <Info className="w-3 h-3" />
+                          <span>Learn more about FWER</span>
+                        </Link>
                     </div>
                   ) : (
                     <p className="text-gray-400 text-xs mt-1">at α = {alpha.toFixed(3)}</p>
