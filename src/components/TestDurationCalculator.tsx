@@ -480,13 +480,13 @@ export function TestDurationCalculator({ onNavigate }: TestDurationCalculatorPro
                       <p className="text-gray-400 mt-1">
                         {comparisonType === 'control' ? `${numFlights - 1} comparisons to control` : `${(numFlights * (numFlights - 1)) / 2} pairwise comparisons`}
                       </p>
-                      <button
-                        onClick={() => onNavigate('fwer')}
-                        className="flex items-center gap-1 text-blue-400 hover:text-blue-300 text-xs mt-1 transition-colors"
-                      >
+                      <Link
+                        to="/fwer"                        
+                        className="flex items-center gap-1 text-blue-400 hover:text-blue-300 text-xs transition-colors"
+                        >
                         <Info className="w-3 h-3" />
                         <span>Learn about FWER</span>
-                      </button>
+                      </Link>
                     </div>
                   )}
                 </div>
