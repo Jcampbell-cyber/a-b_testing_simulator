@@ -654,5 +654,4 @@ const calculateMDE = () => {
         </div>
       </div>
     </div>
-  );
-}
+  ); 
