@@ -416,8 +416,7 @@ const calculateMDE = () => {
                           <span>Learn more about FWER</span>
                         </Link>
                       </div>
-                    )}
-                </div>
+                    )} 
               </div>
               </div> 
 
