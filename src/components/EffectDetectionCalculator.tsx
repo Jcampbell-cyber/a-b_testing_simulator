@@ -7,7 +7,7 @@ interface EffectDetectionCalculatorProps {
   onNavigate: (page: string) => void;
 }
 
- export function EffectDetectionCalculator({ onNavigate }: EffectDetectionCalculatorProps)
+ export function EffectDetectionCalculator({ onNavigate }: EffectDetectionCalculatorProps){
   const onBack = () => {
     window.location.href = '/';
   };  
@@ -653,6 +653,7 @@ const calculateMDE = () => {
         </div>
       </div>
     </div>
+        </div>
         </div>
   );
 } 
