@@ -652,9 +652,7 @@ const calculateMDE = () => {
           </div>
         </div>
       </div>
-    </div>
-        </div>
-        </div>
+    </div> 
   );
 } 
   
