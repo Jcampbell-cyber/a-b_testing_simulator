@@ -1,16 +1,16 @@
 import { useState } from 'react';
 import { ArrowLeft, Info } from 'lucide-react';
 import { Helmet } from 'react-helmet-async';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router-dom'; 
 
 interface EffectDetectionCalculatorProps { 
   onNavigate: (page: string) => void;
 }
-
-export function EffectDetectionCalculator({ onNavigate }: EffectDetectionCalculatorProps) {
+ 
+export function EffectDetectionCalculator({ onNavigate }: TestDurationCalculatorProps) {
   const onBack = () => {
-  window.location.href = '/'; // go to home page
-  };
+    window.location.href = '/';
+  };  
   const [metricType, setMetricType] = useState<'continuous' | 'binary'>('continuous');
   const [testType, setTestType] = useState<'two-sided' | 'one-sided'>('two-sided');
   const [alpha, setAlpha] = useState(0.05);
@@ -643,15 +643,17 @@ const calculateMDE = () => {
   <p className="text-gray-300 mb-4">
     Ready to analyse the results of your experiment? 
   </p>
-<Link
-  to="/test-results-calc"
-  className="inline-block bg-blue-500 hover:bg-blue-600 text-white font-semibold px-6 py-3 rounded transition-colors"
->
-  Open Test Results Calculator →
-</Link>
-</div>
-
+            <Link
+              to="/effect-detection-calc"
+              className="inline-block bg-blue-500 hover:bg-blue-600 text-white font-semibold px-6 py-3 rounded transition-colors"
+            >
+              Open Effect Detection Calculator →
+            </Link>
+          </div>
         </div>
       </div>
     </div>
-  ); 
+        </div>
+  );
+}}}
+  
