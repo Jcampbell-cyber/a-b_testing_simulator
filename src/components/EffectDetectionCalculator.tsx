@@ -6,8 +6,8 @@ import { Link } from 'react-router-dom';
 interface EffectDetectionCalculatorProps { 
   onNavigate: (page: string) => void;
 }
- 
-export function EffectDetectionCalculator({ onNavigate }: TestDurationCalculatorProps) {
+
+ export function EffectDetectionCalculator({ onNavigate }: EffectDetectionCalculatorProps)
   const onBack = () => {
     window.location.href = '/';
   };  
@@ -655,5 +655,5 @@ const calculateMDE = () => {
     </div>
         </div>
   );
-}}}
+} 
   
