@@ -7,17 +7,27 @@ import { Link } from 'react-router-dom';
 import { Gauge } from 'lucide-react';
 
 const data = [
-  { proportion: 0.0, variance: 0.00, coev: 0.0, mde_prop: 0.00,  mde_cont: 0.00  },
-  { proportion: 0.1, variance: 0.09, coev: 0.1, mde_prop: 2.63,  mde_cont: 0.88  },
-  { proportion: 0.2, variance: 0.16, coev: 0.2, mde_prop: 3.51,  mde_cont: 1.75  },
-  { proportion: 0.3, variance: 0.21, coev: 0.3, mde_prop: 4.02,  mde_cont: 2.63  },
-  { proportion: 0.4, variance: 0.24, coev: 0.4, mde_prop: 4.29,  mde_cont: 3.51  },
-  { proportion: 0.5, variance: 0.25, coev: 0.5, mde_prop: 4.38,  mde_cont: 4.38  },
-  { proportion: 0.6, variance: 0.24, coev: 0.6, mde_prop: 4.29,  mde_cont: 5.26  },
-  { proportion: 0.7, variance: 0.21, coev: 0.7, mde_prop: 4.02,  mde_cont: 6.14  },
-  { proportion: 0.8, variance: 0.16, coev: 0.8, mde_prop: 3.51,  mde_cont: 7.01  },
-  { proportion: 0.9, variance: 0.09, coev: 0.9, mde_prop: 2.63,  mde_cont: 7.89  },
-  { proportion: 1.0, variance: 0.00, coev: 1.0, mde_prop: 0.00,  mde_cont: 8.77  },
+  { proportion: 0.00, variance: 0.0000, coev: 0.00, mde_prop: 0.00, mde_cont: 0.00 },
+  { proportion: 0.05, variance: 0.0475, coev: 0.05, mde_prop: 1.91, mde_cont: 0.44 },
+  { proportion: 0.10, variance: 0.0900, coev: 0.10, mde_prop: 2.63, mde_cont: 0.88 },
+  { proportion: 0.15, variance: 0.1275, coev: 0.15, mde_prop: 3.13, mde_cont: 1.32 },
+  { proportion: 0.20, variance: 0.1600, coev: 0.20, mde_prop: 3.51, mde_cont: 1.75 },
+  { proportion: 0.25, variance: 0.1875, coev: 0.25, mde_prop: 3.80, mde_cont: 2.19 },
+  { proportion: 0.30, variance: 0.2100, coev: 0.30, mde_prop: 4.02, mde_cont: 2.63 },
+  { proportion: 0.35, variance: 0.2275, coev: 0.35, mde_prop: 4.18, mde_cont: 3.07 },
+  { proportion: 0.40, variance: 0.2400, coev: 0.40, mde_prop: 4.29, mde_cont: 3.51 },
+  { proportion: 0.45, variance: 0.2475, coev: 0.45, mde_prop: 4.36, mde_cont: 3.95 },
+  { proportion: 0.50, variance: 0.2500, coev: 0.50, mde_prop: 4.38, mde_cont: 4.38 },
+  { proportion: 0.55, variance: 0.2475, coev: 0.55, mde_prop: 4.36, mde_cont: 4.82 },
+  { proportion: 0.60, variance: 0.2400, coev: 0.60, mde_prop: 4.29, mde_cont: 5.26 },
+  { proportion: 0.65, variance: 0.2275, coev: 0.65, mde_prop: 4.18, mde_cont: 5.70 },
+  { proportion: 0.70, variance: 0.2100, coev: 0.70, mde_prop: 4.02, mde_cont: 6.14 },
+  { proportion: 0.75, variance: 0.1875, coev: 0.75, mde_prop: 3.80, mde_cont: 6.58 },
+  { proportion: 0.80, variance: 0.1600, coev: 0.80, mde_prop: 3.51, mde_cont: 7.01 },
+  { proportion: 0.85, variance: 0.1275, coev: 0.85, mde_prop: 3.13, mde_cont: 7.45 },
+  { proportion: 0.90, variance: 0.0900, coev: 0.90, mde_prop: 2.63, mde_cont: 7.89 },
+  { proportion: 0.95, variance: 0.0475, coev: 0.95, mde_prop: 1.91, mde_cont: 8.33 },
+  { proportion: 1.00, variance: 0.0000, coev: 1.00, mde_prop: 0.00, mde_cont: 8.77 },
 ];
 
 // Custom tooltip showing CoV, MDE type clarifications, and runtime advantage
@@ -31,14 +41,17 @@ const CustomTooltip = ({ active, payload, label }: any) => {
 
   let runtimeNote = null;
   if (mde_prop != null && mde_cont != null && mde_cont > 0 && mde_prop > 0) {
-    // Sample size ∝ 1/MDE² so runtime ratio = (mde_prop/mde_cont)²
-    const runtimeRatio = Math.pow(mde_cont / mde_prop, 2);
-    if (runtimeRatio < 1) {
-      const pctFaster = ((1 - runtimeRatio) * 100).toFixed(0);
-      runtimeNote = `Continuous metric needs ~${pctFaster}% more samples than proportion at this point`;
-    } else if (runtimeRatio > 1) {
-      const pctFaster = ((1 - 1 / runtimeRatio) * 100).toFixed(0);
-      runtimeNote = `Proportion metric needs ~${pctFaster}% more samples than continuous at this point`;
+    // Sample size ∝ 1/MDE² — lower MDE means MORE samples needed for same sensitivity
+    // But here we're comparing: which metric needs fewer samples to detect the same effect?
+    // If mde_prop < mde_cont → proportion is harder to detect → needs more samples
+    // If mde_prop > mde_cont → proportion needs fewer samples to reach same MDE threshold
+    const sampleRatio = Math.pow(mde_cont / mde_prop, 2);
+    if (sampleRatio > 1) {
+      const pctFewer = ((1 - 1 / sampleRatio) * 100).toFixed(0);
+      runtimeNote = `Proportion needs ~${pctFewer}% fewer samples than continuous at this CoV`;
+    } else if (sampleRatio < 1) {
+      const pctMore = ((1 / sampleRatio - 1) * 100).toFixed(0);
+      runtimeNote = `Continuous needs ~${pctMore}% fewer samples than proportion at this CoV`;
     } else {
       runtimeNote = 'Both metrics require equal sample sizes at this point';
     }
@@ -47,7 +60,7 @@ const CustomTooltip = ({ active, payload, label }: any) => {
   return (
     <div className="bg-gray-900 border border-gray-600 rounded p-3 text-sm max-w-xs">
       <p className="text-white font-semibold mb-1">
-        Proportion: {(label * 100).toFixed(0)}% &nbsp;|&nbsp; CoV: {coev.toFixed(1)}
+        Proportion: {(label * 100).toFixed(0)}% &nbsp;|&nbsp; CoV: {coev.toFixed(2)}
       </p>
       {mde_prop != null && (
         <p className="text-blue-400">
