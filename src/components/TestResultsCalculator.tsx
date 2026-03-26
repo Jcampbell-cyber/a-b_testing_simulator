@@ -683,3 +683,9 @@ export function TestResultsCalculator({ onNavigate }: TestResultsCalculatorProps
   >
     Learn About Null Hypothesis and Significance Testing →
   </Link>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
