@@ -227,9 +227,10 @@ export function VariabilityVsCoevPage() {
             CoV = Standard Deviation ÷ Mean
           </div>
           <ul className="text-gray-400 text-sm space-y-2">
-            <li><span className="text-white font-semibold">CoV &lt; 0.3</span> — low variability, fast experiments, small MDE achievable</li>
+            <li><span className="text-white font-semibold">CoV &lt; 0.3</span> — extremely low variability, fast experiments, small MDE achievable</li>
             <li><span className="text-white font-semibold">CoV ≈ 0.5</span> — similar variability to a 50 % proportion metric — this is the crossover point</li>
-            <li><span className="text-white font-semibold">CoV &gt; 0.5</span> — high variability, slow experiments — consider a proportion equivalent</li>
+            <li><span className="text-white font-semibold">CoV &gt; 1</span> — high variability, slow experiments — consider a proportion equivalent</li>
+            <li><span className="text-white font-semibold">CoV &gt; 1>/span> — extremely high variability, quite standard in user metrics — use proportion if business accepts</li>
           </ul>
           <p className="text-gray-400 text-sm mt-4">
             Revenue and score-based metrics often have CoV between 1 and 3 due to extreme outliers,
