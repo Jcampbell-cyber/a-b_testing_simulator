@@ -687,5 +687,6 @@ export function TestResultsCalculator({ onNavigate }: TestResultsCalculatorProps
         </div>     // closes bg-gray-800
       </div>       // closes max-w-5xl
     </div>         // closes min-h-screen
+  </div>         // closes min-h-screen
   );
 }
