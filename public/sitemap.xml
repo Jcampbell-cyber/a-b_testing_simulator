@@ -40,6 +40,12 @@
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
+  <url> 
+    <loc>https://advancedab.tech/metric-variability-detectability</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>  
+  </url>
   <url>
     <loc>https://advancedab.tech/imbalanced</loc>
     <changefreq>weekly</changefreq>
