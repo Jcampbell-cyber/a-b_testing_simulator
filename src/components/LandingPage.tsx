@@ -37,6 +37,7 @@ export function LandingPage() {
     { title: "Peeking Checks", desc: "Understand how frequently checking test results inflates false positive rates based on p-values.", path: "/peeking" },
     { title: "Statistical Guardrails", desc: "Set manual or statistical guardrails to detect and stop tests when metrics fall below acceptable thresholds.", path: "/guardrails" },
     { title: "Imbalanced Flights", desc: "Explore how imbalanced sample splits affect statistical power and sample size requirements.", path: "/imbalanced" },
+    { title: "Metric Variability & Detectability", desc: "Learn how variability differs for proportion vs continuous metrics, how it affects minimum detectable effects (MDE).", path: "/metric-variability-detectability" },
   ];
 
   const advancedExperimentTechniquesCards = [

@@ -12,6 +12,7 @@ const pageLabels: Record<string, string> = {
   guardrails: 'Guardrails Simulator',
   fwer: 'Family-Wise Error Rate',
   imbalanced: 'Imbalanced Flights',
+  metricvariabilitydetectability: 'Metric Variability & Detectability',
   cuped: 'CUPED Variance Reduction',
   winsorizing: 'Winsorizing Simulator',
   feedback: 'Feedback & Enquiries',
