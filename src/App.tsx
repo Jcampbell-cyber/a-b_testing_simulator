@@ -33,7 +33,7 @@ function App() {
         <Route path="/peeking" element={<PeekingPage />} />
         <Route path="/guardrails" element={<GuardrailsPage />} />
         <Route path="/imbalanced" element={<ImbalancedFlightsPage />} />
-        <Route path="/metric-variability-detectability" element={<MetricVariabilityDetectabilityPage />} />
+        <Route path="/metricvariabilitydetectability" element={<MetricVariabilityDetectabilityPage />} />
         <Route path="/cuped" element={<CUPEDPage />} />
         <Route path="/fwer" element={<FWERPage />} /> 
         <Route path="/winsorizing" element={<WinsorizingPage />} />
