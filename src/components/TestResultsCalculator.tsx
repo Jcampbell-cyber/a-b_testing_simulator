@@ -188,7 +188,6 @@ export function TestResultsCalculator({ onNavigate }: TestResultsCalculatorProps
   };
 
   const result = calculateResults();
-</div>
   return (
     <div className="min-h-screen bg-gray-900">
       <Helmet>
