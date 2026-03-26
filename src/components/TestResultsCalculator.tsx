@@ -188,7 +188,7 @@ export function TestResultsCalculator({ onNavigate }: TestResultsCalculatorProps
   };
 
   const result = calculateResults();
-
+</div>
   return (
     <div className="min-h-screen bg-gray-900">
       <Helmet>
@@ -683,10 +683,10 @@ export function TestResultsCalculator({ onNavigate }: TestResultsCalculatorProps
   >
     Learn About Null Hypothesis and Significance Testing →
   </Link>
-          </div>
-        </div>
-      </div>
-    </div>
-    </div>
+            </div>
+          </div>   // closes grid lg:grid-cols-3 gap-8
+        </div>     // closes bg-gray-800
+      </div>       // closes max-w-5xl
+    </div>         // closes min-h-screen
   );
 }
