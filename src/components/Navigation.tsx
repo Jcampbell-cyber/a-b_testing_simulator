@@ -17,6 +17,7 @@ export const pages = [
   { id: 'peeking', label: 'Peeking Checks', group: 'Experiment Best Practices' },
   { id: 'guardrails', label: 'Statistical Guardrails', group: 'Experiment Best Practices' },
   { id: 'imbalanced', label: 'Imbalanced Flights', group: 'Experiment Best Practices' },
+  { id: 'metric-variability-detectability', label: 'Metric Variability & Detectability', group: 'Experiment Best Practices'},
 
   // Advanced Experiment Techniques
   { id: 'cuped', label: 'CUPED Variance Reduction', group: 'Advanced Experiment Techniques' },
