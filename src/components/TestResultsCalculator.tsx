@@ -687,5 +687,6 @@ export function TestResultsCalculator({ onNavigate }: TestResultsCalculatorProps
         </div>
       </div>
     </div>
+    </div>
   );
 }
