@@ -684,9 +684,9 @@ export function TestResultsCalculator({ onNavigate }: TestResultsCalculatorProps
     Learn About Null Hypothesis and Significance Testing →
   </Link>
             </div>
-          </div>   // closes grid lg:grid-cols-3 gap-8
-        </div>     // closes bg-gray-800
-      </div>       // closes max-w-5xl
-    </div>         // closes min-h-screen 
+          </div>   
+        </div>   
+      </div>      
+    </div>        
   );
 }
