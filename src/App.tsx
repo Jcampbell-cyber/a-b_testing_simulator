@@ -7,7 +7,7 @@ import { GuardrailsPage } from './components/GuardrailsPage';
 import { ImbalancedFlightsPage } from './components/ImbalancedFlightsPage';
 import { CUPEDPage } from './components/CUPEDPage';
 import { FeedbackForm } from './components/FeedbackForm';
-import { MetricVariabilityDetectability } from './components/MetricVariabilityDetectability';
+import { VariabilityVsCoevPage } from './components/MetricVariabilityDetectability';
 import { FWERPage } from './components/FWERPage';
 import NHSTPage from './components/NHSTPage';
 import { GlossaryPage } from './components/GlossaryPage';
@@ -33,7 +33,7 @@ function App() {
         <Route path="/peeking" element={<PeekingPage />} />
         <Route path="/guardrails" element={<GuardrailsPage />} />
         <Route path="/imbalanced" element={<ImbalancedFlightsPage />} />
-        <Route path="/MetricVariabilityDetectability" element={<MetricVariabilityDetectability />} />
+        <Route path="/metric-variability-detectability" element={<VariabilityVsCoevPage />} />
         <Route path="/cuped" element={<CUPEDPage />} />
         <Route path="/fwer" element={<FWERPage />} /> 
         <Route path="/winsorizing" element={<WinsorizingPage />} />
