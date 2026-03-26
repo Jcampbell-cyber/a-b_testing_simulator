@@ -7,7 +7,7 @@ import { GuardrailsPage } from './components/GuardrailsPage';
 import { ImbalancedFlightsPage } from './components/ImbalancedFlightsPage';
 import { CUPEDPage } from './components/CUPEDPage';
 import { FeedbackForm } from './components/FeedbackForm';
-import { MetricVariabilityDetectabilityPage } from './components/MetricVariabilityDetectabilityPage';
+import { MetricVariabilityDetectabilityPage } from './components/MetricVariabilityDetectability';
 import { FWERPage } from './components/FWERPage';
 import NHSTPage from './components/NHSTPage';
 import { GlossaryPage } from './components/GlossaryPage';
