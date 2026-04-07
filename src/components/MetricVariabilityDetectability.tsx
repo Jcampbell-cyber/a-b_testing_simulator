@@ -109,9 +109,8 @@ export function VariabilityVsCoevPage() {
         <div className="bg-blue-900 border border-blue-700 rounded-lg p-5 mb-8">
           <p className="text-blue-100 font-semibold text-base mb-1">Key Insight</p>
           <p className="text-blue-200 text-sm">
-            If your continuous metric has a <strong>Coefficient of Variation (CoV) above 0.5</strong>,
-            consider whether you can reframe it as a proportion metric. This often results in a
-            substantially lower MDE and faster experiment runtime — at the cost of a slight change
+            If your continuous metric has a <strong>Coefficient of Variation (CoV) above 0.5</strong> (i.e. your standard deviation is above 50% of the value of the mean),
+            consider whether you can reframe it as a proportion metric. This results in a substantially lower MDE and faster experiment runtime - at the cost of a slight change
             in metric definition.
           </p>
         </div>
