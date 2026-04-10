@@ -65,7 +65,7 @@ export function GuardrailsResultsDisplay({
           <div className="flex items-center gap-2 mb-2">
             <ShieldCheck className="w-5 h-5 text-amber-400" />
             <h3 className="font-semibold text-white">
-              % Crossed but Finished Positive
+              % Crossed but Finished Positive at 95% CI
             </h3>
           </div>
           <p className="text-3xl font-bold text-white">{crossedButPositiveRate.toFixed(1)}%</p>

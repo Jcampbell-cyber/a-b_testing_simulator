@@ -222,11 +222,11 @@ export function GuardrailsTimelineChart({
           </div>
           <div className="flex items-center gap-2">
             <div className="w-4 h-0.5 bg-emerald-500" style={{ height: '2px' }}></div>
-            <span className="text-gray-400">Finished positive</span>
+            <span className="text-gray-400">Finished positive at 95% CI</span>
           </div>
           <div className="flex items-center gap-2">
             <div className="w-4 h-0.5 bg-amber-500" style={{ height: '2px' }}></div>
-            <span className="text-gray-400">Crossed guardrail but finished positive</span>
+            <span className="text-gray-400">Crossed guardrail but finished positive at 95% CI</span>
           </div>
           <div className="flex items-center gap-2">
             <div className="w-3 h-3 rounded-full bg-red-500"></div>
@@ -239,7 +239,7 @@ export function GuardrailsTimelineChart({
         </div>
         {crossedButFinishedPositive > 0 && (
           <div className="text-sm text-amber-400 bg-amber-900/20 rounded-md px-3 py-2 border border-amber-700/30">
-            {crossedButFinishedPositive} run{crossedButFinishedPositive !== 1 ? 's' : ''} crossed guardrail but finished positive
+            {crossedButFinishedPositive} run{crossedButFinishedPositive !== 1 ? 's' : ''} crossed guardrail but finished positive at 95% CI
           </div>
         )}
       </div>
