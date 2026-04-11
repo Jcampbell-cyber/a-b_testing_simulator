@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 
-import { runBootstrapMean } from '../utils/bootstrapMeanSimulation';
+import { runBootstrapMean } from './bootstrapMeanSimulation';
 
 import { BootstrapMeanChart } from './BootstrapMeanChart';
 import { RawDistributionChart } from './RawDistributionChart';
