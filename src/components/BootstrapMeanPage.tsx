@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { runBootstrapMean } from './bootstrapMeanSimulation';
 
 import { BootstrapMeanChart } from './BootstrapMeanChart';
-import { RawDistributionChart } from './BootstrapRawDistributionChart';
+import { BootstrapRawDistributionChart } from './BootstrapRawDistributionChart';
 
 export function BootstrapMeanPage() {
   const [sampleSize, setSampleSize] = useState(1000);
