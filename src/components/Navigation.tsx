@@ -17,6 +17,7 @@ export const pages = [
   { id: 'fwer', label: 'Family-Wise Error Rate', group: 'Advanced Experiment Techniques' },
   { id: 'winsorizing', label: 'Winsorizing', group: 'Advanced Experiment Techniques' },
   { id: 'normalisation', label: 'Normalisation', group: 'Advanced Experiment Techniques' },
+  { id: 'bootstrap', label: 'Bootstrapping', group: 'Advanced Experiment Techniques' },
   { id: 'glossary', label: 'Glossary', group: 'Other' },
   { id: 'feedback', label: 'Feedback & Enquiries', group: 'Other' },
 ];
