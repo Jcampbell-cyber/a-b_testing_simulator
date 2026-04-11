@@ -7,8 +7,8 @@ import { BootstrapMeanChart } from './BootstrapMeanChart';
 import { RawDistributionChart } from './BootstrapRawDistributionChart';
 
 export function BootstrapMeanPage() {
-  const [sampleSize, setSampleSize] = useState(80);
-  const [resamples, setResamples] = useState(600);
+  const [sampleSize, setSampleSize] = useState(1000);
+  const [resamples, setResamples] = useState(1000);
 
   const [results, setResults] = useState<any>(null);
   const [view, setView] = useState(0);
