@@ -72,6 +72,11 @@
     <priority>0.7</priority>
   </url>
   <url>
+    <loc>https://advancedab.tech/bootstrap</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://advancedab.tech/glossary</loc>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
