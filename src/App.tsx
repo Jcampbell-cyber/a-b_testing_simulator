@@ -17,7 +17,7 @@ import { EffectDetectionCalculator } from './components/EffectDetectionCalculato
 import { TestResultsCalculator } from './components/TestResultsCalculator';
 import { WinsorizingPage } from './components/WinsorizingPage';
 import { NormalisationPage } from './components/NormalisationPage';
-import { BootstrapPage } from './components/BootstrapPage';
+import { BootstrapMeanPage } from './components/BootstrapMeanPage';
 import { pages } from './components/Navigation';
 
 function App() {
