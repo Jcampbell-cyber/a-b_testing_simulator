@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { Link } from 'react-router-dom';
-import { runBootstrapMean } from './bootstrapMeanSimulation';
 
+import { runBootstrapMean } from './bootstrapMeanSimulation';
 import { BootstrapMeanChart } from './BootstrapMeanChart';
 import { BootstrapRawDistributionChart } from './BootstrapRawDistributionChart';
 
@@ -25,12 +25,12 @@ export function BootstrapMeanPage() {
     let i = 0;
 
     const interval = setInterval(() => {
-      i += 25;
+      i = Math.min(i + 25, res.bootstrapStats.length);
+
       setView(i);
 
       if (i >= res.bootstrapStats.length) {
         clearInterval(interval);
-        setView(res.bootstrapStats.length);
         setRunning(false);
       }
     }, 20);
@@ -55,9 +55,7 @@ export function BootstrapMeanPage() {
         {/* CONTROLS */}
         <div className="bg-gray-800 p-4 rounded mb-6 space-y-3">
 
-          <div className="text-sm text-gray-300">
-            Sample size
-          </div>
+          <div className="text-sm text-gray-300">Sample size</div>
           <input
             className="bg-gray-700 p-2 rounded w-full"
             type="number"
@@ -65,9 +63,7 @@ export function BootstrapMeanPage() {
             onChange={e => setSampleSize(Number(e.target.value))}
           />
 
-          <div className="text-sm text-gray-300">
-            Bootstrap resamples
-          </div>
+          <div className="text-sm text-gray-300">Bootstrap resamples</div>
           <input
             className="bg-gray-700 p-2 rounded w-full"
             type="number"
@@ -83,13 +79,20 @@ export function BootstrapMeanPage() {
           </button>
         </div>
 
-        {/* RAW DATA */}
-        {results && (
-          <RawDistributionChart data={results.raw} />
+        {/* SAFETY GUARD */}
+        {!results && (
+          <div className="text-gray-400 text-sm">
+            Run simulation to view results
+          </div>
         )}
 
-        {/* BOOTSTRAP DISTRIBUTION */}
-        {results && (
+        {/* RAW DATA */}
+        {results?.raw && (
+          <BootstrapRawDistributionChart data={results.raw} />
+        )}
+
+        {/* BOOTSTRAP MEAN DISTRIBUTION */}
+        {results?.bootstrapStats && (
           <BootstrapMeanChart
             stats={results.bootstrapStats.slice(0, view)}
             mean={results.pointEstimate}
@@ -116,23 +119,27 @@ export function BootstrapMeanPage() {
             <div>5. CI = 2.5th → 97.5th percentile</div>
           </div>
         </div>
-<div className="bg-gray-800 p-6 rounded mt-8 border border-gray-700">
-  <h2 className="text-xl font-semibold text-white mb-2">
-    Next step
-  </h2>
 
-  <p className="text-sm text-gray-300 mb-4">
-    Now that you understand how bootstrapping builds a distribution for a single metric,
-    let’s apply it to A/B testing.
-  </p>
+        {/* NEXT STEP */}
+        {results && (
+          <div className="bg-gray-800 p-6 rounded mt-8 border border-gray-700">
+            <h2 className="text-xl font-semibold mb-2">
+              Next step
+            </h2>
 
-  <Link
-    to="/bootstrap/ab"
-    className="inline-block bg-blue-500 hover:bg-blue-600 text-white px-5 py-2 rounded font-semibold transition-colors"
-  >
-    Go to A/B Bootstrap →
-  </Link>
-</div>
+            <p className="text-sm text-gray-300 mb-4">
+              Now apply bootstrapping to A/B tests to estimate lift (Δ between groups).
+            </p>
+
+            <Link
+              to="/bootstrap/ab"
+              className="inline-block bg-blue-500 hover:bg-blue-600 px-5 py-2 rounded font-semibold"
+            >
+              Go to A/B Bootstrap →
+            </Link>
+          </div>
+        )}
+
       </div>
     </div>
   );
