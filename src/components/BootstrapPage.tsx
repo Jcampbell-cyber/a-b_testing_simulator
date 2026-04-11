@@ -4,7 +4,7 @@ import { Helmet } from 'react-helmet-async';
 import {
   runBootstrapSimulation,
   type MetricType,
-} from '/bootstrapSimulation';
+} from './bootstrapSimulation';
 
 import { BootstrapChart } from './BootstrapChart';
 import { BootstrappingRawDataChart } from './BootstrappingRawDataChart';
