@@ -1,32 +1,49 @@
 import { useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 
-import { runBootstrapSimulation, type MetricType } from '../utils/bootstrapSimulation';
+import {
+  runBootstrapSimulation,
+  type MetricType,
+} from '../utils/bootstrapSimulation';
 
 import { BootstrapChart } from './BootstrapChart';
-import { RawDataChart } from './RawDataChart';
+import { BootstrappingRawDataChart } from './BootstrappingRawDataChart';
 
 export function BootstrapPage() {
-  const [sampleSize, setSampleSize] = useState(100);
+  const [sampleSize, setSampleSize] = useState(120);
   const [numResamples, setNumResamples] = useState(1000);
   const [metricType, setMetricType] = useState<MetricType>('mean');
 
   const [results, setResults] = useState<any>(null);
   const [isRunning, setIsRunning] = useState(false);
 
-  const handleRun = () => {
+  const runAnimated = async () => {
     setIsRunning(true);
 
-    setTimeout(() => {
-      const res = runBootstrapSimulation(
-        sampleSize,
-        numResamples,
-        metricType
+    const full = runBootstrapSimulation(
+      sampleSize,
+      numResamples,
+      metricType
+    );
+
+    const partial: number[] = [];
+    const step = Math.max(1, Math.floor(numResamples / 80));
+
+    for (let i = 0; i < full.bootstrapStats.length; i += step) {
+      partial.push(
+        ...full.bootstrapStats.slice(i, i + step)
       );
 
-      setResults(res);
-      setIsRunning(false);
-    }, 50);
+      setResults({
+        ...full,
+        bootstrapStats: [...partial],
+      });
+
+      await new Promise((r) => setTimeout(r, 15));
+    }
+
+    setResults(full);
+    setIsRunning(false);
   };
 
   return (
@@ -43,15 +60,17 @@ export function BootstrapPage() {
         </h1>
 
         <p className="text-gray-400 mb-6">
-          Visualise uncertainty using resampling instead of analytical assumptions.
+          See how uncertainty is built by resampling your data.
         </p>
 
         {/* Controls */}
         <div className="bg-gray-800 p-4 rounded mb-6 space-y-4">
 
-          {/* Metric type */}
           <div>
-            <label className="text-sm text-gray-300">Metric</label>
+            <label className="text-sm text-gray-300">
+              Metric
+            </label>
+
             <select
               className="block mt-1 bg-gray-700 p-2 rounded"
               value={metricType}
@@ -64,11 +83,11 @@ export function BootstrapPage() {
             </select>
           </div>
 
-          {/* Sample size */}
           <div>
             <label className="text-sm text-gray-300">
               Sample size
             </label>
+
             <input
               type="number"
               className="block mt-1 bg-gray-700 p-2 rounded"
@@ -79,11 +98,11 @@ export function BootstrapPage() {
             />
           </div>
 
-          {/* Resamples */}
           <div>
             <label className="text-sm text-gray-300">
-              Bootstrap resamples
+              Resamples
             </label>
+
             <input
               type="number"
               className="block mt-1 bg-gray-700 p-2 rounded"
@@ -95,34 +114,34 @@ export function BootstrapPage() {
           </div>
 
           <button
-            onClick={handleRun}
+            onClick={runAnimated}
             disabled={isRunning}
             className="bg-blue-500 px-4 py-2 rounded"
           >
-            {isRunning ? 'Running...' : 'Run'}
+            {isRunning ? 'Building distribution...' : 'Run bootstrap'}
           </button>
         </div>
 
-        {/* Raw data */}
+        {/* RAW DATA */}
         {results && (
           <div className="mb-6">
-            <RawDataChart data={results.rawData} />
+            <BootstrappingRawDataChart data={results.rawData} />
           </div>
         )}
 
-        {/* Bootstrap distribution */}
+        {/* BOOTSTRAP */}
         {results && (
           <div className="mb-6">
             <BootstrapChart
               bootstrapStats={results.bootstrapStats}
               pointEstimate={results.mean}
               bootstrapCI={results.ci}
-              analyticCI={[0, 0]} // optional placeholder
+              analyticCI={[0, 0]}
             />
           </div>
         )}
 
-        {/* Summary */}
+        {/* SUMMARY */}
         {results && (
           <div className="bg-gray-800 p-4 rounded mb-6">
             <h2 className="text-xl font-semibold mb-2">
@@ -130,11 +149,14 @@ export function BootstrapPage() {
             </h2>
 
             <div className="text-sm text-gray-300 space-y-1">
-              <div>Mean: {results.mean.toFixed(4)}</div>
-              <div>Std dev: {results.stdev.toFixed(4)}</div>
               <div>
-                Bootstrap CI:{' '}
-                {results.ci[0].toFixed(4)} →{' '}
+                Mean: {results.mean.toFixed(4)}
+              </div>
+              <div>
+                Std dev: {results.stdev.toFixed(4)}
+              </div>
+              <div>
+                CI: {results.ci[0].toFixed(4)} →{' '}
                 {results.ci[1].toFixed(4)}
               </div>
               <div className="text-gray-400">
@@ -144,32 +166,41 @@ export function BootstrapPage() {
           </div>
         )}
 
-        {/* Explanation */}
-        <div className="bg-gray-800 p-6 rounded space-y-3">
-          <h2 className="text-xl font-semibold">
+        {/* HOW IT WORKS */}
+        <div className="bg-gray-800 p-6 rounded mb-6">
+          <h2 className="text-xl font-semibold mb-3">
             How bootstrap works
           </h2>
 
-          <div className="text-gray-300 text-sm space-y-1">
-            <div>1. Take original sample</div>
-            <div>2. Resample WITH replacement</div>
+          <div className="text-sm text-gray-300 space-y-1">
+            <div>1. Start with observed data</div>
+            <div>2. Sample WITH replacement</div>
             <div>3. Compute metric each time</div>
             <div>4. Repeat many times</div>
-            <div>5. Build distribution of metrics</div>
+            <div>5. Build distribution of estimates</div>
             <div>6. Take 2.5% and 97.5% as CI</div>
           </div>
         </div>
 
-        {/* When to use */}
-        <div className="bg-gray-800 p-6 rounded mt-6">
-          <h2 className="text-xl font-semibold mb-2">
+        {/* WHEN TO USE */}
+        <div className="bg-gray-800 p-6 rounded">
+          <h2 className="text-xl font-semibold mb-3">
             When to use bootstrap
           </h2>
 
-          <div className="text-gray-300 text-sm space-y-1">
-            <div>• Ratio metrics (skewed, noisy denominators)</div>
-            <div>• Heavy-tailed data</div>
-            <div>• Metrics without clean analytic SE</div>
+          <div className="text-sm text-gray-300 space-y-1">
+            <div>
+              • Ratio metrics (skewed / zero-heavy data)
+            </div>
+            <div>
+              • Heavy-tailed distributions
+            </div>
+            <div>
+              • Metrics without clean analytical SE
+            </div>
+            <div>
+              • Distribution-shape metrics (e.g. Gini, TVD)
+            </div>
           </div>
         </div>
 
