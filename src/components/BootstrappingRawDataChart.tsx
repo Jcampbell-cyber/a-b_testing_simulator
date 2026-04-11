@@ -41,7 +41,7 @@ function createHistogram(data: number[], bins = 25) {
   return hist;
 }
 
-export function RawDataChart({ data }: Props) {
+export function BootstrappingRawDataChart({ data }: Props) {
   const hist = createHistogram(data);
 
   const mean =
