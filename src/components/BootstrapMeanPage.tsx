@@ -4,7 +4,7 @@ import { Helmet } from 'react-helmet-async';
 import { runBootstrapMean } from './bootstrapMeanSimulation';
 
 import { BootstrapMeanChart } from './BootstrapMeanChart';
-import { RawDistributionChart } from './RawDistributionChart';
+import { RawDistributionChart } from './BootstrapRawDistributionChart';
 
 export function BootstrapMeanPage() {
   const [sampleSize, setSampleSize] = useState(80);
