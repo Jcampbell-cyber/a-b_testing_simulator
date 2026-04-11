@@ -7,28 +7,35 @@ import { BootstrapChart } from './BootstrapChart';
 import { BootstrappingRawDataChart } from './BootstrappingRawDataChart';
 
 export function BootstrapPage() {
-  const [sampleSize, setSampleSize] = useState(100);
-  const [numResamples, setNumResamples] = useState(600);
+  const [sampleSize, setSampleSize] = useState(120);
+  const [numResamples, setNumResamples] = useState(800);
 
   const [results, setResults] = useState<any>(null);
+  const [viewIndex, setViewIndex] = useState(800);
   const [isRunning, setIsRunning] = useState(false);
 
-  const run = async () => {
+  const run = () => {
     setIsRunning(true);
 
-    const full = runBootstrapAB(sampleSize, numResamples, 0.6);
+    const res = runBootstrapAB(sampleSize, numResamples, 0.6);
 
-    for (let i = 1; i <= full.bootstrapStats.length; i++) {
-      setResults({
-        ...full,
-        bootstrapStats: full.bootstrapStats.slice(0, i),
-      });
+    setResults(res);
+    setViewIndex(0);
 
-      await new Promise(r => setTimeout(r, 5));
-    }
+    // FAST animation (no rerender spam)
+    let i = 0;
 
-    setResults(full);
-    setIsRunning(false);
+    const interval = setInterval(() => {
+      i += 30; // FAST STEP
+
+      setViewIndex(i);
+
+      if (i >= res.bootstrapStats.length) {
+        clearInterval(interval);
+        setViewIndex(res.bootstrapStats.length);
+        setIsRunning(false);
+      }
+    }, 20);
   };
 
   return (
@@ -39,67 +46,98 @@ export function BootstrapPage() {
 
       <div className="container mx-auto px-4 py-8">
 
-        <h1 className="text-4xl font-bold mb-4">
+        {/* HEADER */}
+        <h1 className="text-4xl font-bold mb-2">
           A/B Bootstrap Simulator
         </h1>
 
-        {/* controls */}
+        <p className="text-gray-400 mb-6">
+          See how uncertainty in A/B tests is built from resampling.
+        </p>
+
+        {/* CONTROLS (RESTORED PROPERLY) */}
         <div className="bg-gray-800 p-4 rounded mb-6 space-y-3">
 
-          <input
-            type="number"
-            value={sampleSize}
-            onChange={e => setSampleSize(Number(e.target.value))}
-            className="bg-gray-700 p-2 rounded block"
-            placeholder="sample size"
-          />
+          <div>
+            <div className="text-sm text-gray-300">Sample size (per group)</div>
+            <input
+              type="number"
+              value={sampleSize}
+              onChange={e => setSampleSize(Number(e.target.value))}
+              className="bg-gray-700 p-2 rounded w-full mt-1"
+            />
+          </div>
 
-          <input
-            type="number"
-            value={numResamples}
-            onChange={e => setNumResamples(Number(e.target.value))}
-            className="bg-gray-700 p-2 rounded block"
-            placeholder="resamples"
-          />
+          <div>
+            <div className="text-sm text-gray-300">Bootstrap resamples</div>
+            <input
+              type="number"
+              value={numResamples}
+              onChange={e => setNumResamples(Number(e.target.value))}
+              className="bg-gray-700 p-2 rounded w-full mt-1"
+            />
+          </div>
 
           <button
             onClick={run}
-            disabled={isRunning}
             className="bg-blue-500 px-4 py-2 rounded"
           >
-            {isRunning ? 'Running...' : 'Run'}
+            {isRunning ? 'Building distribution...' : 'Run simulation'}
           </button>
         </div>
 
         {/* RAW DATA */}
-        {results?.rawA && results?.rawB && (
+        {results && (
           <BootstrappingRawDataChart
             dataA={results.rawA}
             dataB={results.rawB}
           />
         )}
 
-        {/* BOOTSTRAP */}
-        {results?.bootstrapStats && (
+        {/* BOOTSTRAP (ANIMATED VIEW) */}
+        {results && (
           <BootstrapChart
-            bootstrapStats={results.bootstrapStats}
-            pointEstimate={results.pointEstimate ?? 0}
-            bootstrapCI={results.ci ?? [0, 0]}
+            bootstrapStats={results.bootstrapStats.slice(0, viewIndex)}
+            pointEstimate={results.pointEstimate}
+            bootstrapCI={results.ci}
             analyticCI={[0, 0]}
           />
         )}
 
+        {/* PROGRESS TEXT */}
+        {results && (
+          <div className="text-sm text-gray-400 mt-2">
+            Resamples: {viewIndex} / {results.bootstrapStats.length}
+          </div>
+        )}
+
         {/* SUMMARY */}
         {results && (
-          <div className="bg-gray-800 p-4 rounded mt-6 text-sm">
-            <div>A mean: {results.meanA?.toFixed(3)}</div>
-            <div>B mean: {results.meanB?.toFixed(3)}</div>
-            <div>Δ: {results.pointEstimate?.toFixed(3)}</div>
+          <div className="bg-gray-800 p-4 rounded mt-6">
+            <div>Mean A: {results.meanA.toFixed(3)}</div>
+            <div>Mean B: {results.meanB.toFixed(3)}</div>
+            <div>Δ: {results.pointEstimate.toFixed(3)}</div>
             <div>
-              CI: {results.ci?.[0]?.toFixed(3)} → {results.ci?.[1]?.toFixed(3)}
+              CI: {results.ci[0].toFixed(3)} → {results.ci[1].toFixed(3)}
             </div>
           </div>
         )}
+
+        {/* EXPLANATION (RESTORED) */}
+        <div className="bg-gray-800 p-6 rounded mt-6">
+          <h2 className="text-xl mb-2">
+            What’s happening
+          </h2>
+
+          <div className="text-sm text-gray-300 space-y-1">
+            <div>1. We observe A and B groups</div>
+            <div>2. We resample users with replacement</div>
+            <div>3. We compute mean(A) - mean(B)</div>
+            <div>4. Repeat many times</div>
+            <div>5. Build distribution of differences</div>
+            <div>6. Take 2.5% and 97.5% as CI</div>
+          </div>
+        </div>
 
       </div>
     </div>
