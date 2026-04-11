@@ -1,7 +1,7 @@
 import {
   ResponsiveContainer,
-  BarChart,
-  Bar,
+  LineChart,
+  Line,
   XAxis,
   YAxis,
   CartesianGrid,
@@ -11,146 +11,89 @@ import {
 
 type Props = {
   bootstrapStats: number[];
-  analyticCI: [number, number];
-  bootstrapCI: [number, number];
   pointEstimate: number;
+  bootstrapCI: [number, number];
+  analyticCI: [number, number];
 };
 
-function createHistogram(data: number[], bins = 25) {
-  if (!data || data.length === 0) return [];
+function hist(data: number[], bins = 25) {
+  if (!data?.length) return [];
 
   const min = Math.min(...data);
   const max = Math.max(...data);
 
-  // handle edge case: all values identical
   if (min === max) {
-    return [
-      {
-        x: min,
-        count: data.length,
-      },
-    ];
+    return [{ x: min, y: data.length }];
   }
 
   const width = (max - min) / bins;
 
-  const hist = Array.from({ length: bins }, (_, i) => ({
+  const arr = Array.from({ length: bins }, (_, i) => ({
     x: min + i * width,
-    count: 0,
+    y: 0,
   }));
 
-  data.forEach((v) => {
-    if (!Number.isFinite(v)) return;
-
+  data.forEach(v => {
     const idx = Math.min(
       Math.floor((v - min) / width),
       bins - 1
     );
 
-    if (hist[idx]) {
-      hist[idx].count += 1;
-    }
+    if (arr[idx]) arr[idx].y += 1;
   });
 
-  return hist;
+  return arr;
 }
 
 export function BootstrapChart({
   bootstrapStats,
-  analyticCI,
-  bootstrapCI,
   pointEstimate,
+  bootstrapCI,
+  analyticCI,
 }: Props) {
-  // 🚨 guard: prevents full crash
-  if (!bootstrapStats || bootstrapStats.length === 0) {
-    return (
-      <div className="bg-gray-800 rounded-lg border border-gray-700 p-6 text-white">
-        No bootstrap data yet — click Run
-      </div>
-    );
-  }
+  if (!bootstrapStats?.length) return null;
 
-  const data = createHistogram(bootstrapStats);
-
-  const safe = (v: number) =>
-    Number.isFinite(v) ? v : null;
+  const data = hist(bootstrapStats);
 
   return (
-    <div className="bg-gray-800 rounded-lg border border-gray-700 p-6">
-      <h2 className="text-xl font-semibold text-white mb-2">
-        Bootstrap Distribution
+    <div className="bg-gray-800 p-6 rounded">
+      <h2 className="text-xl mb-2">
+        Bootstrap Distribution (Δ A - B)
       </h2>
 
-      <p className="text-sm text-gray-400 mb-4">
-        Each bar shows how often a resampled statistic appears
-      </p>
-
       <ResponsiveContainer width="100%" height={350}>
-        <BarChart data={data}>
-          <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
+        <LineChart data={data}>
+          <CartesianGrid stroke="#374151" />
 
-          <XAxis
-            dataKey="x"
-            stroke="#9ca3af"
-            tickFormatter={(v) =>
-              Number.isFinite(v) ? v.toFixed(2) : ''
-            }
-          />
-
+          <XAxis dataKey="x" stroke="#9ca3af" />
           <YAxis stroke="#9ca3af" />
 
-          <Tooltip
-            contentStyle={{
-              backgroundColor: '#111827',
-              border: '1px solid #374151',
-              color: '#fff',
-            }}
+          <Tooltip />
+
+          <Line dataKey="y" stroke="#60a5fa" dot={false} />
+
+          <ReferenceLine
+            x={pointEstimate}
+            stroke="#f59e0b"
           />
 
-          <Bar dataKey="count" fill="#60a5fa" />
+          <ReferenceLine
+            x={bootstrapCI?.[0]}
+            stroke="#34d399"
+            strokeDasharray="3 3"
+          />
 
-          {/* Point estimate */}
-          {safe(pointEstimate) !== null && (
-            <ReferenceLine
-              x={pointEstimate}
-              stroke="#f59e0b"
-              strokeWidth={2}
-            />
-          )}
-
-          {/* Bootstrap CI */}
-          {bootstrapCI && (
-            <>
-              <ReferenceLine
-                x={safe(bootstrapCI[0])}
-                stroke="#10b981"
-                strokeDasharray="3 3"
-              />
-              <ReferenceLine
-                x={safe(bootstrapCI[1])}
-                stroke="#10b981"
-                strokeDasharray="3 3"
-              />
-            </>
-          )}
-
-          {/* Analytic CI */}
-          {analyticCI && (
-            <>
-              <ReferenceLine
-                x={safe(analyticCI[0])}
-                stroke="#ef4444"
-                strokeDasharray="2 2"
-              />
-              <ReferenceLine
-                x={safe(analyticCI[1])}
-                stroke="#ef4444"
-                strokeDasharray="2 2"
-              />
-            </>
-          )}
-        </BarChart>
+          <ReferenceLine
+            x={bootstrapCI?.[1]}
+            stroke="#34d399"
+            strokeDasharray="3 3"
+          />
+        </LineChart>
       </ResponsiveContainer>
+
+      <div className="text-sm text-gray-400 mt-2">
+        CI = 2.5th → 97.5th percentile
+      </div>
     </div>
   );
 }
