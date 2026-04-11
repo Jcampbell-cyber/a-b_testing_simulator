@@ -45,8 +45,7 @@ export function LandingPage() {
     { title: "Family‑Wise Error Rate", desc: "Simulate post‑hoc corrections like Bonferroni, Holm, Tukey, and Dunnett to explore their impact on false‑positive and false‑negative rates.", path: "/fwer" },
     { title: "Winsorizing", desc: "Explore how winsorizing handles outliers by capping extreme values to reduce variance and improve statistical precision.", path: "/winsorizing" },
     { title: "Normalisation", desc: "Learn how to normalise metrics across segments with different baselines to ensure comparable aggregation in experiments.", path: "/normalisation" },
-    { title: "Bootstrapping", desc: "Learn how to estimate uncertainty directly from your data using resampling, without relying on distributional assumptions.", path: "/bootstrap" 
-}
+    { title: "Bootstrapping", desc: "Learn how to estimate uncertainty directly from your data using resampling, without relying on distributional assumptions.", path: "/bootstrap" }
   ];
 
   const calculatorCards = [
