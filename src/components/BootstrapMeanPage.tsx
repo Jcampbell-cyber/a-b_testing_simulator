@@ -116,7 +116,23 @@ export function BootstrapMeanPage() {
             <div>5. CI = 2.5th → 97.5th percentile</div>
           </div>
         </div>
+<div className="bg-gray-800 p-6 rounded mt-8 border border-gray-700">
+  <h2 className="text-xl font-semibold text-white mb-2">
+    Next step
+  </h2>
 
+  <p className="text-sm text-gray-300 mb-4">
+    Now that you understand how bootstrapping builds a distribution for a single metric,
+    let’s apply it to A/B testing.
+  </p>
+
+  <Link
+    to="/bootstrap/ab"
+    className="inline-block bg-blue-500 hover:bg-blue-600 text-white px-5 py-2 rounded font-semibold transition-colors"
+  >
+    Go to A/B Bootstrap →
+  </Link>
+</div>
       </div>
     </div>
   );
