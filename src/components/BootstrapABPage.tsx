@@ -51,7 +51,7 @@ export function BootstrapABPage() {
         </h1>
 
         <p className="text-gray-400 mb-6">
-          Estimate uncertainty in experiment lift using resampling.
+          Estimate uncertainty in the difference between flights using resampling.
         </p>
 
         {/* CONTROLS */}
@@ -134,6 +134,7 @@ export function BootstrapABPage() {
             <div>4. Repeat many times</div>
             <div>5. We build distribution of Δ</div>
             <div>6. CI = 2.5th → 97.5th percentile</div>
+            <div>7. If our CI does not straddle the zero line - this is statistically significant</div>
           </div>
         </div>
 
