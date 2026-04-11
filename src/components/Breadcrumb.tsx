@@ -15,9 +15,10 @@ const pageLabels: Record<string, string> = {
   metricvariabilitydetectability: 'Metric Variability & Detectability',
   cuped: 'CUPED Variance Reduction',
   winsorizing: 'Winsorizing Simulator',
+  normalisation: 'Normalisation Simulator',
+  bootstrap: 'Bootstrapping Simulator',
   feedback: 'Feedback & Enquiries',
   glossary: 'Glossary',
-  normalisation: 'Normalisation Simulator',
 };
 
 export function Breadcrumb({ currentPage }: BreadcrumbProps) {
