@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { BootstrapControls } from './BootstrapControls';
-import { runBootstrapSimulation, type BootstrapResults } from '../utils/bootstrapSimulation';
+import { runBootstrapSimulation } from './bootstrapSimulation';
 import { BootstrapChart } from './BootstrapChart';
 import { BootstrapComparison } from './BootstrapComparison';
 
