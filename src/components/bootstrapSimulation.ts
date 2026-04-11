@@ -1,21 +1,10 @@
-export type MetricType = 'mean' | 'ratio';
+export type MetricType = 'mean';
 
-export type User = {
-  sessions: number;
-  revenue: number;
+type User = {
+  value: number;
 };
 
-export type BootstrapResult = {
-  rawData: number[];
-  bootstrapStats: number[];
-  mean: number;
-  stdev: number;
-  ci: [number, number];
-};
-
-// ------------------------
-// Helpers
-// ------------------------
+type Group = User[];
 
 function mean(arr: number[]) {
   return arr.reduce((a, b) => a + b, 0) / arr.length;
@@ -32,93 +21,53 @@ function percentile(arr: number[], p: number) {
   return sorted[idx];
 }
 
-// ------------------------
-// Synthetic data generator
-// ------------------------
-
-function generateUsers(n: number): User[] {
-  return Array.from({ length: n }, () => {
-    // lots of inactive users
-    const inactive = Math.random() < 0.3;
-
-    if (inactive) {
-      return { sessions: 0, revenue: 0 };
-    }
-
-    const sessions =
-      Math.random() < 0.7 ? 1 : Math.floor(Math.random() * 10 + 1);
-
-    const revenue = Math.random() < 0.08 ? Math.random() * 100 : 0;
-
-    return { sessions, revenue };
-  });
+// synthetic normal-ish data
+function generateGroup(n: number, shift = 0): Group {
+  return Array.from({ length: n }, () => ({
+    value: Math.random() * 10 + shift + Math.random() * 2,
+  }));
 }
 
-// ------------------------
-// Metric computation
-// ------------------------
+// bootstrap ONE difference
+function bootstrapDiff(A: Group, B: Group): number {
+  const resample = (g: Group) =>
+    Array.from({ length: g.length }, () =>
+      g[Math.floor(Math.random() * g.length)]
+    );
 
-function computeMean(users: User[]) {
-  const values = users.map(u => u.revenue);
-  return mean(values);
+  const Aboot = resample(A).map(x => x.value);
+  const Bboot = resample(B).map(x => x.value);
+
+  return mean(Aboot) - mean(Bboot);
 }
 
-function computeRatio(users: User[]) {
-  const totalRevenue = users.reduce((s, u) => s + u.revenue, 0);
-  const totalSessions = users.reduce((s, u) => s + u.sessions, 0);
-
-  return totalSessions === 0 ? 0 : totalRevenue / totalSessions;
-}
-
-// ------------------------
-// Bootstrap core
-// ------------------------
-
-function bootstrap(
-  users: User[],
-  metricType: MetricType
-): number {
-  const resample = Array.from(
-    { length: users.length },
-    () => users[Math.floor(Math.random() * users.length)]
-  );
-
-  return metricType === 'mean'
-    ? computeMean(resample)
-    : computeRatio(resample);
-}
-
-// ------------------------
-// Main function
-// ------------------------
-
-export function runBootstrapSimulation(
+export function runBootstrapAB(
   sampleSize: number,
   numResamples: number,
-  metricType: MetricType
-): BootstrapResult {
-  const users = generateUsers(sampleSize);
+  uplift = 0.5
+) {
+  const A = generateGroup(sampleSize, 0);
+  const B = generateGroup(sampleSize, uplift);
 
-  const rawData =
-    metricType === 'mean'
-      ? users.map(u => u.revenue)
-      : users.map(u => (u.sessions > 0 ? u.revenue / u.sessions : 0));
+  const rawA = A.map(x => x.value);
+  const rawB = B.map(x => x.value);
 
-  const pointEstimate =
-    metricType === 'mean'
-      ? computeMean(users)
-      : computeRatio(users);
+  const pointEstimate = mean(rawA) - mean(rawB);
 
   const bootstrapStats = Array.from(
     { length: numResamples },
-    () => bootstrap(users, metricType)
+    () => bootstrapDiff(A, B)
   );
 
   return {
-    rawData,
+    rawA,
+    rawB,
+    meanA: mean(rawA),
+    meanB: mean(rawB),
+    stdevA: stdev(rawA),
+    stdevB: stdev(rawB),
+    pointEstimate,
     bootstrapStats,
-    mean: pointEstimate,
-    stdev: stdev(bootstrapStats),
     ci: [
       percentile(bootstrapStats, 0.025),
       percentile(bootstrapStats, 0.975),
