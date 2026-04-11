@@ -39,7 +39,7 @@ function App() {
         <Route path="/fwer" element={<FWERPage />} /> 
         <Route path="/winsorizing" element={<WinsorizingPage />} />
         <Route path="/normalisation" element={<NormalisationPage />} />
-        <Route path="/Bootstrap" element={<BootstrapPage/>} />
+        <Route path="/Bootstrap" element={<BootstrapMeanPage/>} />
         <Route path="/feedback" element={<FeedbackForm />} />
         <Route path="/glossary" element={<GlossaryPage />} />
         <Route path="/sample-size-calc" element={<SampleSizeCalculator />} />
