@@ -8,7 +8,7 @@ import {
   Tooltip,
 } from 'recharts';
 
-export function RawDistributionChart({ data }: { data: number[] }) {
+export function BootstrapRawDistributionChart({ data }: { data: number[] }) {
   if (!data?.length) return null;
 
   const min = Math.min(...data);
