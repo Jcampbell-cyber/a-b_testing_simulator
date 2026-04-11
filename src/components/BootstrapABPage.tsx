@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 
-import { runBootstrapAB } from '../utils/bootstrapABSimulation';
+import { Link } from 'react-router-dom';
+import { runBootstrapAB } from './bootstrapABSimulation';
 
 import { BootstrapABChart } from './BootstrapABChart';
 import { BootstrapRawDistributionChart } from './BootstrapRawDistributionChart';
