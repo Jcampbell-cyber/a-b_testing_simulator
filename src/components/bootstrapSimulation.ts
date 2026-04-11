@@ -1,100 +1,127 @@
-export type BootstrapResults = {
-  sample: number[];
+export type MetricType = 'mean' | 'ratio';
+
+export type User = {
+  sessions: number;
+  revenue: number;
+};
+
+export type BootstrapResult = {
+  rawData: number[];
   bootstrapStats: number[];
-  analyticCI: [number, number];
-  bootstrapCI: [number, number];
-  pointEstimate: number;
+  mean: number;
+  stdev: number;
+  ci: [number, number];
 };
 
-type Params = {
-  distribution: 'normal' | 'skewed' | 'bimodal';
-  sampleSize: number;
-  numResamples: number;
-  metric: 'mean' | 'median';
-};
+// ------------------------
+// Helpers
+// ------------------------
 
-// --- helpers ---
-
-function randn() {
-  return Math.sqrt(-2 * Math.log(Math.random())) *
-         Math.cos(2 * Math.PI * Math.random());
+function mean(arr: number[]) {
+  return arr.reduce((a, b) => a + b, 0) / arr.length;
 }
 
-function generateSample(dist: Params['distribution'], n: number): number[] {
-  if (dist === 'normal') {
-    return Array.from({ length: n }, () => randn() * 1 + 0);
-  }
-
-  if (dist === 'skewed') {
-    return Array.from({ length: n }, () => Math.exp(randn()));
-  }
-
-  // bimodal
-  return Array.from({ length: n }, () =>
-    Math.random() < 0.5 ? randn() - 2 : randn() + 2
-  );
-}
-
-function computeStat(data: number[], metric: Params['metric']) {
-  if (metric === 'mean') {
-    return data.reduce((a, b) => a + b, 0) / data.length;
-  }
-
-  const sorted = [...data].sort((a, b) => a - b);
-  return sorted[Math.floor(sorted.length / 2)];
-}
-
-function bootstrapSample(data: number[]) {
-  return Array.from({ length: data.length }, () =>
-    data[Math.floor(Math.random() * data.length)]
-  );
+function stdev(arr: number[]) {
+  const m = mean(arr);
+  return Math.sqrt(mean(arr.map(x => (x - m) ** 2)));
 }
 
 function percentile(arr: number[], p: number) {
   const sorted = [...arr].sort((a, b) => a - b);
-  const idx = Math.floor(p * sorted.length);
+  const idx = Math.floor(p * (sorted.length - 1));
   return sorted[idx];
 }
 
-// --- main ---
+// ------------------------
+// Synthetic data generator
+// ------------------------
 
-export function runBootstrapSimulation(params: Params): BootstrapResults {
-  const { distribution, sampleSize, numResamples, metric } = params;
+function generateUsers(n: number): User[] {
+  return Array.from({ length: n }, () => {
+    // lots of inactive users
+    const inactive = Math.random() < 0.3;
 
-  const sample = generateSample(distribution, sampleSize);
-  const pointEstimate = computeStat(sample, metric);
+    if (inactive) {
+      return { sessions: 0, revenue: 0 };
+    }
 
-  const bootstrapStats: number[] = [];
+    const sessions =
+      Math.random() < 0.7 ? 1 : Math.floor(Math.random() * 10 + 1);
 
-  for (let i = 0; i < numResamples; i++) {
-    const resample = bootstrapSample(sample);
-    bootstrapStats.push(computeStat(resample, metric));
-  }
+    const revenue = Math.random() < 0.08 ? Math.random() * 100 : 0;
 
-  // bootstrap CI
-  const lower = percentile(bootstrapStats, 0.025);
-  const upper = percentile(bootstrapStats, 0.975);
+    return { sessions, revenue };
+  });
+}
 
-  // analytic CI (mean only really valid)
-  let analyticCI: [number, number] = [NaN, NaN];
+// ------------------------
+// Metric computation
+// ------------------------
 
-  if (metric === 'mean') {
-    const mean = pointEstimate;
-    const variance =
-      sample.reduce((sum, x) => sum + (x - mean) ** 2, 0) /
-      (sample.length - 1);
+function computeMean(users: User[]) {
+  const values = users.map(u => u.revenue);
+  return mean(values);
+}
 
-    const se = Math.sqrt(variance / sample.length);
-    const margin = 1.96 * se;
+function computeRatio(users: User[]) {
+  const totalRevenue = users.reduce((s, u) => s + u.revenue, 0);
+  const totalSessions = users.reduce((s, u) => s + u.sessions, 0);
 
-    analyticCI = [mean - margin, mean + margin];
-  }
+  return totalSessions === 0 ? 0 : totalRevenue / totalSessions;
+}
+
+// ------------------------
+// Bootstrap core
+// ------------------------
+
+function bootstrap(
+  users: User[],
+  metricType: MetricType
+): number {
+  const resample = Array.from(
+    { length: users.length },
+    () => users[Math.floor(Math.random() * users.length)]
+  );
+
+  return metricType === 'mean'
+    ? computeMean(resample)
+    : computeRatio(resample);
+}
+
+// ------------------------
+// Main function
+// ------------------------
+
+export function runBootstrapSimulation(
+  sampleSize: number,
+  numResamples: number,
+  metricType: MetricType
+): BootstrapResult {
+  const users = generateUsers(sampleSize);
+
+  const rawData =
+    metricType === 'mean'
+      ? users.map(u => u.revenue)
+      : users.map(u => (u.sessions > 0 ? u.revenue / u.sessions : 0));
+
+  const pointEstimate =
+    metricType === 'mean'
+      ? computeMean(users)
+      : computeRatio(users);
+
+  const bootstrapStats = Array.from(
+    { length: numResamples },
+    () => bootstrap(users, metricType)
+  );
 
   return {
-    sample,
+    rawData,
     bootstrapStats,
-    analyticCI,
-    bootstrapCI: [lower, upper],
-    pointEstimate,
+    mean: pointEstimate,
+    stdev: stdev(bootstrapStats),
+    ci: [
+      percentile(bootstrapStats, 0.025),
+      percentile(bootstrapStats, 0.975),
+    ],
   };
 }
