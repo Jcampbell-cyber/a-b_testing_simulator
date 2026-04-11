@@ -17,6 +17,7 @@ import { EffectDetectionCalculator } from './components/EffectDetectionCalculato
 import { TestResultsCalculator } from './components/TestResultsCalculator';
 import { WinsorizingPage } from './components/WinsorizingPage';
 import { NormalisationPage } from './components/NormalisationPage';
+import { BootstrapABPage } from './components/BootstrapABPage';
 import { BootstrapMeanPage } from './components/BootstrapMeanPage';
 import { pages } from './components/Navigation';
 
@@ -39,7 +40,8 @@ function App() {
         <Route path="/fwer" element={<FWERPage />} /> 
         <Route path="/winsorizing" element={<WinsorizingPage />} />
         <Route path="/normalisation" element={<NormalisationPage />} />
-        <Route path="/Bootstrap" element={<BootstrapMeanPage/>} />
+        <Route path="/bootstrap" element={<BootstrapMeanPage />} />
+        <Route path="/bootstrap/ab" element={<BootstrapABPage />} />    
         <Route path="/feedback" element={<FeedbackForm />} />
         <Route path="/glossary" element={<GlossaryPage />} />
         <Route path="/sample-size-calc" element={<SampleSizeCalculator />} />
