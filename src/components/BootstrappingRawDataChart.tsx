@@ -6,6 +6,7 @@ import {
   YAxis,
   CartesianGrid,
   Tooltip,
+  Legend,
 } from 'recharts';
 
 type Props = {
@@ -13,61 +14,62 @@ type Props = {
   dataB: number[];
 };
 
-function hist(data: number[], bins = 20) {
-  if (!data?.length) return [];
-
+function histogram(data: number[], bins = 20) {
   const min = Math.min(...data);
   const max = Math.max(...data);
 
-  if (min === max) {
-    return [{ x: min, a: data.length, b: 0 }];
-  }
-
   const width = (max - min) / bins;
 
-  const arr = Array.from({ length: bins }, (_, i) => ({
+  const hist = Array.from({ length: bins }, (_, i) => ({
     x: min + i * width,
     a: 0,
     b: 0,
   }));
 
-  return arr;
+  return hist;
+}
+
+function fill(hist: any[], data: number[], key: 'a' | 'b') {
+  const min = Math.min(...data);
+  const max = Math.max(...data);
+  const width = (max - min) / 20;
+
+  data.forEach(v => {
+    const idx = Math.min(
+      Math.floor((v - min) / width),
+      hist.length - 1
+    );
+
+    hist[idx][key] += 1;
+  });
+
+  return hist;
 }
 
 export function BootstrappingRawDataChart({ dataA, dataB }: Props) {
   if (!dataA?.length || !dataB?.length) return null;
 
-  const A = hist(dataA);
-  const B = hist(dataB);
+  let base = histogram(dataA);
+
+  base = fill(base, dataA, 'a');
+  base = fill(base, dataB, 'b');
 
   return (
     <div className="bg-gray-800 p-6 rounded mb-6">
-      <h2 className="text-xl mb-2">Raw Data (A vs B)</h2>
+      <h2 className="text-xl mb-3">Raw Data (A vs B)</h2>
 
       <ResponsiveContainer width="100%" height={300}>
-        <BarChart data={A}>
+        <BarChart data={base}>
           <CartesianGrid stroke="#374151" />
-
-          <XAxis
-            dataKey="x"
-            stroke="#9ca3af"
-            tickFormatter={(v) =>
-              Number.isFinite(v) ? v.toFixed(1) : ''
-            }
-          />
-
+          <XAxis dataKey="x" stroke="#9ca3af" />
           <YAxis stroke="#9ca3af" />
-
           <Tooltip />
+          <Legend />
 
           <Bar dataKey="a" fill="#60a5fa" />
           <Bar dataKey="b" fill="#34d399" />
         </BarChart>
       </ResponsiveContainer>
-
-      <div className="text-sm text-gray-400 mt-2">
-        Blue = A, Green = B
-      </div>
     </div>
   );
 }
