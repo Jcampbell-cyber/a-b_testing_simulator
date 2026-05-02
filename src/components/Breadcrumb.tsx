@@ -7,18 +7,23 @@ interface BreadcrumbProps {
 
 const pageLabels: Record<string, string> = {
   landing: 'Home',
+  'sample-size-calc': 'Sample Size Calculator',
+  'test-duration-calc': 'Test Duration Calculator',
+  'effect-detection-calc': 'Effect Detection Calculator',
+  'test-results-calc': 'Test Results Calculator',
   nhst: 'Significance Testing',
   peeking: 'Peeking Simulator',
   guardrails: 'Guardrails Simulator',
-  fwer: 'Family-Wise Error Rate',
   imbalanced: 'Imbalanced Flights',
-  metricvariabilitydetectability: 'Metric Variability & Detectability',
+  'metric-variability-detectability': 'Metric Variability & Detectability',
   cuped: 'CUPED Variance Reduction',
+  fwer: 'Family-Wise Error Rate',
   winsorizing: 'Winsorizing Simulator',
   normalisation: 'Normalisation Simulator',
   bootstrap: 'Bootstrapping Simulator',
-  feedback: 'Feedback & Enquiries',
+  'bootstrap/ab': 'Bootstrap A/B Testing',
   glossary: 'Glossary',
+  feedback: 'Feedback & Enquiries',
 };
 
 export function Breadcrumb({ currentPage }: BreadcrumbProps) {
