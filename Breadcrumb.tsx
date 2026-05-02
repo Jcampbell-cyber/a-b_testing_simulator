@@ -1,0 +1,1 @@
+const pageLabels = {\n    "home": "Home",\n    "calculator-1": "Calculator One",\n    "calculator-2": "Calculator Two",\n    "calculator-3": "Calculator Three",\n    "metric-variability-detectability": "Metric Variability Detectability",\n    // Add more pages if they exist\n};\n\nexport default pageLabels;
