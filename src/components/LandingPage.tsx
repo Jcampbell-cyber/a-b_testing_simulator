@@ -73,6 +73,15 @@ function ProcessStep({
 export function LandingPage() {
   const variant = useFeatureFlagVariantKey('new-design-test');
 
+  // `variant` is undefined until the flag request resolves — this is the
+  // common case for first-time visitors, who have nothing cached yet.
+  // Without this gate, every one of those visitors falls through to the
+  // control `return` below (since undefined !== 'test'), which is almost
+  // certainly why "everyone" was landing on control.
+  if (variant === undefined) {
+    return null;
+  }
+
   const experimentBestPracticeCards = [
     { title: "Significance Testing", desc: "Visualize the relationship between statistical power, effect size, sample size, and alpha level in hypothesis testing.", path: "/nhst" },
     { title: "Peeking Checks", desc: "Understand how frequently checking test results inflates false positive rates based on p-values.", path: "/peeking" },
