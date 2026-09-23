@@ -4,6 +4,7 @@ import { Seo } from '../components/site/Seo';
 import { Container } from '../components/site/ui';
 import { cx } from '../lib/cx';
 import { lessons } from '../content/lessons';
+import { lessonIllustrations } from '../content/lessonIllustrations';
 import { CONTACT_PATH } from '../site';
 import { trackCtaClick, useCta } from '../lib/analytics';
 
@@ -28,20 +29,22 @@ export default function LessonsPage() {
             Real lessons from real experiments. Each one is a reason not to trust your gut alone.
           </p>
           <nav aria-label="Lessons" className="mt-4 flex flex-wrap gap-3">
-            {lessons.map((l, i) => (
+            {lessons.map(l => (
               <a
                 key={l.id}
                 href={`#${l.id}`}
                 className="rounded-full border border-gray-700 px-4 py-2 text-[15px] font-semibold text-gray-300 no-underline hover:border-blue-600 hover:text-white"
               >
-                Lesson {i + 1}
+                {l.title}
               </a>
             ))}
           </nav>
         </Container>
       </section>
 
-      {lessons.map((lesson, i) => (
+      {lessons.map((lesson, i) => {
+        const Illustration = lessonIllustrations[lesson.id];
+        return (
         <article
           key={lesson.id}
           id={lesson.id}
@@ -49,11 +52,13 @@ export default function LessonsPage() {
           className={cx('py-16 sm:py-20 lg:py-24', i % 2 === 0 ? 'border-y border-gray-700 bg-gray-800' : 'bg-gray-900')}
         >
           <Container className="flex flex-col gap-6 lg:flex-row lg:gap-[72px]">
-            <div className="flex flex-col gap-4 lg:w-[380px] lg:flex-none">
-              <div className="text-[13px] font-bold uppercase tracking-[0.08em] text-blue-400">Lesson {i + 1}</div>
+            <div className="flex flex-col gap-6 lg:w-[440px] lg:flex-none">
               <h2 id={`${lesson.id}-title`} className="m-0 text-[2rem] font-semibold leading-[1.12] sm:text-[2.5rem]">
                 {lesson.title}
               </h2>
+              <figure className={cx('m-0 rounded-2xl border border-gray-700 p-4 sm:p-5', i % 2 === 0 ? 'bg-gray-900' : 'bg-gray-800')}>
+                <Illustration />
+              </figure>
             </div>
             <div className="flex max-w-[680px] flex-1 flex-col gap-5">
               {lesson.paragraphs.map((p, j) => (
@@ -71,7 +76,8 @@ export default function LessonsPage() {
             </div>
           </Container>
         </article>
-      ))}
+        );
+      })}
 
       <div className="pt-16 lg:pt-24">
         <CtaBand title="What would your visitors choose?" location="lessons-final">

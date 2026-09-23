@@ -3,8 +3,9 @@ import { CtaButton } from '../components/site/CtaButton';
 import { CtaBand } from '../components/site/CtaBand';
 import { Seo } from '../components/site/Seo';
 import { Container, Eyebrow, H2, Lead, Section, SectionIntro } from '../components/site/ui';
-import { FREE_PLAN_TURNAROUND, PRICES } from '../site';
+import { FREE_PLAN_TURNAROUND } from '../site';
 import { lessons } from '../content/lessons';
+import { lessonIllustrations } from '../content/lessonIllustrations';
 
 function Dots() {
   return (
@@ -178,21 +179,31 @@ const rigour = [
   },
 ];
 
-const plans = [
+const workSteps = [
   {
-    price: 'Free',
-    title: 'Testing plan',
-    body: 'A quick scan of your site for revenue leaks, plus three ranked test ideas and an honest note on whether your traffic can measure each one.',
+    title: 'Get 3 free test ideas',
+    free: true,
+    body: 'A scan of your site for revenue leaks, three ranked ideas, and an honest note on whether your traffic can measure each.',
   },
   {
-    price: PRICES.oneOff,
-    title: 'One-off test',
-    body: 'One experiment, run end to end: opportunity finding, setup, weekly check-ins and a final report with clear recommendations. Testing software and screen recordings included.',
+    title: 'Talk it through',
+    body: 'A short call to agree your goals, the number that matters most, and which test to run first.',
   },
   {
-    price: `${PRICES.ongoing} / month`,
-    title: 'Ongoing testing',
-    body: 'A continuous testing programme, so every result feeds the next test. Best value. Cancel any time.',
+    title: 'Set up tracking and your dashboard',
+    body: 'Testing software and screen recordings installed, plus a live dashboard of your key numbers. Nothing for you to buy or set up.',
+  },
+  {
+    title: 'Find the opportunities',
+    body: 'We dig into your data and watch real visitors use your site to find where sales are being lost.',
+  },
+  {
+    title: 'Run the test properly',
+    body: 'Sample size and length planned before it starts, safety checks while it runs, and a weekly check-in.',
+  },
+  {
+    title: 'Get a clear answer, then repeat',
+    body: 'A plain-English verdict on whether the result is real, what it means for your revenue, and the next test to run.',
   },
 ];
 
@@ -252,7 +263,10 @@ export function HomePage() {
       <Section id="how" containerClassName="flex flex-col gap-10 lg:gap-12">
         <SectionIntro>
           <H2>How testing works</H2>
-          <Lead>It’s simpler than it sounds. You may hear it called A/B testing. It just means letting your real visitors decide.</Lead>
+          <Lead>
+            The idea is simple. Getting a trustworthy answer isn’t. Stop a test too early or measure the wrong number, and you’ll
+            confidently roll out a change that loses money.
+          </Lead>
         </SectionIntro>
         <ol className="m-0 grid list-none grid-cols-1 gap-10 p-0 md:grid-cols-3 md:gap-7">
           {steps.map((s, i) => (
@@ -301,17 +315,24 @@ export function HomePage() {
           </Link>
         </div>
         <div className="grid grid-cols-1 gap-5 md:grid-cols-3 lg:gap-7">
-          {lessons.map((l, i) => (
-            <Link
-              key={l.id}
-              to={`/lessons#${l.id}`}
-              className="group flex flex-col gap-3.5 rounded-[14px] border border-gray-700 bg-gray-800 p-7 no-underline transition-colors hover:border-blue-600 lg:p-8"
-            >
-              <div className="text-[13px] font-bold uppercase tracking-[0.08em] text-blue-400">Lesson {i + 1}</div>
-              <h3 className="m-0 font-display text-[25px] font-semibold leading-[1.2] text-white">{l.title}</h3>
-              <p className="m-0 text-[17px] leading-normal text-gray-300">{l.summary}</p>
-            </Link>
-          ))}
+          {lessons.map(l => {
+            const Illustration = lessonIllustrations[l.id];
+            return (
+              <Link
+                key={l.id}
+                to={`/lessons#${l.id}`}
+                className="group flex flex-col gap-4 rounded-[14px] border border-gray-700 bg-gray-800 p-5 no-underline transition-colors hover:border-blue-600 lg:p-6"
+              >
+                <div className="rounded-[10px] border border-gray-700 bg-gray-900 p-3">
+                  <Illustration />
+                </div>
+                <div className="flex flex-col gap-3 px-2 pb-2">
+                  <h3 className="m-0 font-display text-[25px] font-semibold leading-[1.2] text-white">{l.title}</h3>
+                  <p className="m-0 text-[17px] leading-normal text-gray-300">{l.summary}</p>
+                </div>
+              </Link>
+            );
+          })}
         </div>
       </Section>
 
@@ -325,17 +346,24 @@ export function HomePage() {
               See full pricing and what’s included →
             </Link>
           </div>
-          <div className="flex flex-1 flex-col border-b border-gray-700">
-            {plans.map(p => (
-              <div key={p.title} className="flex flex-col gap-2 border-t border-gray-700 py-[26px] sm:flex-row sm:gap-6">
-                <div className="text-[15px] font-bold text-blue-400 sm:w-40 sm:flex-none">{p.price}</div>
-                <div className="flex flex-1 flex-col gap-1.5">
-                  <div className="text-xl font-bold text-white">{p.title}</div>
-                  <div className="text-[17px] leading-normal text-gray-300">{p.body}</div>
+          <ol className="m-0 flex flex-1 list-none flex-col border-b border-gray-700 p-0">
+            {workSteps.map((step, i) => (
+              <li key={step.title} className="flex gap-5 border-t border-gray-700 py-[26px] sm:gap-6">
+                <div className="flex h-10 w-10 flex-none items-center justify-center rounded-full border border-blue-600 font-display text-lg font-semibold text-blue-400">
+                  {i + 1}
                 </div>
-              </div>
+                <div className="flex flex-1 flex-col gap-1.5">
+                  <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
+                    <h3 className="m-0 text-xl font-bold text-white">{step.title}</h3>
+                    {step.free && (
+                      <span className="rounded-full bg-emerald-400/[0.14] px-2.5 py-0.5 text-[13px] font-semibold text-emerald-400">Free</span>
+                    )}
+                  </div>
+                  <p className="m-0 text-[17px] leading-normal text-gray-300">{step.body}</p>
+                </div>
+              </li>
             ))}
-          </div>
+          </ol>
         </Container>
       </section>
 

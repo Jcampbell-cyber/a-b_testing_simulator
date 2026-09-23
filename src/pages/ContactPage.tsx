@@ -112,18 +112,26 @@ export default function ContactPage() {
                   </div>
                 </div>
 
-                <div>
-                  <label htmlFor="website" className={labelCls}>Your website</label>
-                  <input
-                    id="website"
-                    name="website"
-                    type="text"
-                    inputMode="url"
-                    required
-                    autoComplete="url"
-                    placeholder="yourshop.com"
-                    className={field}
-                  />
+                <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
+                  <div>
+                    <label htmlFor="website" className={labelCls}>Your website</label>
+                    <input
+                      id="website"
+                      name="website"
+                      type="text"
+                      inputMode="url"
+                      required
+                      autoComplete="url"
+                      placeholder="yourshop.com"
+                      className={field}
+                    />
+                  </div>
+                  <div>
+                    <label htmlFor="mobile" className={labelCls}>
+                      Mobile <span className="font-normal text-gray-400">(optional)</span>
+                    </label>
+                    <input id="mobile" name="mobile" type="tel" autoComplete="tel" className={field} />
+                  </div>
                 </div>
 
                 <div>
