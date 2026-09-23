@@ -89,10 +89,10 @@ export function GuardrailsTimelineChart({
     return -avgHalfWidth;
   };
 
-  const chartData: any[] = [];
+  const chartData: Record<string, number>[] = [];
 
   for (let day = 0; day <= maxDay; day++) {
-    const dataPoint: any = { day };
+    const dataPoint: Record<string, number> = { day };
 
     timelines.forEach((timeline, idx) => {
       const previousPeek = [...timeline.peeks].reverse().find((p) => p.day <= day);
@@ -121,12 +121,12 @@ export function GuardrailsTimelineChart({
   }
 
   // Render red dots only on actual peaks that crossed guardrail
-  const renderDot = (idx: number) => (props: any) => {
+  const renderDot = (idx: number) => (props: { cx?: number; cy?: number; payload?: { day: number }; value?: number }) => {
     const { cx, cy, payload, value } = props;
     if (value === undefined) return null;
 
     // Use the crossedGuardrail flag from simulation (already computed correctly)
-    const peekAtThisDay = timelines[idx].peeks.find((p) => p.day === payload.day);
+    const peekAtThisDay = timelines[idx].peeks.find((p) => p.day === payload?.day);
     const crossed = peekAtThisDay?.crossedGuardrail || false;
 
     return (
@@ -143,7 +143,7 @@ export function GuardrailsTimelineChart({
   };
 
   return (
-    <div className="bg-gray-800 rounded-lg shadow-md border border-gray-700 p-6 relative">
+    <div className="bg-gray-800 rounded-2xl shadow-md border border-gray-700 p-6 relative">
       <h2 className="text-xl font-semibold text-white mb-4">Timeline Chart</h2>
       <p className="text-sm text-gray-400 mb-4">
         Tracking percent change over time. Points below guardrail are highlighted.

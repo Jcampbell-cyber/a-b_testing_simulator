@@ -37,7 +37,7 @@ export function NormalisationControls({
 
           <div className="space-y-3">
             {groupConfigs.map((config, index) => (
-              <div key={index} className="bg-gray-800 rounded-lg p-3 border border-gray-700">
+              <div key={index} className="bg-gray-800 rounded-2xl p-3 border border-gray-700">
                 <div className="text-sm font-medium text-gray-200 mb-2">{config.name}</div>
                 <div className="grid grid-cols-2 gap-3">
                   <div>

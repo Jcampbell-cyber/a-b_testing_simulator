@@ -62,9 +62,9 @@ export function PeekingControls({
 
   const actualPeeks = calculatePeeks();
   return (
-    <div className="bg-gray-800 rounded-lg shadow-md border border-gray-700 p-6 space-y-6">
+    <div className="bg-gray-800 rounded-2xl shadow-md border border-gray-700 p-6 space-y-6">
       <div className="flex items-center gap-2 mb-4">
-        <Settings className="w-5 h-5 text-[#0017D2]" />
+        <Settings className="w-5 h-5 text-blue-400" />
         <h2 className="text-xl font-semibold text-white">Peeking Simulation Parameters</h2>
       </div>
 
@@ -76,7 +76,7 @@ export function PeekingControls({
           <select
             value={testType}
             onChange={(e) => onTestTypeChange(e.target.value as TestType)}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className="w-full px-3 py-2 border border-gray-600 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
           >
             <option value="AA">A/A Test (No true effect)</option>
             <option value="AB">A/B Test (With true effect)</option>
@@ -92,7 +92,7 @@ export function PeekingControls({
             type="number"
             value={baselineMean}
             onChange={(e) => onBaselineMeanChange(Number(e.target.value))}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className="w-full px-3 py-2 border border-gray-600 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
           />
           <p className="text-xs text-gray-500 mt-1">Average value for control group</p>
         </div>
@@ -106,7 +106,7 @@ export function PeekingControls({
               type="number"
               value={expectedUplift}
               onChange={(e) => onExpectedUpliftChange(Number(e.target.value))}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full px-3 py-2 border border-gray-600 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             />
             <p className="text-xs text-gray-500 mt-1">True percentage change in treatment group</p>
           </div>
@@ -120,7 +120,7 @@ export function PeekingControls({
             type="number"
             value={stdev}
             onChange={(e) => onStdevChange(Number(e.target.value))}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className="w-full px-3 py-2 border border-gray-600 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
           />
           <p className="text-xs text-gray-500 mt-1">Variability in the data</p>
         </div>
@@ -133,7 +133,7 @@ export function PeekingControls({
             type="number"
             value={testDuration}
             onChange={(e) => onTestDurationChange(Number(e.target.value))}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className="w-full px-3 py-2 border border-gray-600 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
           />
           <p className="text-xs text-gray-500 mt-1">How long the test runs</p>
         </div>
@@ -146,7 +146,7 @@ export function PeekingControls({
             type="number"
             value={sampleSize}
             onChange={(e) => onSampleSizeChange(Number(e.target.value))}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className="w-full px-3 py-2 border border-gray-600 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
           />
           <p className="text-xs text-gray-500 mt-1">Number of observations in each group</p>
         </div>
@@ -159,7 +159,7 @@ export function PeekingControls({
             type="number"
             value={numSimulations}
             onChange={(e) => onNumSimulationsChange(Number(e.target.value))}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className="w-full px-3 py-2 border border-gray-600 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
           />
           <p className="text-xs text-gray-500 mt-1">How many test runs to simulate</p>
         </div>
@@ -175,17 +175,17 @@ export function PeekingControls({
             max="99.9"
             value={confidenceLevel}
             onChange={(e) => onConfidenceLevelChange(Number(e.target.value))}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className="w-full px-3 py-2 border border-gray-600 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
           />
           <p className="text-xs text-gray-500 mt-1">95% means p-value threshold of 0.05</p>
         </div>
 
-        <div className="md:col-span-2 bg-blue-50 border border-blue-200 rounded-md p-4">
-          <label className="block text-sm font-medium text-blue-900 mb-1">
+        <div className="md:col-span-2 bg-blue-900/30 border border-blue-700 rounded-md p-4">
+          <label className="block text-sm font-medium text-blue-200 mb-1">
             Minimum Detectable Effect (MDE)
           </label>
           <p className="text-2xl font-bold text-blue-700">{mde.toFixed(2)}%</p>
-          <p className="text-xs text-[#0017D2] mt-1">
+          <p className="text-xs text-blue-400 mt-1">
             Smallest effect you can reliably detect with current sample size and test duration
           </p>
         </div>
@@ -197,7 +197,7 @@ export function PeekingControls({
           <select
             value={peekingMode}
             onChange={(e) => onPeekingModeChange(e.target.value as PeekingMode)}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent mb-3"
+            className="w-full px-3 py-2 border border-gray-600 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent mb-3"
           >
             <option value="daily">Daily (Check every day)</option>
             <option value="weekly">Weekly (Check every 7 days)</option>
@@ -232,7 +232,7 @@ export function PeekingControls({
       <button
         onClick={onRunSimulation}
         disabled={isRunning}
-        className="w-full bg-[#0017D2] hover:bg-white hover:text-[#0017D2] disabled:bg-gray-400 text-white font-semibold py-3 px-6 rounded-md transition-colors duration-200"
+        className="w-full bg-blue-600 hover:bg-blue-500 disabled:bg-gray-400 text-white font-semibold py-3 px-6 rounded-md transition-colors duration-200"
       >
         {isRunning ? 'Running Simulation...' : 'Run Simulation'}
       </button>

@@ -1,16 +1,10 @@
 import { useState } from 'react';
-import { ArrowLeft, Info } from 'lucide-react';
+import { Info } from 'lucide-react';
 import { Helmet } from 'react-helmet-async';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
-interface TestResultsCalculatorProps {
-  onNavigate: (page: string) => void;
-}
-
-export function TestResultsCalculator({ onNavigate }: TestResultsCalculatorProps) {
-  const onBack = () => {
-    window.location.href = '/';
-  };
+export function TestResultsCalculator() {
+  const navigate = useNavigate();
 
   const [metricType, setMetricType] = useState<'continuous' | 'binary'>('continuous');
   const [testType, setTestType] = useState<'two-sided' | 'one-sided'>('two-sided');
@@ -171,7 +165,7 @@ export function TestResultsCalculator({ onNavigate }: TestResultsCalculatorProps
   const result = calculateResults();
 
   return (
-    <div className="min-h-screen bg-gray-900">
+    <div className="bg-gray-900">
       <Helmet>
         <title>Test Results Calculator | Experiment Tools</title>
         <meta
@@ -180,14 +174,7 @@ export function TestResultsCalculator({ onNavigate }: TestResultsCalculatorProps
         />
       </Helmet>
       <div className="max-w-5xl mx-auto px-4 py-8">
-        <button
-          onClick={onBack}
-          className="flex items-center gap-2 text-blue-400 hover:text-white mb-8 transition-colors"
-        >
-          <ArrowLeft className="w-4 h-4" />
-          Back to Tools
-        </button>
-        <div className="bg-gray-800 rounded-lg shadow-lg p-8">
+        <div className="bg-gray-800 rounded-2xl shadow-lg p-8">
           <h1 className="text-4xl font-bold text-white mb-2">Test Results Calculator</h1>
           <p className="text-gray-300 mb-8">
             Analyze your test results and calculate statistical significance
@@ -271,7 +258,7 @@ export function TestResultsCalculator({ onNavigate }: TestResultsCalculatorProps
                           Bonferroni adjusted α: {(alpha / (comparisonType === 'control' ? numFlights - 1 : (numFlights * (numFlights - 1)) / 2)).toFixed(4)}
                         </p>
                         <button
-                          onClick={() => onNavigate('fwer')}
+                          onClick={() => navigate('/resources/advanced-techniques/fwer')}
                           className="flex items-center gap-1 text-blue-400 hover:text-blue-300 text-xs transition-colors"
                         >
                           <Info className="w-3 h-3" />
@@ -434,7 +421,7 @@ export function TestResultsCalculator({ onNavigate }: TestResultsCalculatorProps
                           : `${(numFlights * (numFlights - 1)) / 2} pairwise comparisons`}
                       </p>
                       <button
-                        onClick={() => onNavigate('fwer')}
+                        onClick={() => navigate('/resources/advanced-techniques/fwer')}
                         className="flex items-center gap-1 text-blue-400 hover:text-blue-300 text-xs transition-colors"
                       >
                         <Info className="w-3 h-3" />
@@ -507,7 +494,7 @@ export function TestResultsCalculator({ onNavigate }: TestResultsCalculatorProps
           <div className="mt-12 bg-gray-700 rounded-lg p-6 text-center">
             <p className="text-gray-300 mb-4">Want to understand the theory behind these calculations?</p>
             <Link
-              to="/nhst"
+              to="/resources/best-practices/nhst"
               className="inline-block bg-blue-500 hover:bg-blue-600 text-white font-semibold px-6 py-3 rounded transition-colors"
             >
               Learn About Null Hypothesis and Significance Testing →

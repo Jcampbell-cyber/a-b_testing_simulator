@@ -28,7 +28,7 @@ function generateNormalSample(mean: number, stdev: number, size: number): number
   const samples: number[] = [];
   for (let i = 0; i < size; i++) {
     let u1 = Math.random();
-    let u2 = Math.random();
+    const u2 = Math.random();
 
     while (u1 === 0) u1 = Math.random();
 
@@ -94,7 +94,7 @@ function logBeta(a: number, b: number): number {
 
 function logGamma(x: number): number {
   const coefficients = [
-    76.18009172947146, -86.50532032941677, 24.01409824083091,
+    76.18009172947146, -86.50532032941678, 24.01409824083091,
     -1.231739572450155, 0.1208650973866179e-2, -0.5395239384953e-5
   ];
 
@@ -107,7 +107,7 @@ function logGamma(x: number): number {
     ser += coefficients[i] / ++y;
   }
 
-  return -tmp + Math.log(2.5066282746310005 * ser / x);
+  return -tmp + Math.log(2.5066282746310007 * ser / x);
 }
 
 function betaContinuedFraction(a: number, b: number, x: number): number {
@@ -252,7 +252,7 @@ export function runPeekingSimulation(
       const treatmentSample = treatmentGroup.slice(0, currentSampleSize);
 
       const percentChange = calculatePercentChange(controlSample, treatmentSample);
-      const { tStat, pValue } = runTTest(controlSample, treatmentSample);
+      const { pValue } = runTTest(controlSample, treatmentSample);
       const { lowerCI, upperCI } = calculateConfidenceInterval(controlSample, treatmentSample, confidenceLevel);
 
       const isSignificant = pValue < alpha;

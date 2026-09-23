@@ -45,7 +45,7 @@ export function FWERPage() {
     : numFlights - 1;
 
   return (
-    <div className="min-h-screen bg-gray-900">
+    <div className="bg-gray-900">
 <Helmet>
   <title>FWER Control in A/B Testing</title>
   <meta
@@ -65,7 +65,7 @@ export function FWERPage() {
           </p>
         </div>
 
-        <div className="bg-gray-800 rounded-lg shadow-md border border-gray-700 p-6 mb-8">
+        <div className="bg-gray-800 rounded-2xl shadow-md border border-gray-700 p-6 mb-8">
           <h2 className="text-xl font-semibold text-white mb-4">The Multiple Comparisons Problem</h2>
 
           <div className="space-y-4 text-gray-300">
@@ -208,7 +208,7 @@ export function FWERPage() {
     Outliers can inflate variance and reduce detecting effects
   </p>
   <Link
-    to="/winsorizing"
+    to="/resources/advanced-techniques/winsorizing"
     className="inline-block bg-blue-500 hover:bg-blue-600 text-white font-semibold px-6 py-3 rounded transition-colors"
   >
     Go to Winsorizing to learn how to handle outliers →

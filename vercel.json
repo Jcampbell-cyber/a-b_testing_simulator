@@ -1,5 +1,40 @@
 {
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "trailingSlash": false,
+  "redirects": [
+    { "source": "/sample-size-calc", "destination": "/resources/calculators/sample-size-calc", "permanent": true },
+    { "source": "/test-duration-calc", "destination": "/resources/calculators/test-duration-calc", "permanent": true },
+    { "source": "/effect-detection-calc", "destination": "/resources/calculators/effect-detection-calc", "permanent": true },
+    { "source": "/test-results-calc", "destination": "/resources/calculators/test-results-calc", "permanent": true },
+    { "source": "/nhst", "destination": "/resources/best-practices/nhst", "permanent": true },
+    { "source": "/peeking", "destination": "/resources/best-practices/peeking", "permanent": true },
+    { "source": "/guardrails", "destination": "/resources/best-practices/guardrails", "permanent": true },
+    { "source": "/imbalanced", "destination": "/resources/best-practices/imbalanced", "permanent": true },
+    { "source": "/metric-variability-detectability", "destination": "/resources/best-practices/metric-variability-detectability", "permanent": true },
+    { "source": "/cuped", "destination": "/resources/advanced-techniques/cuped", "permanent": true },
+    { "source": "/fwer", "destination": "/resources/advanced-techniques/fwer", "permanent": true },
+    { "source": "/winsorizing", "destination": "/resources/advanced-techniques/winsorizing", "permanent": true },
+    { "source": "/normalisation", "destination": "/resources/advanced-techniques/normalisation", "permanent": true },
+    { "source": "/bootstrap", "destination": "/resources/advanced-techniques/bootstrap", "permanent": true },
+    { "source": "/bootstrap/ab", "destination": "/resources/advanced-techniques/bootstrap/ab", "permanent": true },
+    { "source": "/glossary", "destination": "/resources/glossary", "permanent": true },
+    { "source": "/feedback", "destination": "/contact", "permanent": true }
+  ],
   "rewrites": [
-    { "source": "/(.*)", "destination": "/" }
+    { "source": "/(.*)", "destination": "/index.html" }
+  ],
+  "headers": [
+    {
+      "source": "/assets/(.*)",
+      "headers": [{ "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }]
+    },
+    {
+      "source": "/(.*)",
+      "headers": [
+        { "key": "X-Content-Type-Options", "value": "nosniff" },
+        { "key": "Referrer-Policy", "value": "strict-origin-when-cross-origin" },
+        { "key": "X-Frame-Options", "value": "SAMEORIGIN" }
+      ]
+    }
   ]
 }

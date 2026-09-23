@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { type TimelineData } from '../utils/peekingSimulation';
 import {
   LineChart,
@@ -15,8 +14,7 @@ interface PeekingTimelineChartProps {
   testDuration: number;
 }
 
-export function PeekingTimelineChart({ timelines, confidenceLevel, testDuration }: PeekingTimelineChartProps) {
-  const [hoveredRun] = useState<number | null>(null);
+export function PeekingTimelineChart({ timelines, confidenceLevel }: PeekingTimelineChartProps) {
 
   if (timelines.length === 0) return null;
 
@@ -32,10 +30,10 @@ export function PeekingTimelineChart({ timelines, confidenceLevel, testDuration 
 
   const maxDay = Math.max(...timelines.flatMap((t) => t.peeks.map((p) => p.day)));
 
-  const chartData: any[] = [];
+  const chartData: Record<string, number>[] = [];
 
   for (let day = 0; day <= maxDay; day++) {
-    const dataPoint: any = { day };
+    const dataPoint: Record<string, number> = { day };
 
     timelines.forEach((timeline, idx) => {
       const previousPeek = [...timeline.peeks].reverse().find((p) => p.day <= day);
@@ -57,11 +55,11 @@ export function PeekingTimelineChart({ timelines, confidenceLevel, testDuration 
     chartData.push(dataPoint);
   }
 
-  const renderDot = (idx: number) => (props: any) => {
+  const renderDot = (idx: number) => (props: { cx?: number; cy?: number; payload?: { day: number }; value?: number }) => {
     const { cx, cy, payload, value } = props;
     if (value === undefined) return null;
 
-    const peekAtThisDay = timelines[idx].peeks.find((p) => p.day === payload.day);
+    const peekAtThisDay = timelines[idx].peeks.find((p) => p.day === payload?.day);
     const isSignificant = peekAtThisDay?.isSignificant || false;
 
     if (!isSignificant) return null;
@@ -80,7 +78,7 @@ export function PeekingTimelineChart({ timelines, confidenceLevel, testDuration 
   };
 
   return (
-    <div className="bg-gray-800 rounded-lg shadow-md border border-gray-700 p-6">
+    <div className="bg-gray-800 rounded-2xl shadow-md border border-gray-700 p-6">
       <h2 className="text-xl font-semibold text-white mb-4">Test Timelines</h2>
       <p className="text-sm text-gray-300 mb-4">
         Showing all {timelines.length} simulated test runs. Lines turn red/green when p-value &lt; {alpha.toFixed(2)} (statistically significant), gray when not significant.

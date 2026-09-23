@@ -35,7 +35,7 @@ export function WinsorizingDistributionChart({
 
   return (
     <div className="space-y-6">
-      <div className="bg-gray-800 rounded-lg shadow-sm border border-gray-700 p-6">
+      <div className="bg-gray-800 rounded-2xl shadow-sm border border-gray-700 p-6">
         <h3 className="text-lg font-semibold text-white mb-4">Distribution with Cutoff Line</h3>
         <ResponsiveContainer width="100%" height={400}>
           <ScatterChart margin={{ top: 20, right: 30, left: 20, bottom: 20 }}>
@@ -58,10 +58,10 @@ export function WinsorizingDistributionChart({
                 if (active && payload && payload.length) {
                   const data = payload[0].payload;
                   return (
-                    <div className="bg-white p-3 border border-gray-200 rounded shadow-lg">
+                    <div className="bg-gray-800 p-3 border border-gray-700 rounded shadow-lg">
                       <p className="text-sm font-medium">Observation {data.index + 1}</p>
-                      <p className="text-sm text-gray-600">Original: {data.original.toFixed(2)}</p>
-                      <p className="text-sm text-gray-600">Winsorized: {data.winsorized.toFixed(2)}</p>
+                      <p className="text-sm text-gray-400">Original: {data.original.toFixed(2)}</p>
+                      <p className="text-sm text-gray-400">Winsorized: {data.winsorized.toFixed(2)}</p>
                       {data.isOutlier && (
                         <p className="text-sm text-red-600 font-medium mt-1">Outlier</p>
                       )}
@@ -110,7 +110,7 @@ export function WinsorizingDistributionChart({
         </div>
       </div>
 
-      <div className="bg-gray-800 rounded-lg shadow-sm border border-gray-700 p-6">
+      <div className="bg-gray-800 rounded-2xl shadow-sm border border-gray-700 p-6">
         <h3 className="text-lg font-semibold text-white mb-4">Histogram Comparison</h3>
         <div className="grid grid-cols-2 gap-4">
           <HistogramChart

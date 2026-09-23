@@ -58,8 +58,8 @@ function SingleSampleResults({ results }: { results: WinsorizingResults }) {
         />
       </div>
 
-      <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-        <h3 className="text-lg font-semibold text-gray-900 mb-4">Statistical Comparison</h3>
+      <div className="bg-gray-800 rounded-lg shadow-sm border border-gray-700 p-6">
+        <h3 className="text-lg font-semibold text-white mb-4">Statistical Comparison</h3>
         <ResponsiveContainer width="100%" height={300}>
           <BarChart data={comparisonData} margin={{ top: 20, right: 30, left: 20, bottom: 20 }}>
             <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
@@ -69,7 +69,7 @@ function SingleSampleResults({ results }: { results: WinsorizingResults }) {
               content={({ active, payload }) => {
                 if (active && payload && payload.length) {
                   return (
-                    <div className="bg-white p-3 border border-gray-200 rounded shadow-lg">
+                    <div className="bg-gray-800 p-3 border border-gray-700 rounded shadow-lg">
                       <p className="text-sm font-medium mb-2">{payload[0].payload.metric}</p>
                       <p className="text-sm text-blue-600">Original: {payload[0].value?.toFixed(2)}</p>
                       <p className="text-sm text-green-600">Winsorized: {payload[1].value?.toFixed(2)}</p>
@@ -80,9 +80,9 @@ function SingleSampleResults({ results }: { results: WinsorizingResults }) {
               }}
             />
             <Legend />
-            <Bar dataKey="original" fill="#3b82f6" name="Original" label={{ position: 'top', fontSize: 12, formatter: (val: number) => val.toFixed(2) }}>
+            <Bar dataKey="original" fill="#3b82f6" name="Original" label={{ position: 'top', fontSize: 12, formatter: (val) => Number(val).toFixed(2) }}>
             </Bar>
-            <Bar dataKey="winsorized" fill="#10b981" name="Winsorized" label={{ position: 'top', fontSize: 12, formatter: (val: number) => val.toFixed(2) }}>
+            <Bar dataKey="winsorized" fill="#10b981" name="Winsorized" label={{ position: 'top', fontSize: 12, formatter: (val) => Number(val).toFixed(2) }}>
             </Bar>
           </BarChart>
         </ResponsiveContainer>
@@ -113,8 +113,8 @@ function SingleSampleResults({ results }: { results: WinsorizingResults }) {
         />
       </div>
 
-      <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-        <h4 className="text-sm font-semibold text-blue-900 mb-2">Key Insights</h4>
+      <div className="bg-blue-900/30 border border-blue-700 rounded-lg p-4">
+        <h4 className="text-sm font-semibold text-blue-200 mb-2">Key Insights</h4>
         <ul className="text-sm text-blue-800 space-y-1">
           <li>• Standard deviation reduced by {results.comparison.stdReduction.toFixed(1)}%</li>
           <li>• Confidence interval narrowed by {results.comparison.ciReduction.toFixed(1)}%</li>
@@ -147,9 +147,9 @@ function ABTestResultsDisplay({ results }: { results: ABTestResults }) {
   return (
     <div className="space-y-6">
       <div className="grid grid-cols-2 gap-4">
-        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+        <div className="bg-gray-800 rounded-lg shadow-sm border border-gray-700 p-6">
           <div className="flex items-center justify-between mb-4">
-            <h3 className="text-lg font-semibold text-gray-900">Original A/B Test</h3>
+            <h3 className="text-lg font-semibold text-white">Original A/B Test</h3>
             {results.original.significant ? (
               <CheckCircle2 className="w-6 h-6 text-green-500" />
             ) : (
@@ -158,26 +158,26 @@ function ABTestResultsDisplay({ results }: { results: ABTestResults }) {
           </div>
           <div className="space-y-3">
             <div>
-              <p className="text-sm text-gray-600">Control Mean</p>
-              <p className="text-2xl font-bold text-gray-900">{results.original.controlMean.toFixed(2)}</p>
+              <p className="text-sm text-gray-400">Control Mean</p>
+              <p className="text-2xl font-bold text-white">{results.original.controlMean.toFixed(2)}</p>
             </div>
             <div>
-              <p className="text-sm text-gray-600">Treatment Mean</p>
-              <p className="text-2xl font-bold text-gray-900">{results.original.treatmentMean.toFixed(2)}</p>
+              <p className="text-sm text-gray-400">Treatment Mean</p>
+              <p className="text-2xl font-bold text-white">{results.original.treatmentMean.toFixed(2)}</p>
             </div>
             <div>
-              <p className="text-sm text-gray-600">Observed Lift</p>
+              <p className="text-sm text-gray-400">Observed Lift</p>
               <p className="text-2xl font-bold text-blue-600">{results.original.lift.toFixed(2)}%</p>
             </div>
             <div>
-              <p className="text-sm text-gray-600">P-Value</p>
+              <p className="text-sm text-gray-400">P-Value</p>
               <p className={`text-xl font-bold ${results.original.significant ? 'text-green-600' : 'text-red-600'}`}>
                 {results.original.pValue.toFixed(4)}
               </p>
             </div>
             <div>
-              <p className="text-sm text-gray-600">95% CI of Difference</p>
-              <p className="text-sm font-medium text-gray-900">
+              <p className="text-sm text-gray-400">95% CI of Difference</p>
+              <p className="text-sm font-medium text-white">
                 [{results.original.ciLower.toFixed(2)}, {results.original.ciUpper.toFixed(2)}]
               </p>
             </div>
@@ -189,9 +189,9 @@ function ABTestResultsDisplay({ results }: { results: ABTestResults }) {
           </div>
         </div>
 
-        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+        <div className="bg-gray-800 rounded-lg shadow-sm border border-gray-700 p-6">
           <div className="flex items-center justify-between mb-4">
-            <h3 className="text-lg font-semibold text-gray-900">Winsorized A/B Test</h3>
+            <h3 className="text-lg font-semibold text-white">Winsorized A/B Test</h3>
             {results.winsorized.significant ? (
               <CheckCircle2 className="w-6 h-6 text-green-500" />
             ) : (
@@ -200,26 +200,26 @@ function ABTestResultsDisplay({ results }: { results: ABTestResults }) {
           </div>
           <div className="space-y-3">
             <div>
-              <p className="text-sm text-gray-600">Control Mean</p>
-              <p className="text-2xl font-bold text-gray-900">{results.winsorized.controlMean.toFixed(2)}</p>
+              <p className="text-sm text-gray-400">Control Mean</p>
+              <p className="text-2xl font-bold text-white">{results.winsorized.controlMean.toFixed(2)}</p>
             </div>
             <div>
-              <p className="text-sm text-gray-600">Treatment Mean</p>
-              <p className="text-2xl font-bold text-gray-900">{results.winsorized.treatmentMean.toFixed(2)}</p>
+              <p className="text-sm text-gray-400">Treatment Mean</p>
+              <p className="text-2xl font-bold text-white">{results.winsorized.treatmentMean.toFixed(2)}</p>
             </div>
             <div>
-              <p className="text-sm text-gray-600">Observed Lift</p>
+              <p className="text-sm text-gray-400">Observed Lift</p>
               <p className="text-2xl font-bold text-green-600">{results.winsorized.lift.toFixed(2)}%</p>
             </div>
             <div>
-              <p className="text-sm text-gray-600">P-Value</p>
+              <p className="text-sm text-gray-400">P-Value</p>
               <p className={`text-xl font-bold ${results.winsorized.significant ? 'text-green-600' : 'text-red-600'}`}>
                 {results.winsorized.pValue.toFixed(4)}
               </p>
             </div>
             <div>
-              <p className="text-sm text-gray-600">95% CI of Difference</p>
-              <p className="text-sm font-medium text-gray-900">
+              <p className="text-sm text-gray-400">95% CI of Difference</p>
+              <p className="text-sm font-medium text-white">
                 [{results.winsorized.ciLower.toFixed(2)}, {results.winsorized.ciUpper.toFixed(2)}]
               </p>
             </div>
@@ -232,8 +232,8 @@ function ABTestResultsDisplay({ results }: { results: ABTestResults }) {
         </div>
       </div>
 
-      <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-        <h3 className="text-lg font-semibold text-gray-900 mb-4">P-Value & CI Width Comparison</h3>
+      <div className="bg-gray-800 rounded-lg shadow-sm border border-gray-700 p-6">
+        <h3 className="text-lg font-semibold text-white mb-4">P-Value & CI Width Comparison</h3>
         <ResponsiveContainer width="100%" height={300}>
           <BarChart data={comparisonData} margin={{ top: 20, right: 30, left: 20, bottom: 20 }}>
             <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
@@ -244,7 +244,7 @@ function ABTestResultsDisplay({ results }: { results: ABTestResults }) {
               content={({ active, payload }) => {
                 if (active && payload && payload.length) {
                   return (
-                    <div className="bg-white p-3 border border-gray-200 rounded shadow-lg">
+                    <div className="bg-gray-800 p-3 border border-gray-700 rounded shadow-lg">
                       <p className="text-sm font-medium mb-2">{payload[0].payload.test}</p>
                       <p className="text-sm text-blue-600">P-Value: {Number(payload[0].value).toFixed(4)}</p>
                       <p className="text-sm text-amber-600">CI Width: {Number(payload[1].value).toFixed(2)}</p>
@@ -255,14 +255,14 @@ function ABTestResultsDisplay({ results }: { results: ABTestResults }) {
               }}
             />
             <Legend />
-            <Bar yAxisId="left" dataKey="pValue" fill="#3b82f6" name="P-Value (left axis)" label={{ position: 'top', fontSize: 12, formatter: (val: number) => val.toFixed(4) }} />
-            <Bar yAxisId="right" dataKey="ciWidth" fill="#f59e0b" name="CI Width (right axis)" label={{ position: 'top', fontSize: 12, formatter: (val: number) => val.toFixed(2) }} />
+            <Bar yAxisId="left" dataKey="pValue" fill="#3b82f6" name="P-Value (left axis)" label={{ position: 'top', fontSize: 12, formatter: (val) => Number(val).toFixed(4) }} />
+            <Bar yAxisId="right" dataKey="ciWidth" fill="#f59e0b" name="CI Width (right axis)" label={{ position: 'top', fontSize: 12, formatter: (val) => Number(val).toFixed(2) }} />
           </BarChart>
         </ResponsiveContainer>
       </div>
 
-      <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-        <h4 className="text-sm font-semibold text-blue-900 mb-2">Key Insights</h4>
+      <div className="bg-blue-900/30 border border-blue-700 rounded-lg p-4">
+        <h4 className="text-sm font-semibold text-blue-200 mb-2">Key Insights</h4>
         <ul className="text-sm text-blue-800 space-y-1">
           <li>• Confidence interval width reduced by {ciReduction.toFixed(1)}%</li>
           <li>• {results.original.significant === results.winsorized.significant
@@ -278,12 +278,12 @@ function ABTestResultsDisplay({ results }: { results: ABTestResults }) {
 
 function MetricCard({ title, value, subtitle, icon }: { title: string, value: string | number, subtitle: string, icon: React.ReactNode }) {
   return (
-    <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4">
+    <div className="bg-gray-800 rounded-lg shadow-sm border border-gray-700 p-4">
       <div className="flex items-center justify-between mb-2">
-        <p className="text-sm text-gray-600">{title}</p>
+        <p className="text-sm text-gray-400">{title}</p>
         {icon}
       </div>
-      <p className="text-2xl font-bold text-gray-900 mb-1">{value}</p>
+      <p className="text-2xl font-bold text-white mb-1">{value}</p>
       <p className="text-xs text-gray-500">{subtitle}</p>
     </div>
   );
@@ -297,12 +297,12 @@ function StatBox({ title, stats, color }: { title: string, stats: { label: strin
 
   return (
     <div className={`rounded-lg shadow-sm border p-4 ${colorClasses[color as keyof typeof colorClasses]}`}>
-      <h4 className="text-sm font-semibold text-gray-900 mb-3">{title}</h4>
+      <h4 className="text-sm font-semibold text-white mb-3">{title}</h4>
       <div className="space-y-2">
         {stats.map((stat, idx) => (
           <div key={idx} className="flex justify-between items-center">
-            <span className="text-sm text-gray-600">{stat.label}:</span>
-            <span className="text-sm font-medium text-gray-900">{stat.value}</span>
+            <span className="text-sm text-gray-400">{stat.label}:</span>
+            <span className="text-sm font-medium text-white">{stat.value}</span>
           </div>
         ))}
       </div>

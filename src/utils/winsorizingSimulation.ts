@@ -43,16 +43,6 @@ export interface ABTestResults {
   };
 }
 
-function generateNormalData(n: number, mean: number, std: number): number[] {
-  const data: number[] = [];
-  for (let i = 0; i < n; i++) {
-    const u1 = Math.random();
-    const u2 = Math.random();
-    const z = Math.sqrt(-2 * Math.log(u1)) * Math.cos(2 * Math.PI * u2);
-    data.push(mean + z * std);
-  }
-  return data;
-}
 
 function generateSkewedData(n: number, mean: number, std: number): number[] {
   const data: number[] = [];

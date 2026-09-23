@@ -6,34 +6,54 @@ import {
   YAxis,
   CartesianGrid,
   Tooltip,
+  Legend,
 } from 'recharts';
 
-export function BootstrapRawDistributionChart({ data }: { data: number[] }) {
-  if (!data?.length) return null;
+type Props =
+  | { data: number[]; dataA?: never; dataB?: never }
+  | { data?: never; dataA: number[]; dataB: number[] };
 
-  const min = Math.min(...data);
-  const max = Math.max(...data);
-  const bins = 15;
+const BINS = 15;
 
-  const width = (max - min) / bins;
+function extent(values: number[]) {
+  let min = Infinity;
+  let max = -Infinity;
+  for (const v of values) {
+    if (v < min) min = v;
+    if (v > max) max = v;
+  }
+  return { min, max };
+}
 
-  const hist = Array.from({ length: bins }, (_, i) => ({
+function histogram(values: number[], min: number, width: number) {
+  const counts = new Array<number>(BINS).fill(0);
+  for (const v of values) {
+    const idx = width > 0 ? Math.min(Math.floor((v - min) / width), BINS - 1) : 0;
+    counts[idx] += 1;
+  }
+  return counts;
+}
+
+export function BootstrapRawDistributionChart(props: Props) {
+  const series = props.data ? [props.data] : [props.dataA, props.dataB];
+  const all = series.flat();
+  if (!all.length) return null;
+
+  const { min, max } = extent(all);
+  const width = (max - min) / BINS;
+  const counts = series.map(s => histogram(s, min, width));
+
+  const hist = Array.from({ length: BINS }, (_, i) => ({
     x: (min + i * width).toFixed(1),
-    y: 0,
+    a: counts[0][i],
+    b: counts[1]?.[i],
   }));
 
-  data.forEach(v => {
-    const idx = Math.min(
-      Math.floor((v - min) / width),
-      bins - 1
-    );
-
-    hist[idx].y += 1;
-  });
+  const isAB = series.length === 2;
 
   return (
-    <div className="bg-gray-800 p-6 rounded mb-6">
-      <h2 className="text-xl mb-3">Raw Data Distribution</h2>
+    <div className="bg-gray-800 border border-gray-700 p-6 rounded-2xl mb-6">
+      <h2 className="text-xl mb-3">{isAB ? 'Raw Data Distribution: A vs B' : 'Raw Data Distribution'}</h2>
 
       <ResponsiveContainer width="100%" height={280}>
         <BarChart data={hist}>
@@ -41,7 +61,9 @@ export function BootstrapRawDistributionChart({ data }: { data: number[] }) {
           <XAxis dataKey="x" stroke="#9ca3af" />
           <YAxis stroke="#9ca3af" />
           <Tooltip />
-          <Bar dataKey="y" fill="#34d399" />
+          {isAB && <Legend />}
+          <Bar dataKey="a" name={isAB ? 'A' : 'Count'} fill={isAB ? '#60A5FA' : '#34d399'} />
+          {isAB && <Bar dataKey="b" name="B" fill="#34d399" />}
         </BarChart>
       </ResponsiveContainer>
     </div>

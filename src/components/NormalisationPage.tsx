@@ -1,6 +1,4 @@
 import { useState, useEffect } from 'react';
-import { ArrowLeft } from 'lucide-react';
-import { Breadcrumb } from './Breadcrumb';
 import { NormalisationControls } from './NormalisationControls';
 import { NormalisationResultsDisplay } from './NormalisationResultsDisplay';
 import { NormalisationHistogram } from './NormalisationHistogram';
@@ -9,16 +7,12 @@ import { runNormalisationSimulation, NormalisationResults, GroupConfig } from '.
 import { Helmet } from 'react-helmet-async';
 import { Link } from 'react-router-dom';
 
-interface Props {
-  onBack: () => void;
-}
-
 const DEFAULT_GROUPS: GroupConfig[] = [
   { name: 'Southeast Asia', baselineMean: 25, baselineStd: 8 },
   { name: 'North America', baselineMean: 200, baselineStd: 50 }
 ];
 
-export function NormalisationPage({ onBack }: Props) {
+export function NormalisationPage() {
   const [groupConfigs, setGroupConfigs] = useState<GroupConfig[]>(DEFAULT_GROUPS);
   const [sampleSizePerGroup, setSampleSizePerGroup] = useState(1000);
   const [trueEffectPercent, setTrueEffectPercent] = useState(5);
@@ -42,10 +36,12 @@ export function NormalisationPage({ onBack }: Props) {
 
   useEffect(() => {
     runSimulation();
+  // Run once on first load; later runs are triggered by the button
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
-    <div className="min-h-screen bg-gray-950 text-white">
+    <div className="bg-gray-900 text-white">
             <Helmet>
         <title>Normalisation Simulator for A/B Testing</title>
         <meta
@@ -55,20 +51,7 @@ export function NormalisationPage({ onBack }: Props) {
       </Helmet>
 
       <div className="max-w-7xl mx-auto px-4 py-6">
-        <Breadcrumb
-          items={[
-            { label: 'Simulators', onClick: onBack },
-            { label: 'Normalisation' }
-          ]}
-        />
 
-        <button
-          onClick={onBack}
-          className="flex items-center gap-2 text-gray-400 hover:text-white transition-colors mb-6"
-        >
-          <ArrowLeft className="w-4 h-4" />
-          Back to Simulators
-        </button>
 
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-white mb-3">Metric Normalisation</h1>
@@ -212,7 +195,7 @@ export function NormalisationPage({ onBack }: Props) {
     Understand guardrails to see how monitoring choices impact experiment safety
   </p>
   <Link
-    to="/guardrails"
+    to="/resources/best-practices/guardrails"
     className="inline-block bg-blue-500 hover:bg-blue-600 text-white font-semibold px-6 py-3 rounded transition-colors"
   >
     Explore Guardrails →

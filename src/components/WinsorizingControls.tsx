@@ -34,7 +34,7 @@ export function WinsorizingControls({
   isRunning
 }: WinsorizingControlsProps) {
   return (
-    <div className="bg-gray-800 rounded-lg shadow-sm border border-gray-700 p-6">
+    <div className="bg-gray-800 rounded-2xl shadow-sm border border-gray-700 p-6">
       <div className="space-y-6">
         <div>
           <label className="flex items-center gap-2 text-sm font-medium text-gray-200 mb-3">

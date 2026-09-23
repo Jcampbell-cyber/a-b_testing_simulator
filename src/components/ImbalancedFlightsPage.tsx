@@ -47,17 +47,17 @@ export function ImbalancedFlightsPage() {
   const yMaxFP = 70;
   const yMaxSample = 200;
 
-  const yScaleFP = (value) =>
+  const yScaleFP = (value: number) =>
     chartPadding.top +
     ((yMaxFP - value) / yMaxFP) *
       (chartHeight - chartPadding.top - chartPadding.bottom);
 
-  const yScaleSample = (value) =>
+  const yScaleSample = (value: number) =>
     chartPadding.top +
     ((yMaxSample - value) / yMaxSample) *
       (chartHeight - chartPadding.top - chartPadding.bottom);
 
-  const xScale = (split) =>
+  const xScale = (split: number) =>
     chartPadding.left +
     ((split - 10) / 80) *
       (chartWidth - chartPadding.left - chartPadding.right);
@@ -83,8 +83,8 @@ export function ImbalancedFlightsPage() {
   const maxXFixed = baselineMean + baselineMean * 0.15;
   const xRangeFixed = maxXFixed - minXFixed;
 
-  const generateDistribution = (mean, std) => {
-    const points = [];
+  const generateDistribution = (mean: number, std: number) => {
+    const points: { x: number; y: number }[] = [];
     const steps = 200;
     for (let i = 0; i <= steps; i++) {
       const x = minXFixed + (xRangeFixed * i) / steps;
@@ -104,22 +104,22 @@ export function ImbalancedFlightsPage() {
 
   const criticalValue = controlMean + 1.96 * controlStdError;
 
-  const xScaleDist = (value) =>
+  const xScaleDist = (value: number) =>
     distChartPadding.left +
     ((value - minXFixed) / xRangeFixed) *
       (distChartWidth - distChartPadding.left - distChartPadding.right);
 
-  const yScaleDist = (value) =>
+  const yScaleDist = (value: number) =>
     distChartHeight -
     distChartPadding.bottom -
     (value / maxY) *
       (distChartHeight - distChartPadding.top - distChartPadding.bottom) *
       0.9;
 
-  const createPath = (points) => {
+  const createPath = (points: { x: number; y: number }[]) => {
     if (points.length === 0) return '';
     let path = `M ${xScaleDist(points[0].x)} ${yScaleDist(points[0].y)}`;
-    for (let p of points) path += ` L ${xScaleDist(p.x)} ${yScaleDist(p.y)}`;
+    for (const p of points) path += ` L ${xScaleDist(p.x)} ${yScaleDist(p.y)}`;
     return path;
   };
 
@@ -127,7 +127,7 @@ export function ImbalancedFlightsPage() {
     knownPowerRates.find((p) => p.split === selectedSplit)?.rate || 80;
 
   return (
-    <div className="min-h-screen bg-gray-900">
+    <div className="bg-gray-900">
 <Helmet>
   <title>Imbalanced Exposure in A/B Tests</title>
   <meta
@@ -147,7 +147,7 @@ export function ImbalancedFlightsPage() {
           </p>
         </div>
 
-        <div className="bg-gray-800 rounded-lg shadow-md border border-gray-700 p-6 mb-6">
+        <div className="bg-gray-800 rounded-2xl shadow-md border border-gray-700 p-6 mb-6">
           <h2 className="text-xl font-semibold text-white mb-4">Parameters</h2>
           <div className="flex items-center gap-8">
             <div className="flex-1">
@@ -178,7 +178,7 @@ export function ImbalancedFlightsPage() {
  
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6"> 
         {/* --- Explanation of variance --- */}
-        <div className="lg:col-span-3 bg-gray-800 rounded-lg shadow-md border border-gray-700 p-6 mb-6">
+        <div className="lg:col-span-3 bg-gray-800 rounded-2xl shadow-md border border-gray-700 p-6 mb-6">
           <h2 className="text-xl font-semibold text-white mb-4">Why Imbalance Increases Variance</h2>
           <p className="text-base text-gray-400 mb-4">
             The standard error of the difference between two groups is calculated as:
@@ -192,7 +192,7 @@ export function ImbalancedFlightsPage() {
         </div>
             
           {/* --- Distribution visualization --- */}
-          <div className="bg-gray-800 rounded-lg shadow-md border border-gray-700 p-6">
+          <div className="bg-gray-800 rounded-2xl shadow-md border border-gray-700 p-6">
             <h2 className="text-xl font-semibold text-white mb-4">Distribution Visualization</h2>
             <p className="text-base text-gray-400 mb-4">
               Sampling distributions for control (blue) and treatment (green) groups. As imbalance increases, standard errors differ, reducing overlap and statistical power.
@@ -297,7 +297,7 @@ export function ImbalancedFlightsPage() {
           </div>
 
           {/* --- Power Chart --- */}
-          <div className="bg-gray-800 rounded-lg shadow-md border border-gray-700 p-6">
+          <div className="bg-gray-800 rounded-2xl shadow-md border border-gray-700 p-6">
             <h2 className="text-xl font-semibold text-white mb-4">Power at Different Splits – Ability to Detect a True Difference</h2>
             <p className="text-base text-gray-400 mb-4">
               Statistical power represents your ability to detect a true difference when one exists. At a 50/50 split, you achieve 80% power. Imbalanced splits reduce your ability to detect true effects.
@@ -423,7 +423,7 @@ export function ImbalancedFlightsPage() {
           </div>
 
           {/* --- Sample Size Increase Chart --- */}
-          <div className="bg-gray-800 rounded-lg shadow-md border border-gray-700 p-6">
+          <div className="bg-gray-800 rounded-2xl shadow-md border border-gray-700 p-6">
             <h2 className="text-xl font-semibold text-white mb-4">Extra Sample Size Required vs 50/50 Split</h2>
             <p className="text-base text-gray-400 mb-4">
               Percentage increase in total sample size needed to maintain the same statistical power as a balanced 50/50 split.
@@ -552,7 +552,7 @@ export function ImbalancedFlightsPage() {
     CUPED can reduce variance introduced by imbalanced flights
   </p>
   <Link
-    to="/cuped"
+    to="/resources/advanced-techniques/cuped"
     className="inline-block bg-blue-500 hover:bg-blue-600 text-white font-semibold px-6 py-3 rounded transition-colors"
   >
     Go to CUPED Variance Reduction →

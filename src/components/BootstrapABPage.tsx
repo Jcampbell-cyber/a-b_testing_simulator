@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 
-import { Link } from 'react-router-dom';
 import { runBootstrapAB } from './bootstrapABSimulation';
 
 import { BootstrapABChart } from './BootstrapABChart';
@@ -11,7 +10,7 @@ export function BootstrapABPage() {
   const [sampleSize, setSampleSize] = useState(100);
   const [resamples, setResamples] = useState(700);
 
-  const [results, setResults] = useState<any>(null);
+  const [results, setResults] = useState<ReturnType<typeof runBootstrapAB> | null>(null);
   const [view, setView] = useState(0);
   const [running, setRunning] = useState(false);
 
@@ -39,7 +38,7 @@ export function BootstrapABPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-900 text-white">
+    <div className="bg-gray-900 text-white">
       <Helmet>
         <title>A/B Bootstrap (Difference in Means)</title>
       </Helmet>

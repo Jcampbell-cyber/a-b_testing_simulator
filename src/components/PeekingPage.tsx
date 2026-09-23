@@ -55,7 +55,7 @@ export function PeekingPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-900"> 
+    <div className="bg-gray-900"> 
       <Helmet>
         <title>Peeking Analysis Tool | Your Brand</title>
         <meta name="description" content="Explore how frequent checking of test results impacts false positive rates and experiment reliability." />
@@ -109,7 +109,7 @@ export function PeekingPage() {
           )}
         </div>
 
-        <div className="mt-8 bg-gray-800 rounded-lg p-6">
+        <div className="mt-8 bg-gray-800 rounded-2xl p-6">
           <h2 className="text-2xl font-bold text-white mb-4">Understanding the Visualisation</h2>
           <div className="text-gray-300 space-y-3">
             <p>
@@ -134,7 +134,7 @@ export function PeekingPage() {
             Learn how peeking and frequent checks relate to experimental guardrails.
           </p>
           <Link
-            to="/guardrails"
+            to="/resources/best-practices/guardrails"
             className="inline-block bg-blue-500 hover:bg-blue-600 text-white font-semibold px-6 py-3 rounded transition-colors"
           >
             Learn About Setting Statistical Guardrails →

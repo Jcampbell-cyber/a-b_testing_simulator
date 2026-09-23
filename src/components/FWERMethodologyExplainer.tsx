@@ -1,4 +1,3 @@
-import React from 'react';
 
 type Props = {
   alpha: number;
@@ -47,7 +46,7 @@ export function FWERMethodologyExplainer({ alpha, numFlights, comparisonType }: 
   };
 
   return (
-    <div className="bg-gray-800 rounded-lg shadow-md border border-gray-700 p-6">
+    <div className="bg-gray-800 rounded-2xl shadow-md border border-gray-700 p-6">
       <h2 className="text-xl font-semibold text-white mb-4">Multiple Testing Correction Methods</h2>
       <p className="text-gray-400 mb-6">
         When testing {numComparisons} comparisons ({comparisonType === 'pairwise' ? 'all pairwise' : 'vs control'}),
