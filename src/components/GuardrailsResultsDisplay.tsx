@@ -10,13 +10,10 @@ interface GuardrailsResultsDisplayProps {
 
 export function GuardrailsResultsDisplay({
   results,
-  guardrailType,
-  manualGuardrail,
-  statisticalConfidence,
 }: GuardrailsResultsDisplayProps) {
   if (!results) {
     return (
-      <div className="bg-gray-800 rounded-lg shadow-md border border-gray-700 p-6">
+      <div className="bg-gray-800 rounded-2xl shadow-md border border-gray-700 p-6">
         <h2 className="text-xl font-semibold text-white mb-4">Results</h2>
         <p className="text-gray-500 text-center py-8">
           Run a simulation to see results
@@ -44,7 +41,7 @@ export function GuardrailsResultsDisplay({
   const finishedPositiveRate = (finishedPositiveCount / results.totalRuns) * 100;
 
   return (
-    <div className="bg-gray-800 rounded-lg shadow-md border border-gray-700 p-6">
+    <div className="bg-gray-800 rounded-2xl shadow-md border border-gray-700 p-6">
       <h2 className="text-xl font-semibold text-white mb-4">
         Guardrails Key Metrics
       </h2>

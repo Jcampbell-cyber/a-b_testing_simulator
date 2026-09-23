@@ -1,4 +1,3 @@
-import React from 'react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 
 type Props = {
@@ -50,8 +49,6 @@ function estimateErrorRates(
 
   // Type 2 error (false negative rate) - depends on power
   // Power calculation for detecting effect
-  const zAlpha = 1.96;
-  const zBeta = 0.84; // for 80% power
   const effectSize = (trueUplift / 100) * baselineMean;
   const se = stdev * Math.sqrt(2 / sampleSize);
   const ncp = effectSize / se; // non-centrality parameter
@@ -99,7 +96,7 @@ export function FWERErrorRateChart({ comparisonType, baselineMean, stdev, sample
   }
 
   return (
-    <div className="bg-gray-800 rounded-lg shadow-md border border-gray-700 p-6">
+    <div className="bg-gray-800 rounded-2xl shadow-md border border-gray-700 p-6">
       <h3 className="text-lg font-semibold text-white mb-4">Error Rates by Number of Comparisons</h3>
       <p className="text-sm text-gray-400 mb-4">
         This chart shows how Type I (false positive) and Type II (false negative) error rates change as the number of comparisons increases for different correction methods.
@@ -124,7 +121,7 @@ export function FWERErrorRateChart({ comparisonType, baselineMean, stdev, sample
               <Tooltip
                 contentStyle={{ backgroundColor: '#1F2937', border: '1px solid #374151', borderRadius: '0.5rem' }}
                 labelStyle={{ color: '#F3F4F6' }}
-                formatter={(value: number) => `${value.toFixed(2)}%`}
+                formatter={(value) => `${Number(value).toFixed(2)}%`}
                 labelFormatter={(label) => {
                   const point = data.find(d => d.numComparisons === label);
                   return point ? `${label} comparisons (${point.numGroups} flights incl. control)` : label;
@@ -180,7 +177,7 @@ export function FWERErrorRateChart({ comparisonType, baselineMean, stdev, sample
               <Tooltip
                 contentStyle={{ backgroundColor: '#1F2937', border: '1px solid #374151', borderRadius: '0.5rem' }}
                 labelStyle={{ color: '#F3F4F6' }}
-                formatter={(value: number) => `${value.toFixed(2)}%`}
+                formatter={(value) => `${Number(value).toFixed(2)}%`}
                 labelFormatter={(label) => {
                   const point = data.find(d => d.numComparisons === label);
                   return point ? `${label} comparisons (${point.numGroups} flights incl. control)` : label;

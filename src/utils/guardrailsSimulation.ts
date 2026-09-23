@@ -27,7 +27,7 @@ function generateNormalSample(mean: number, stdev: number, size: number): number
   const samples: number[] = [];
   for (let i = 0; i < size; i++) {
     let u1 = Math.random();
-    let u2 = Math.random();
+    const u2 = Math.random();
     while (u1 === 0) u1 = Math.random();
     const z0 = Math.sqrt(-2.0 * Math.log(u1)) * Math.cos(2.0 * Math.PI * u2);
     samples.push(mean + z0 * stdev);
@@ -54,7 +54,7 @@ function calculateConfidenceInterval(
   const variance1 = control.reduce((sum, x) => sum + Math.pow(x - mean1, 2), 0) / (n1 - 1);
   const variance2 = treatment.reduce((sum, x) => sum + Math.pow(x - mean2, 2), 0) / (n2 - 1);
   const se = Math.sqrt(variance1 / n1 + variance2 / n2);
-  const zScore = 1.96; // approx 95%
+  const zScore = getZScore(confidenceLevel);
   const marginOfError = zScore * se;
   const diff = mean2 - mean1;
   const lowerBound = diff - marginOfError;
@@ -170,7 +170,6 @@ export function runGuardrailsSimulation(
       }
     }
 
-    let lastGuardrail = guardrailType === 'manual' ? manualGuardrail : 0;
 
     for (const day of peekDays) {
       const currentSampleSize = day === 0 ? 0 : Math.min(day * samplesPerDay, sampleSize);
@@ -200,7 +199,6 @@ export function runGuardrailsSimulation(
         crossedThisPeek = day > 0 && ci99.upperCI < 0;
       }
 
-      lastGuardrail = guardrailValue;
 
       if (crossedThisPeek && !crossedGuardrail) {
         crossedGuardrail = true;

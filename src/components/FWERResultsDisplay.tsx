@@ -1,4 +1,3 @@
-import React from 'react';
 import type { FWERSimulationResults } from '../utils/fwerSimulation';
 
 type Props = {
@@ -23,7 +22,7 @@ export function FWERResultsDisplay({ results, testType, numFlights, comparisonTy
 
   return (
     <div className="space-y-6">
-      <div className="bg-gray-800 rounded-lg shadow-md border border-gray-700 p-6">
+      <div className="bg-gray-800 rounded-2xl shadow-md border border-gray-700 p-6">
         <h2 className="text-xl font-semibold text-white mb-4">Simulation Results</h2>
 
         <div className="bg-gray-750 rounded-lg p-4 mb-4">

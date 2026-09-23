@@ -145,11 +145,11 @@ export function GlossaryPage() {
   });
 
   return (
-    <div className="min-h-screen bg-gray-900">
+    <div className="bg-gray-900">
       <div className="max-w-5xl mx-auto px-4 py-8 sm:px-6 lg:px-8">
         <div className="mb-8">
           <div className="flex items-center gap-3 mb-3">
-            <BookOpen className="w-8 h-8 text-[#0017D2]" />
+            <BookOpen className="w-8 h-8 text-blue-400" />
             <h1 className="text-4xl font-bold text-white">Statistical Glossary</h1>
           </div>
           <p className="text-lg text-gray-300 leading-relaxed">
@@ -166,7 +166,7 @@ export function GlossaryPage() {
                 placeholder="Search terms or definitions..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-10 pr-4 py-3 bg-gray-900 border border-gray-700 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#0017D2] focus:border-transparent"
+                className="w-full pl-10 pr-4 py-3 bg-gray-900 border border-gray-700 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent"
               />
             </div>
           </div>
@@ -178,7 +178,7 @@ export function GlossaryPage() {
                 onClick={() => setSelectedCategory(category)}
                 className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
                   selectedCategory === category
-                    ? 'bg-[#0017D2] text-white'
+                    ? 'bg-blue-600 text-white'
                     : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
                 }`}
               >
@@ -192,11 +192,11 @@ export function GlossaryPage() {
               filteredTerms.map((item, index) => (
                 <div
                   key={index}
-                  className="bg-gray-900/50 border border-gray-700 rounded-lg p-5 hover:border-[#0017D2] transition-colors"
+                  className="bg-gray-900/50 border border-gray-700 rounded-lg p-5 hover:border-blue-600 transition-colors"
                 >
                   <div className="flex items-start justify-between gap-4 mb-2">
                     <h3 className="text-xl font-bold text-white">{item.term}</h3>
-                    <span className="text-xs font-semibold text-[#0017D2] bg-[#0017D2]/10 px-2 py-1 rounded whitespace-nowrap">
+                    <span className="text-xs font-semibold text-blue-400 bg-blue-600/10 px-2 py-1 rounded whitespace-nowrap">
                       {item.category}
                     </span>
                   </div>

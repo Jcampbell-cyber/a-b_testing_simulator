@@ -1,4 +1,3 @@
-import React from 'react';
 
 type Props = {
   testType: 'aa' | 'ab';
@@ -48,7 +47,7 @@ export function FWERControls(props: Props) {
   } = props;
 
   return (
-    <div className="bg-gray-800 rounded-lg shadow-md border border-gray-700 p-6">
+    <div className="bg-gray-800 rounded-2xl shadow-md border border-gray-700 p-6">
       <h2 className="text-xl font-semibold text-white mb-4">Simulation Parameters</h2>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">

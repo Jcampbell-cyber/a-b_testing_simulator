@@ -23,7 +23,6 @@ function hist(data: number[], bins = 20) {
 
   const arr = Array.from({ length: bins }, (_, i) => {
     const start = min + i * width;
-    const end = start + width;
 
     return {
       x: start + width / 2, // ✅ numeric midpoint

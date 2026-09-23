@@ -68,7 +68,7 @@ export function CUPEDPage() {
     (y / distMaxY) *
       (distChartHeight - padding.top - padding.bottom);
 
-  const createPath = (dist: any[]) => {
+  const createPath = (dist: { x: number; y: number }[]) => {
     let path = `M ${xScale(dist[0].x)} ${yScale(dist[0].y)}`;
     for (let i = 1; i < dist.length; i++) {
       path += ` L ${xScale(dist[i].x)} ${yScale(dist[i].y)}`;
@@ -82,7 +82,7 @@ export function CUPEDPage() {
   const barMaxWidth = 260;
 
   return (
-    <div className="min-h-screen bg-gray-900">
+    <div className="bg-gray-900">
 <Helmet>
   <title>CUPED Variance Reduction in A/B Testing</title>
   <meta
@@ -102,7 +102,7 @@ export function CUPEDPage() {
         </p>
 
         {/* Parameters */}
-        <div className="bg-gray-800 rounded-lg border border-gray-700 p-6 mb-6">
+        <div className="bg-gray-800 rounded-2xl border border-gray-700 p-6 mb-6">
           <h2 className="text-xl font-semibold text-white mb-4">Parameters</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {/* R² */}
@@ -155,7 +155,7 @@ export function CUPEDPage() {
         </div>
 
         {/* Distribution + MDE */}
-        <div className="bg-gray-800 rounded-lg border border-gray-700 p-6 mb-6 grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div className="bg-gray-800 rounded-2xl border border-gray-700 p-6 mb-6 grid grid-cols-1 lg:grid-cols-2 gap-6">
           <div>
             <h2 className="text-xl font-semibold text-white mb-2">Variance Reduction</h2>
             <p className="text-sm text-gray-400 mb-4">
@@ -210,7 +210,7 @@ export function CUPEDPage() {
         </div>
 
         {/* How Coverage Dampens CUPED */}
-        <div className="bg-gray-800 rounded-lg border border-gray-700 p-6 mb-6">
+        <div className="bg-gray-800 rounded-2xl border border-gray-700 p-6 mb-6">
           <h2 className="text-xl font-semibold text-white mb-3">How Coverage Dampens CUPED</h2>
           <p className="text-sm text-gray-400 mb-4">
             Even with strong correlation, CUPED’s real-world impact shrinks if historical data is missing for many users.
@@ -228,7 +228,7 @@ export function CUPEDPage() {
         </div>
 
         {/* How CUPED Works */}
-        <div className="mt-6 bg-gray-800 rounded-lg shadow-md border border-gray-700 p-6">
+        <div className="mt-6 bg-gray-800 rounded-2xl shadow-md border border-gray-700 p-6">
           <h2 className="text-xl font-semibold text-white mb-4">How CUPED Works</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm text-gray-300">
             <div>
@@ -250,7 +250,7 @@ export function CUPEDPage() {
           </div>
         </div>
 {/* --- CUPED Math --- */}
-<div className="mt-4 bg-gray-800 rounded-lg shadow-md border border-gray-700 p-6">
+<div className="mt-4 bg-gray-800 rounded-2xl shadow-md border border-gray-700 p-6">
   <h3 className="text-lg font-semibold text-white mb-3">CUPED Formula</h3>
   <p className="text-gray-300 mb-2">
     CUPED adjusts each user's metric to reduce predictable variance while preserving the overall mean:
@@ -286,7 +286,7 @@ export function CUPEDPage() {
         </div>
 
         {/* Why Use CUPED */}
-        <div className="mt-6 bg-gray-800 rounded-lg shadow-md border border-gray-700 p-6">
+        <div className="mt-6 bg-gray-800 rounded-2xl shadow-md border border-gray-700 p-6">
           <h2 className="text-xl font-semibold text-white mb-4">Why Use CUPED?</h2>
           <div className="text-gray-300 space-y-3">
             <p>
@@ -307,7 +307,7 @@ export function CUPEDPage() {
     Multiple flights increase the risk of false positives
   </p>
   <Link
-    to="/fwer"
+    to="/resources/advanced-techniques/fwer"
     className="inline-block bg-blue-500 hover:bg-blue-600 text-white font-semibold px-6 py-3 rounded transition-colors"
   >
     Learn to adjust for multiple flights →

@@ -1,5 +1,4 @@
 import { type PeekingSimulationResults } from '../utils/peekingSimulation';
-import { TrendingUp, TrendingDown, Minus } from 'lucide-react';
 
 interface PeekingResultsDisplayProps {
   results: PeekingSimulationResults | null;
@@ -9,7 +8,7 @@ interface PeekingResultsDisplayProps {
 export function PeekingResultsDisplay({ results, confidenceLevel }: PeekingResultsDisplayProps) {
   if (!results) {
     return (
-      <div className="bg-gray-800 rounded-lg shadow-md border border-gray-700 p-6">
+      <div className="bg-gray-800 rounded-2xl shadow-md border border-gray-700 p-6">
         <h2 className="text-xl font-semibold text-white mb-4">Results</h2>
         <p className="text-gray-500 text-center py-8">
           Run a simulation to see results
@@ -33,7 +32,7 @@ export function PeekingResultsDisplay({ results, confidenceLevel }: PeekingResul
   const alpha = (100 - confidenceLevel);
 
   return (
-    <div className="bg-gray-800 rounded-lg shadow-md border border-gray-700 p-6">
+    <div className="bg-gray-800 rounded-2xl shadow-md border border-gray-700 p-6">
       <h2 className="text-xl font-semibold text-white mb-4">Peeking Results</h2>
 
       <div className="overflow-x-auto mb-6">
@@ -58,7 +57,7 @@ export function PeekingResultsDisplay({ results, confidenceLevel }: PeekingResul
                 <div className="text-xs text-gray-400">({endPosRate.toFixed(1)}%)</div>
               </td>
               <td className="text-center py-3 px-4 text-orange-300 font-semibold">
-                {endPosRate > 0 ? `+${inflationRatePos.toFixed(1)}%` : '—'}
+                {endPosRate > 0 ? `+${inflationRatePos.toFixed(1)}%` : 'n/a'}
               </td>
             </tr>
             <tr className="border-b border-gray-700 bg-gray-900/50">
@@ -72,7 +71,7 @@ export function PeekingResultsDisplay({ results, confidenceLevel }: PeekingResul
                 <div className="text-xs text-gray-400">({endNegRate.toFixed(1)}%)</div>
               </td>
               <td className="text-center py-3 px-4 text-orange-300 font-semibold">
-                {endNegRate > 0 ? `+${inflationRateNeg.toFixed(1)}%` : '—'}
+                {endNegRate > 0 ? `+${inflationRateNeg.toFixed(1)}%` : 'n/a'}
               </td>
             </tr>
             <tr className="border-t-2 border-gray-600 bg-gray-900/30">

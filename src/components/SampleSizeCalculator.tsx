@@ -1,16 +1,9 @@
 import { useState } from 'react';
-import { ArrowLeft, Info } from 'lucide-react';
+import { Info } from 'lucide-react';
 import { Helmet } from "react-helmet-async";
 import { Link } from 'react-router-dom';
   
-interface SampleSizeCalculatorProps { 
-  onNavigate: (page: string) => void;
-}
-
-export function SampleSizeCalculator({ onNavigate }: SampleSizeCalculatorProps) {
-  const onBack = () => {
-  window.location.href = '/'; // go straight to home page
-  };
+export function SampleSizeCalculator() {
   const [metricType, setMetricType] = useState<'continuous' | 'binary'>('continuous');
   const [testType, setTestType] = useState<'two-sided' | 'one-sided'>('two-sided');
   const [alpha, setAlpha] = useState(0.05);
@@ -126,7 +119,7 @@ export function SampleSizeCalculator({ onNavigate }: SampleSizeCalculatorProps) 
   const result = calculateSampleSize();
 
     return ( 
-      <div className="min-h-screen bg-gray-900">
+      <div className="bg-gray-900">
     <Helmet>
       <title>Sample Size Calculator for A/B Testing</title>
       <meta
@@ -137,15 +130,8 @@ export function SampleSizeCalculator({ onNavigate }: SampleSizeCalculatorProps) 
 
     <div className="max-w-5xl mx-auto px-4 py-8">
 
-        <button
-          onClick={onBack}
-          className="flex items-center gap-2 text-blue-400 hover:text-white mb-8 transition-colors"
-        >
-          <ArrowLeft className="w-4 h-4" />
-          Back to Tools
-        </button>
 
-        <div className="bg-gray-800 rounded-lg shadow-lg p-8">
+        <div className="bg-gray-800 rounded-2xl shadow-lg p-8">
           <h1 className="text-4xl font-bold text-white mb-2">Sample Size Calculator</h1>
           <p className="text-gray-300 mb-8">
             Calculate the required sample size for your A/B test
@@ -384,7 +370,7 @@ export function SampleSizeCalculator({ onNavigate }: SampleSizeCalculatorProps) 
                         Bonferroni adjusted α: {(alpha / (comparisonType === 'control' ? numFlights - 1 : (numFlights * (numFlights - 1)) / 2)).toFixed(4)}
                       </p>
                         <Link
-                          to="/fwer"
+                          to="/resources/advanced-techniques/fwer"
                           className="flex items-center gap-1 text-blue-400 hover:text-blue-300 text-xs transition-colors"
                           >
                           <Info className="w-3 h-3" />
@@ -446,7 +432,7 @@ export function SampleSizeCalculator({ onNavigate }: SampleSizeCalculatorProps) 
                         {comparisonType === 'control' ? `${numFlights - 1} comparisons to control` : `${(numFlights * (numFlights - 1)) / 2} pairwise comparisons`}
                       </p>
                       <Link
-                        to="/fwer"
+                        to="/resources/advanced-techniques/fwer"
                         className="flex items-center gap-1 text-blue-400 hover:text-blue-300 text-xs transition-colors"
                         >
                         <Info className="w-3 h-3" />
@@ -534,7 +520,7 @@ export function SampleSizeCalculator({ onNavigate }: SampleSizeCalculatorProps) 
               Want to know how long your experiment needs to run?
             </p>
             <Link
-  to="/test-duration-calc"
+  to="/resources/calculators/test-duration-calc"
   className="inline-block bg-blue-500 hover:bg-blue-600 text-white font-semibold px-6 py-3 rounded transition-colors"
 >
   Open Test Duration Calculator →

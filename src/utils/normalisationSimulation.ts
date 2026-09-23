@@ -54,7 +54,7 @@ function generateNormal(mean: number, std: number, n: number): number[] {
   const values: number[] = [];
   for (let i = 0; i < n; i++) {
     let u1 = Math.random();
-    let u2 = Math.random();
+    const u2 = Math.random();
     while (u1 === 0) u1 = Math.random();
     const z = Math.sqrt(-2.0 * Math.log(u1)) * Math.cos(2.0 * Math.PI * u2);
     values.push(mean + z * std);
@@ -88,7 +88,7 @@ function welchTTest(group1: number[], group2: number[]): number {
     (Math.pow(v1 / n1, 2) / (n1 - 1) + Math.pow(v2 / n2, 2) / (n2 - 1));
 
   const x = df / (df + t * t);
-  let p = incompleteBeta(x, df / 2, 0.5);
+  const p = incompleteBeta(x, df / 2, 0.5);
   return Math.min(1, p);
 }
 
@@ -137,7 +137,7 @@ function betaCF(x: number, a: number, b: number): number {
 
 function logGamma(x: number): number {
   const c = [
-    76.18009172947146, -86.50532032941677, 24.01409824083091,
+    76.18009172947146, -86.50532032941678, 24.01409824083091,
     -1.231739572450155, 0.1208650973866179e-2, -0.5395239384953e-5
   ];
 
@@ -150,7 +150,7 @@ function logGamma(x: number): number {
     ser += c[j] / ++y;
   }
 
-  return -tmp + Math.log(2.5066282746310005 * ser / x);
+  return -tmp + Math.log(2.5066282746310007 * ser / x);
 }
 
 function standardize(values: number[], pooledMean: number, pooledStd: number): number[] {

@@ -2,88 +2,98 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://advancedab.tech/</loc>
-    <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://advancedab.tech/sample-size-calc</loc>
-    <changefreq>weekly</changefreq>
+    <loc>https://advancedab.tech/pricing</loc>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://advancedab.tech/lessons</loc>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://advancedab.tech/test-duration-calc</loc>
-    <changefreq>weekly</changefreq>
+    <loc>https://advancedab.tech/contact</loc>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://advancedab.tech/effect-detection-calc</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://advancedab.tech/test-results-calc</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://advancedab.tech/nhst</loc>
-    <changefreq>weekly</changefreq>
+    <loc>https://advancedab.tech/resources</loc>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://advancedab.tech/peeking</loc>
-    <changefreq>weekly</changefreq>
+    <loc>https://advancedab.tech/resources/calculators</loc>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://advancedab.tech/guardrails</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url> 
-    <loc>https://advancedab.tech/metric-variability-detectability</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>  
-  </url>
-  <url>
-    <loc>https://advancedab.tech/imbalanced</loc>
-    <changefreq>weekly</changefreq>
+    <loc>https://advancedab.tech/resources/best-practices</loc>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://advancedab.tech/cuped</loc>
-    <changefreq>weekly</changefreq>
+    <loc>https://advancedab.tech/resources/advanced-techniques</loc>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://advancedab.tech/fwer</loc>
-    <changefreq>weekly</changefreq>
+    <loc>https://advancedab.tech/resources/calculators/sample-size-calc</loc>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://advancedab.tech/winsorizing</loc>
-    <changefreq>weekly</changefreq>
+    <loc>https://advancedab.tech/resources/calculators/test-duration-calc</loc>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://advancedab.tech/normalisation</loc>
-    <changefreq>weekly</changefreq>
+    <loc>https://advancedab.tech/resources/calculators/effect-detection-calc</loc>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://advancedab.tech/bootstrap</loc>
-    <changefreq>weekly</changefreq>
+    <loc>https://advancedab.tech/resources/calculators/test-results-calc</loc>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://advancedab.tech/glossary</loc>
-    <changefreq>weekly</changefreq>
+    <loc>https://advancedab.tech/resources/best-practices/nhst</loc>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://advancedab.tech/feedback</loc>
-    <changefreq>weekly</changefreq>
+    <loc>https://advancedab.tech/resources/best-practices/peeking</loc>
     <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://advancedab.tech/resources/best-practices/guardrails</loc>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://advancedab.tech/resources/best-practices/imbalanced</loc>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://advancedab.tech/resources/best-practices/metric-variability-detectability</loc>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://advancedab.tech/resources/advanced-techniques/cuped</loc>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://advancedab.tech/resources/advanced-techniques/fwer</loc>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://advancedab.tech/resources/advanced-techniques/winsorizing</loc>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://advancedab.tech/resources/advanced-techniques/normalisation</loc>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://advancedab.tech/resources/advanced-techniques/bootstrap</loc>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://advancedab.tech/resources/advanced-techniques/bootstrap/ab</loc>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://advancedab.tech/resources/glossary</loc>
+    <priority>0.5</priority>
   </url>
 </urlset>

@@ -12,8 +12,6 @@ export function NormalisationImbalanceChart({ groupConfigs }: Props) {
 
     const group1Mean = groupConfigs[0].baselineMean;
     const group2Mean = groupConfigs[1].baselineMean;
-    const group1Name = groupConfigs[0].name;
-    const group2Name = groupConfigs[1].name;
 
     const points = [];
 
@@ -50,7 +48,6 @@ export function NormalisationImbalanceChart({ groupConfigs }: Props) {
   const group1Mean = groupConfigs[0].baselineMean;
   const group2Mean = groupConfigs[1].baselineMean;
   const higherValueRegion = group1Mean > group2Mean ? group1Name : group2Name;
-  const lowerValueRegion = group1Mean > group2Mean ? group2Name : group1Name;
 
   const maxLift = Math.max(...data.map(d => Math.abs(d.liftPercent)));
   const yDomain = [-Math.ceil(maxLift * 1.2), Math.ceil(maxLift * 1.2)];
@@ -99,7 +96,8 @@ export function NormalisationImbalanceChart({ groupConfigs }: Props) {
                 borderRadius: '8px',
                 fontSize: '12px'
               }}
-              formatter={(value: number, name: string) => {
+              formatter={(raw, name) => {
+                const value = Number(raw);
                 if (name === 'liftPercent') {
                   return [`${value >= 0 ? '+' : ''}${value.toFixed(2)}%`, 'Spurious Lift'];
                 }

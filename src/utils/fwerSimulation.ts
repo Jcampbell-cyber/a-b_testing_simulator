@@ -73,7 +73,7 @@ function anovaFTestP(groupMeans: number[], groupSDs: number[], n: number): numbe
   const normalZ = z / Math.sqrt(2 / (9 * dfBetween));
 
   // Standard normal CDF approximation
-  const pValue = 1 - 0.5 * (1 + Math.erf(normalZ / Math.sqrt(2)));
+  const pValue = 1 - 0.5 * (1 + erf(normalZ / Math.sqrt(2)));
 
   return Math.max(0, Math.min(1, pValue));
 }
@@ -81,7 +81,7 @@ function anovaFTestP(groupMeans: number[], groupSDs: number[], n: number): numbe
 /**
  * Error function approximation
  */
-Math.erf = Math.erf || function(x: number): number {
+function erf(x: number): number {
   // Constants for approximation
   const a1 =  0.254829592;
   const a2 = -0.284496736;
@@ -102,7 +102,7 @@ Math.erf = Math.erf || function(x: number): number {
 /**
  * Apply multiple testing corrections
  */
-function adjustPValues(pVals: number[], method: string, alpha: number, numGroups: number): number[] {
+function adjustPValues(pVals: number[], method: string, numGroups: number): number[] {
   const m = pVals.length;
 
   if (method === 'Bonferroni') {
@@ -218,7 +218,7 @@ export function runFWERSimulation(
         sigs = pVals.map(() => false);
       } else {
         // Proceed with pairwise tests
-        const adjP = adjustPValues(pVals, baseMethod, alpha, numFlights);
+        const adjP = adjustPValues(pVals, baseMethod, numFlights);
         sigs = adjP.map((p) => p < alpha);
       }
 

@@ -1,11 +1,7 @@
 import { useEffect, useState } from 'react';
-import { ArrowLeft, Info } from 'lucide-react';
+import { Info } from 'lucide-react';
 import { Helmet } from 'react-helmet-async';
 import { Link } from 'react-router-dom';
-
-interface EffectDetectionCalculatorProps {
-  onNavigate: (page: string) => void;
-}
 
 type MetricType = 'continuous' | 'binary';
 type TestType = 'two-sided' | 'one-sided';
@@ -13,10 +9,7 @@ type SampleSizeMode = 'per-group' | 'all-groups';
 type ComparisonType = 'none' | 'control' | 'pairwise';
 type AllocationMode = 'equal' | 'unequal';
 
-export function EffectDetectionCalculator({ onNavigate }: EffectDetectionCalculatorProps) {
-  const onBack = () => {
-    window.location.href = '/';
-  };
+export function EffectDetectionCalculator() {
 
   const [metricType, setMetricType] = useState<MetricType>('continuous');
   const [testType, setTestType] = useState<TestType>('two-sided');
@@ -348,7 +341,7 @@ export function EffectDetectionCalculator({ onNavigate }: EffectDetectionCalcula
     );
   };
     return (
-    <div className="min-h-screen bg-gray-900">
+    <div className="bg-gray-900">
       <Helmet>
         <title>Effect Detection Calculator | Experiment Tools</title>
         <meta
@@ -358,15 +351,8 @@ export function EffectDetectionCalculator({ onNavigate }: EffectDetectionCalcula
       </Helmet>
 
       <div className="max-w-5xl mx-auto px-4 py-8">
-        <button
-          onClick={onBack}
-          className="flex items-center gap-2 text-blue-400 hover:text-white mb-8 transition-colors"
-        >
-          <ArrowLeft className="w-4 h-4" />
-          Back to Tools
-        </button>
 
-        <div className="bg-gray-800 rounded-lg shadow-lg p-8">
+        <div className="bg-gray-800 rounded-2xl shadow-lg p-8">
           <h1 className="text-4xl font-bold text-white mb-2">Effect Detection Calculator</h1>
           <p className="text-gray-300 mb-8">
             Calculate the minimum detectable effect for your experiment setup
@@ -681,7 +667,7 @@ export function EffectDetectionCalculator({ onNavigate }: EffectDetectionCalcula
                         Bonferroni adjusted α: {(alpha / getNumComparisons()).toFixed(4)}
                       </p>
                       <Link
-                        to="/fwer"
+                        to="/resources/advanced-techniques/fwer"
                         className="flex items-center gap-1 text-blue-400 hover:text-blue-300 text-xs transition-colors"
                       >
                         <Info className="w-3 h-3" />
@@ -843,7 +829,7 @@ export function EffectDetectionCalculator({ onNavigate }: EffectDetectionCalcula
 
               {numFlights > 2 && comparisonType !== 'none' && (
                 <Link
-                  to="/fwer"
+                  to="/resources/advanced-techniques/fwer"
                   className="flex items-center gap-1 text-blue-400 hover:text-blue-300 text-xs transition-colors mt-2"
                 >
                   <Info className="w-3 h-3" />
@@ -951,7 +937,7 @@ export function EffectDetectionCalculator({ onNavigate }: EffectDetectionCalcula
       <div className="mt-12 bg-gray-700 rounded-lg p-6 text-center">
         <p className="text-gray-300 mb-4">Ready to analyse the results of your experiment?</p>
         <Link
-          to="/test-results-calc"
+          to="/resources/calculators/test-results-calc"
           className="inline-block bg-blue-500 hover:bg-blue-600 text-white font-semibold px-6 py-3 rounded transition-colors"
         >
           Open Test Results Calculator →

@@ -4,7 +4,7 @@ import {
   CartesianGrid, ResponsiveContainer, Legend
 } from 'recharts';
 import { Link } from 'react-router-dom';
-import { Gauge } from 'lucide-react';
+import { AlertTriangle, Check, Gauge } from 'lucide-react';
 
 const data = [
   { proportion: 0.00, variance: 0.0000, coev: 0.00, mde_prop: 0.00, mde_cont: 0.00 },
@@ -31,13 +31,14 @@ const data = [
 ];
 
 // Custom tooltip showing CoV, MDE type clarifications, and runtime advantage
-const CustomTooltip = ({ active, payload, label }: any) => {
+type TooltipEntry = { dataKey?: string | number; value?: number };
+const CustomTooltip = ({ active, payload, label = 0 }: { active?: boolean; payload?: TooltipEntry[]; label?: number }) => {
   if (!active || !payload || !payload.length) return null;
 
   const row = data.find(d => d.proportion === label);
   const coev = row?.coev ?? label;
-  const mde_prop = payload.find((p: any) => p.dataKey === 'mde_prop')?.value;
-  const mde_cont = payload.find((p: any) => p.dataKey === 'mde_cont')?.value;
+  const mde_prop = payload.find((p) => p.dataKey === 'mde_prop')?.value;
+  const mde_cont = payload.find((p) => p.dataKey === 'mde_cont')?.value;
 
   let runtimeNote = null;
   if (mde_prop != null && mde_cont != null && mde_cont > 0 && mde_prop > 0) {
@@ -83,7 +84,7 @@ const CustomTooltip = ({ active, payload, label }: any) => {
 
 export function VariabilityVsCoevPage() {
   return (
-    <div className="min-h-screen bg-gray-900">
+    <div className="bg-gray-900">
       <Helmet>
         <title>Metric Variability & Detectability | Experiment Tools</title>
         <meta
@@ -101,7 +102,7 @@ export function VariabilityVsCoevPage() {
           The variability of your metric directly determines how long your experiment needs to run.
           Both <strong className="text-white">proportion metrics</strong> (e.g. conversion rate) and{' '}
           <strong className="text-white">continuous metrics</strong> (e.g. average revenue, scores) have
-          different variability profiles — and choosing the right metric type can significantly reduce
+          different variability profiles, and choosing the right metric type can significantly reduce
           experiment runtime.
         </p>
 
@@ -116,7 +117,7 @@ export function VariabilityVsCoevPage() {
         </div>
 
         {/* Chart */}
-        <div className="bg-gray-800 rounded-lg shadow-md border border-gray-700 p-6 mb-6">
+        <div className="bg-gray-800 rounded-2xl shadow-md border border-gray-700 p-6 mb-6">
           <h2 className="text-xl font-semibold text-white mb-1">
             MDE by Proportion Baseline and Continuous Metric CoV
           </h2>
@@ -178,7 +179,7 @@ export function VariabilityVsCoevPage() {
         </div>
 
         {/* Metric redefinition trade-off */}
-        <div className="bg-gray-800 rounded-lg shadow-md border border-gray-700 p-6 mb-6">
+        <div className="bg-gray-800 rounded-2xl shadow-md border border-gray-700 p-6 mb-6">
           <h2 className="text-xl font-semibold text-white mb-3">
             Switching Metric Type: The Trade-off
           </h2>
@@ -192,21 +193,21 @@ export function VariabilityVsCoevPage() {
               <p className="text-gray-300 text-sm mb-1">
                 <span className="text-green-400 font-semibold">Continuous:</span>{' '}
                 Average application quality score per user
-                <span className="text-gray-500 text-xs block">(e.g. mean dotmatch score — high CoV, noisy)</span>
+                <span className="text-gray-500 text-xs block">(e.g. mean dotmatch score: high CoV, noisy)</span>
               </p>
               <p className="text-gray-300 text-sm mt-3">
                 <span className="text-blue-400 font-semibold">Proportion equivalent:</span>{' '}
                 % of users who submitted at least one high-fit application
-                <span className="text-gray-500 text-xs block">(binary — did they hit the threshold? Much lower variance)</span>
+                <span className="text-gray-500 text-xs block">(binary: did they hit the threshold? Much lower variance)</span>
               </p>
             </div>
             <div className="bg-gray-700 rounded p-4">
               <p className="text-white font-semibold mb-2">What changes</p>
               <ul className="text-gray-300 text-sm space-y-2">
-                <li>✅ Substantially lower MDE — detectable with fewer samples</li>
-                <li>✅ Faster experiment runtime</li>
-                <li>⚠️ Metric definition shifts slightly — you're now measuring a threshold, not an average</li>
-                <li>⚠️ You lose granularity — a user scoring 0.95 vs 0.61 looks the same</li>
+                <li className="flex gap-2"><Check className="mt-0.5 h-4 w-4 shrink-0 text-emerald-400" aria-hidden="true" />Substantially lower MDE, so it is detectable with fewer samples</li>
+                <li className="flex gap-2"><Check className="mt-0.5 h-4 w-4 shrink-0 text-emerald-400" aria-hidden="true" />Faster experiment runtime</li>
+                <li className="flex gap-2"><AlertTriangle className="mt-0.5 h-4 w-4 shrink-0 text-amber-400" aria-hidden="true" />Metric definition shifts slightly: you're now measuring a threshold, not an average</li>
+                <li className="flex gap-2"><AlertTriangle className="mt-0.5 h-4 w-4 shrink-0 text-amber-400" aria-hidden="true" />You lose granularity: a user scoring 0.95 vs 0.61 looks the same</li>
               </ul>
             </div>
           </div>
@@ -216,7 +217,7 @@ export function VariabilityVsCoevPage() {
         </div>
 
         {/* CoV explainer */}
-        <div className="bg-gray-800 rounded-lg shadow-md border border-gray-700 p-6 mb-6">
+        <div className="bg-gray-800 rounded-2xl shadow-md border border-gray-700 p-6 mb-6">
           <h2 className="text-xl font-semibold text-white mb-3">Understanding Coefficient of Variation (CoV)</h2>
           <p className="text-base text-gray-400 mb-3">
             For continuous metrics, the <strong className="text-white">Coefficient of Variation (CoV)</strong> captures
@@ -226,14 +227,14 @@ export function VariabilityVsCoevPage() {
             CoV = Standard Deviation ÷ Mean
           </div>
             <ul className="text-gray-400 text-sm space-y-2">
-              <li><span className="text-white font-semibold">CoV &lt; 0.3</span> — extremely low variability, fast experiments, small MDE achievable</li>
-              <li><span className="text-white font-semibold">CoV ≈ 0.5</span> — similar variability to a 50% proportion metric — this is the crossover point</li>
-              <li><span className="text-white font-semibold">CoV &gt; 0.5</span> — high variability, slow experiments — consider a proportion equivalent</li>
-              <li><span className="text-white font-semibold">CoV &gt; 1</span> — extremely high variability, quite standard in user metrics — use proportion if business accepts the metric redefinition</li>
+              <li><span className="text-white font-semibold">CoV &lt; 0.3</span>: extremely low variability, fast experiments, small MDE achievable</li>
+              <li><span className="text-white font-semibold">CoV ≈ 0.5</span>: similar variability to a 50% proportion metric. This is the crossover point</li>
+              <li><span className="text-white font-semibold">CoV &gt; 0.5</span>: high variability, slow experiments. Consider a proportion equivalent</li>
+              <li><span className="text-white font-semibold">CoV &gt; 1</span>: extremely high variability, quite standard in user metrics. Use proportion if business accepts the metric redefinition</li>
             </ul>
           <p className="text-gray-400 text-sm mt-4">
             Revenue and score-based metrics often have CoV between 1 and 3 due to extreme outliers,
-            making them inherently harder to detect changes in — even after winsorizing.
+            making them inherently harder to detect changes in, even after winsorizing.
           </p>
         </div>
 
@@ -241,10 +242,10 @@ export function VariabilityVsCoevPage() {
         <div className="grid md:grid-cols-2 gap-4 mt-10">
           <div className="bg-gray-700 rounded-lg p-6 text-center">
             <p className="text-gray-300 mb-4">
-              CUPED can reduce variance for continuous metrics — often a faster alternative to switching metric type.
+              CUPED can reduce variance for continuous metrics, often a faster alternative to switching metric type.
             </p>
             <Link
-              to="/cuped"
+              to="/resources/advanced-techniques/cuped"
               className="inline-block bg-blue-500 hover:bg-blue-600 text-white font-semibold px-6 py-3 rounded transition-colors"
             >
               Go to CUPED Variance Reduction →
@@ -255,7 +256,7 @@ export function VariabilityVsCoevPage() {
               Winsorizing can also reduce the impact of outliers on high-CoV continuous metrics.
             </p>
             <Link
-              to="/winsorizing"
+              to="/resources/advanced-techniques/winsorizing"
               className="inline-block bg-blue-500 hover:bg-blue-600 text-white font-semibold px-6 py-3 rounded transition-colors"
             >
               Go to Winsorizing →

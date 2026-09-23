@@ -10,7 +10,7 @@ export function BootstrapMeanPage() {
   const [sampleSize, setSampleSize] = useState(1000);
   const [resamples, setResamples] = useState(1000);
 
-  const [results, setResults] = useState<any>(null);
+  const [results, setResults] = useState<ReturnType<typeof runBootstrapMean> | null>(null);
   const [view, setView] = useState(0);
   const [running, setRunning] = useState(false);
 
@@ -37,7 +37,7 @@ export function BootstrapMeanPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-900 text-white">
+    <div className="bg-gray-900 text-white">
       <Helmet>
         <title>Bootstrap Mean</title>
       </Helmet>
@@ -132,7 +132,7 @@ export function BootstrapMeanPage() {
             </p>
 
             <Link
-              to="/bootstrap/ab"
+              to="/resources/advanced-techniques/bootstrap/ab"
               className="inline-block bg-blue-500 hover:bg-blue-600 px-5 py-2 rounded font-semibold"
             >
               Go to A/B Bootstrap →

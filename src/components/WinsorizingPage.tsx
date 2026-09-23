@@ -45,7 +45,7 @@ export function WinsorizingPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-900">
+    <div className="bg-gray-900">
 <Helmet>
   <title>Winsorising in A/B Testing</title>
   <meta
@@ -62,7 +62,7 @@ export function WinsorizingPage() {
         </div>
 
         <div className="space-y-4">
-          <div className="bg-gray-800 rounded-lg border border-gray-700 p-5">
+          <div className="bg-gray-800 rounded-2xl border border-gray-700 p-5">
             <h3 className="text-lg font-semibold text-white mb-3">What is Winsorizing?</h3>
             <p className="text-sm text-gray-300 mb-3">
               <strong className="text-white">Winsorizing</strong> is a statistical technique for handling skewed distributions and outliers by capping extreme values
@@ -81,7 +81,7 @@ export function WinsorizingPage() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="bg-gray-800 rounded-lg border border-gray-700 p-5">
+            <div className="bg-gray-800 rounded-2xl border border-gray-700 p-5">
               <h3 className="text-lg font-semibold text-emerald-400 mb-3">Key Benefits</h3>
               <ul className="space-y-2 text-sm text-gray-300">
                 <li><strong className="text-white">Reduces variance:</strong> Controls the influence of extreme outliers</li>
@@ -92,7 +92,7 @@ export function WinsorizingPage() {
               </ul>
             </div>
 
-            <div className="bg-gray-800 rounded-lg border border-gray-700 p-5">
+            <div className="bg-gray-800 rounded-2xl border border-gray-700 p-5">
               <h3 className="text-lg font-semibold text-blue-400 mb-3">Choosing the Right Threshold</h3>
               <p className="text-sm text-gray-300 mb-2">
                 A lower percentile caps more values and produces greater variance reduction:
@@ -105,7 +105,7 @@ export function WinsorizingPage() {
             </div>
           </div>
 
-          <div className="bg-gray-800 rounded-lg border border-cyan-700/50 p-5">
+          <div className="bg-gray-800 rounded-2xl border border-cyan-700/50 p-5">
             <h3 className="text-lg font-semibold text-cyan-400 mb-3">How to Apply in A/B Tests</h3>
             <p className="text-sm text-gray-300 mb-2">
               Calculate the percentile threshold using the <strong className="text-white">combined population</strong> (both control and treatment together), then apply this single threshold to all data.
@@ -120,7 +120,7 @@ export function WinsorizingPage() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="bg-gray-800 rounded-lg border border-gray-700 p-5">
+            <div className="bg-gray-800 rounded-2xl border border-gray-700 p-5">
               <h3 className="text-lg font-semibold text-green-400 mb-3">When to Use</h3>
               <ul className="space-y-1.5 text-sm text-gray-300">
                 <li>Revenue per user with whale customers</li>
@@ -131,7 +131,7 @@ export function WinsorizingPage() {
               </ul>
             </div>
 
-            <div className="bg-gray-800 rounded-lg border border-gray-700 p-5">
+            <div className="bg-gray-800 rounded-2xl border border-gray-700 p-5">
               <h3 className="text-lg font-semibold text-red-400 mb-3">When NOT to Use</h3>
               <ul className="space-y-1.5 text-sm text-gray-300">
                 <li>Binary metrics (conversion, CTR)</li>
@@ -189,14 +189,14 @@ export function WinsorizingPage() {
             )}
 
             {!results && !abTestResults && (
-              <div className="bg-gray-800 rounded-lg shadow-sm border border-gray-700 p-12 text-center">
+              <div className="bg-gray-800 rounded-2xl shadow-sm border border-gray-700 p-12 text-center">
                 <p className="text-gray-400">Configure parameters and click "Run Simulation" to see results</p>
               </div>
             )}
           </div>
         </div>
 
-        <div className="mt-8 bg-gray-800 rounded-lg p-6">
+        <div className="mt-8 bg-gray-800 rounded-2xl p-6">
           <h2 className="text-2xl font-bold text-white mb-4">Understanding the Results</h2>
           <div className="text-gray-300 space-y-3">
             <p>
@@ -228,7 +228,7 @@ export function WinsorizingPage() {
     Normalisation helps make metrics comparable across different groups and noisy data
   </p>
   <Link
-    to="/normalisation"
+    to="/resources/advanced-techniques/normalisation"
     className="inline-block bg-blue-500 hover:bg-blue-600 text-white font-semibold px-6 py-3 rounded transition-colors"
   >
     Make your metrics comparable with Normalisation →

@@ -1,16 +1,9 @@
 import { useState } from 'react';
-import { ArrowLeft, Info } from 'lucide-react';
+import { Info } from 'lucide-react';
 import { Helmet } from 'react-helmet-async';
 import { Link } from 'react-router-dom';
 
-interface TestDurationCalculatorProps {
-  onNavigate: (page: string) => void;
-}
-
-export function TestDurationCalculator({ onNavigate }: TestDurationCalculatorProps) {
-  const onBack = () => {
-    window.location.href = '/';
-  };
+export function TestDurationCalculator() {
 
   const [metricType, setMetricType] = useState<'continuous' | 'binary'>('continuous');
   const [testType, setTestType] = useState<'two-sided' | 'one-sided'>('two-sided');
@@ -142,7 +135,7 @@ export function TestDurationCalculator({ onNavigate }: TestDurationCalculatorPro
   const result = calculateDuration();
 
   return (
-    <div className="min-h-screen bg-gray-900">
+    <div className="bg-gray-900">
       <Helmet>
         <title>Test Duration Calculator for A/B Testing</title>
         <meta
@@ -151,14 +144,7 @@ export function TestDurationCalculator({ onNavigate }: TestDurationCalculatorPro
         />
       </Helmet>
       <div className="max-w-5xl mx-auto px-4 py-8">
-        <button
-          onClick={onBack}
-          className="flex items-center gap-2 text-blue-400 hover:text-white mb-8 transition-colors"
-        >
-          <ArrowLeft className="w-4 h-4" />
-          Back to Tools
-        </button>
-        <div className="bg-gray-800 rounded-lg shadow-lg p-8">
+        <div className="bg-gray-800 rounded-2xl shadow-lg p-8">
           <h1 className="text-4xl font-bold text-white mb-2">Test Duration Calculator</h1>
           <p className="text-gray-300 mb-8">
             Estimate how long your test needs to run to reach statistical significance
@@ -428,7 +414,7 @@ export function TestDurationCalculator({ onNavigate }: TestDurationCalculatorPro
                         Bonferroni adjusted α: {(alpha / (comparisonType === 'control' ? numFlights - 1 : (numFlights * (numFlights - 1)) / 2)).toFixed(4)}
                       </p>
                       <Link
-                      to="/fwer"
+                      to="/resources/advanced-techniques/fwer"
                       className="flex items-center gap-1 text-blue-400 hover:text-blue-300 text-xs transition-colors"
                       >
                       <Info className="w-3 h-3" />
@@ -481,7 +467,7 @@ export function TestDurationCalculator({ onNavigate }: TestDurationCalculatorPro
                         {comparisonType === 'control' ? `${numFlights - 1} comparisons to control` : `${(numFlights * (numFlights - 1)) / 2} pairwise comparisons`}
                       </p>
                       <Link
-                        to="/fwer"                        
+                        to="/resources/advanced-techniques/fwer"                        
                         className="flex items-center gap-1 text-blue-400 hover:text-blue-300 text-xs transition-colors"
                         >
                         <Info className="w-3 h-3" />
@@ -573,7 +559,7 @@ export function TestDurationCalculator({ onNavigate }: TestDurationCalculatorPro
               Want to detect the smallest effect your experiment can reliably measure?
             </p>
             <Link
-              to="/effect-detection-calc"
+              to="/resources/calculators/effect-detection-calc"
               className="inline-block bg-blue-500 hover:bg-blue-600 text-white font-semibold px-6 py-3 rounded transition-colors"
             >
               Open Effect Detection Calculator →

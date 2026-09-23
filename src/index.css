@@ -1,3 +1,52 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    @apply bg-gray-900 font-sans text-gray-300 antialiased;
+  }
+
+  h1,
+  h2 {
+    @apply font-display text-white;
+    font-optical-sizing: auto;
+  }
+
+  a {
+    @apply transition-colors;
+  }
+
+  /* Dark defaults for form controls that don't set their own colours */
+  :where(input:not([type='checkbox'], [type='radio'], [type='range']), select, textarea) {
+    @apply border-gray-600 bg-gray-900 text-white;
+    color-scheme: dark;
+  }
+
+  :focus-visible {
+    @apply outline-none ring-2 ring-blue-400 ring-offset-2 ring-offset-gray-900;
+  }
+
+  [id] {
+    scroll-margin-top: 6rem;
+  }
+}
+
+/* Fraunces is loaded at 500/600, so keep heading "bold" classes at 600 */
+:is(h1, h2):is(.font-bold, .font-extrabold, .font-black) {
+  font-weight: 600;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

@@ -3,7 +3,6 @@ import { Info } from 'lucide-react';
 import { Helmet } from 'react-helmet-async';
 import { Link } from 'react-router-dom';
 import {
-  LineChart,
   Line,
   Area,
   XAxis,
@@ -80,6 +79,8 @@ const NHSTPage: React.FC = () => {
       mean1,
       maxDensity,
     };
+  // Helper functions are pure and only depend on these inputs
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [power, sampleSize, alpha, testType]);
 
   // Normal PDF
@@ -160,7 +161,7 @@ const NHSTPage: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-900">
+    <div className="bg-gray-900">
       <Helmet>
         <title>Null Hypothesis Significance Testing | Guardrails</title>
         <meta
@@ -269,7 +270,7 @@ const NHSTPage: React.FC = () => {
                   onClick={() => setTestType('one-sided')}
                   className={`flex-1 py-2 px-4 rounded-lg font-medium transition-colors ${
                     testType === 'one-sided'
-                      ? 'bg-[#0017D2] text-white'
+                      ? 'bg-blue-600 text-white'
                       : 'bg-gray-700 text-gray-200 hover:bg-gray-600'
                   }`}
                 >
@@ -279,7 +280,7 @@ const NHSTPage: React.FC = () => {
                   onClick={() => setTestType('two-sided')}
                   className={`flex-1 py-2 px-4 rounded-lg font-medium transition-colors ${
                     testType === 'two-sided'
-                      ? 'bg-[#0017D2] text-white'
+                      ? 'bg-blue-600 text-white'
                       : 'bg-gray-700 text-gray-200 hover:bg-gray-600'
                   }`}
                 >
@@ -557,7 +558,7 @@ const NHSTPage: React.FC = () => {
                 See how frequent peeking can inflate false positives in A/B tests
               </p>
               <Link
-                to="/peeking"
+                to="/resources/best-practices/peeking"
                 className="inline-block bg-blue-500 hover:bg-blue-600 text-white font-semibold px-6 py-3 rounded transition-colors"
               >
                 Explore False Positives from Peeking →
