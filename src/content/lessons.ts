@@ -32,8 +32,9 @@ export const lessons: Lesson[] = [
     title: 'When a big percentage is a small deal',
     summary: 'A scary drop inside a test can barely register across the whole business. You have to do the maths.',
     paragraphs: [
-      'Most changes help one number and hurt another. Inside an experiment, those shifts can look dramatic. A 20% drop sounds alarming until you see it applies to a small slice of activity.',
-      'We weigh every trade-off in real business terms: how much does this change overall revenue or activity across the whole site? Often the scary effect is minor and the gain is worth it. Sometimes it’s the other way round, and you only know if you do the maths.',
+      'Sometimes a change helps one number and hurts another, and you have to weigh one against the other. Inside an experiment, those shifts can look dramatic.',
+      'Say a new product page layout leads to 20% fewer gift card sales, but 10% more bundle sales. The 20% drop sounds alarming. But if gift cards are only 2% of your revenue and bundles are 10%, the picture changes. On a site turning over $100,000 a month, you’d lose about $400 in gift card sales and gain about $1,000 in bundles. That’s roughly $600 more every month, so the change is worth rolling out.',
+      'We weigh every trade-off in real business terms: what does it do to revenue across the whole site? We also check that both shifts are real, not just noise. Often the scary number turns out to be minor. Sometimes it’s the other way round, and you only know if you do the maths.',
     ],
   },
 ];

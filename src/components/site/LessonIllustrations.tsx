@@ -184,46 +184,43 @@ export function LessonTwoIllustration() {
 }
 
 export function LessonThreeIllustration() {
-  const base = 176;
+  const zero = 118; // left panel: 3.5px per percentage point
+  const money = 150; // right panel: 0.09px per dollar
+  const value = { fontSize: 12, fontWeight: 700, fill: C.white, textAnchor: 'middle' as const };
+  const category = { fontSize: 11, fill: C.muted, textAnchor: 'middle' as const };
   return (
     <Svg
-      title="A 20% drop in a small slice barely moves the whole site"
-      desc="Inside the test, activity in one small slice fell by 20%. Across the whole site that slice is a small share, so total revenue barely moves."
+      title="Gift cards down 20%, bundles up 10%: the site makes about $600 more a month"
+      desc="Inside the test, gift card sales fell 20% and bundle sales rose 10%. On a site turning over $100,000 a month, where gift cards are 2% of revenue and bundles 10%, that is about $400 lost and $1,000 gained, so about $600 more each month."
     >
-      {/* Inside the test */}
+      {/* Inside the test: percentage change */}
       <text x="10" y="18" fontSize="12" fontWeight="600" fill={C.white}>Inside the test</text>
-      <text x="10" y="33" fontSize="10.5" fill={C.muted}>one small slice of activity</text>
-      <line x1="10" y1={base} x2="150" y2={base} stroke={C.line} />
-      <rect x="26" y={base - 110} width="42" height="110" rx="4" fill={C.blue} opacity="0.45" />
-      <rect x="92" y={base - 88} width="42" height="88" rx="4" fill={C.blue} />
-      <text x="47" y={base + 16} textAnchor="middle" fontSize="11" fill={C.muted}>Before</text>
-      <text x="113" y={base + 16} textAnchor="middle" fontSize="11" fill={C.muted}>After</text>
-      <text x="113" y={base - 96} textAnchor="middle" fontFamily="Fraunces, Georgia, serif" fontSize="20" fontWeight="600" fill={C.white}>
-        −20%
-      </text>
-      <text x="80" y="214" textAnchor="middle" fontSize="11.5" fontWeight="600" fill={C.text}>Looks alarming</text>
+      <text x="10" y="33" fontSize="10.5" fill={C.muted}>change in sales</text>
+      <line x1="10" y1={zero} x2="150" y2={zero} stroke={C.line} />
+      <rect x="26" y={zero} width="42" height="70" rx="4" fill={C.muted} />
+      <rect x="92" y={zero - 35} width="42" height="35" rx="4" fill={C.blue} />
+      <text x="47" y={zero + 86} {...value}>−20%</text>
+      <text x="113" y={zero - 43} {...value}>+10%</text>
+      <text x="47" y="221" {...category}>Gift cards</text>
+      <text x="113" y="221" {...category}>Bundles</text>
 
       <line x1="172" y1="10" x2="172" y2="220" stroke={C.panel} />
 
-      {/* Whole site */}
-      <text x="190" y="18" fontSize="12" fontWeight="600" fill={C.white}>Across the whole site</text>
-      <text x="190" y="33" fontSize="10.5" fill={C.muted}>total revenue</text>
-      {[
-        { y: 70, label: 'Before', slice: 22 },
-        { y: 126, label: 'After', slice: 17.6 },
-      ].map(row => (
-        <g key={row.label}>
-          <text x="190" y={row.y - 8} fontSize="11" fill={C.muted}>{row.label}</text>
-          <rect x="190" y={row.y} width="136" height="24" rx="4" fill={C.line} />
-          <rect x="328" y={row.y} width={row.slice} height="24" rx="4" fill={C.blue} opacity={row.label === 'Before' ? 0.45 : 1} />
-        </g>
-      ))}
-      <rect x="190" y="166" width="10" height="10" rx="2" fill={C.line} />
-      <text x="205" y="175" fontSize="10.5" fill={C.muted}>rest of the business</text>
-      <rect x="190" y="183" width="10" height="10" rx="2" fill={C.blue} />
-      <text x="205" y="192" fontSize="10.5" fill={C.muted}>the affected slice</text>
-      <text x="270" y="214" textAnchor="middle" fontSize="11.5" fontWeight="600" fill={C.text}>Barely moves</text>
+      {/* Across the whole site: dollars per month */}
+      <text x="186" y="18" fontSize="12" fontWeight="600" fill={C.white}>Across the whole site</text>
+      <text x="186" y="33" fontSize="10.5" fill={C.muted}>revenue per month, $100k site</text>
+      <line x1="186" y1={money} x2="352" y2={money} stroke={C.line} />
+      <rect x="190" y={money} width="36" height="36" rx="4" fill={C.muted} />
+      <path d={`M226 ${money + 36} H244`} stroke={C.muted} strokeDasharray="2 3" />
+      <rect x="244" y={money + 36 - 90} width="36" height="90" rx="4" fill={C.blue} />
+      <path d={`M280 ${money - 54} H298`} stroke={C.muted} strokeDasharray="2 3" />
+      <rect x="298" y={money - 54} width="36" height="54" rx="4" fill={C.green} />
+      <text x="208" y={money + 50} {...value}>−$400</text>
+      <text x="262" y={money - 62} {...value}>+$1,000</text>
+      <text x="316" y={money - 62} {...value}>+$600</text>
+      <text x="208" y="221" {...category}>Gift cards</text>
+      <text x="262" y="221" {...category}>Bundles</text>
+      <text x="316" y="221" {...category}>Net</text>
     </Svg>
   );
 }
-
