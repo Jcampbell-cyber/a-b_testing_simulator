@@ -215,6 +215,7 @@ const homeJsonLd = [
     url: SITE_URL,
     logo: LOGO_URL,
     description: 'Website testing (A/B testing and conversion rate optimisation) for small online businesses.',
+    address: { '@type': 'PostalAddress', addressLocality: 'Melbourne', addressRegion: 'VIC', addressCountry: 'AU' },
     areaServed: { '@type': 'Country', name: 'Australia' },
   },
   {
@@ -231,7 +232,7 @@ export function HomePage() {
       <Seo
         title="Website A/B Testing & CRO in Australia"
         path="/"
-        description="A/B testing and conversion rate optimisation for Australian small online businesses. We find where you lose sales, test the fixes and prove what works. Free testing plan."
+        description="Melbourne-based A/B testing and conversion rate optimisation for small online businesses across Australia. We find where you lose sales, test the fixes and prove what works."
         jsonLd={homeJsonLd}
       />
 
@@ -361,7 +362,7 @@ export function HomePage() {
         <Container className="flex flex-col gap-10 lg:flex-row lg:gap-[72px]">
           <div className="flex flex-col gap-4 lg:w-[380px] lg:flex-none">
             <H2>How we’d work together</H2>
-            <Lead>No lock-in contracts. Start with a free plan and decide from there.</Lead>
+            <Lead>Based in Melbourne, no lock-in contracts. Start with a free plan and decide from there.</Lead>
             <Link to="/pricing" className="text-[17px] font-semibold text-blue-400 no-underline hover:text-blue-300">
               See full pricing and what’s included →
             </Link>

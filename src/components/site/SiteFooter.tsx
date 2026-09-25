@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { RESOURCES_LABEL, SITE_NAME, SITE_TAGLINE } from '../../site';
+import { RESOURCES_LABEL, SITE_LOCATION, SITE_NAME, SITE_TAGLINE } from '../../site';
 import { Container } from './ui';
 
 const columns = [
@@ -30,6 +30,7 @@ export function SiteFooter() {
         <div className="flex max-w-[320px] flex-col gap-2.5">
           <span className="font-display text-xl font-semibold text-white">{SITE_NAME}</span>
           <span className="text-[15px] leading-normal text-gray-400">{SITE_TAGLINE}</span>
+          <span className="text-[15px] leading-normal text-gray-400">{SITE_LOCATION}</span>
         </div>
         <div className="flex flex-wrap gap-x-[72px] gap-y-10">
           {columns.map(col => (
