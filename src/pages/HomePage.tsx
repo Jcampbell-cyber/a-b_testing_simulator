@@ -3,7 +3,7 @@ import { CtaButton } from '../components/site/CtaButton';
 import { CtaBand } from '../components/site/CtaBand';
 import { Seo } from '../components/site/Seo';
 import { Container, Eyebrow, H2, Lead, Section, SectionIntro } from '../components/site/ui';
-import { FREE_PLAN_TURNAROUND } from '../site';
+import { FREE_PLAN_TURNAROUND, LOGO_URL, SITE_NAME, SITE_URL } from '../site';
 import { lessons } from '../content/lessons';
 import { lessonIllustrations } from '../content/lessonIllustrations';
 
@@ -207,19 +207,39 @@ const workSteps = [
   },
 ];
 
+const homeJsonLd = [
+  {
+    '@type': 'Organization',
+    '@id': `${SITE_URL}/#organization`,
+    name: SITE_NAME,
+    url: SITE_URL,
+    logo: LOGO_URL,
+    description: 'Website testing (A/B testing and conversion rate optimisation) for small online businesses.',
+    areaServed: { '@type': 'Country', name: 'Australia' },
+  },
+  {
+    '@type': 'WebSite',
+    name: SITE_NAME,
+    url: SITE_URL,
+    publisher: { '@id': `${SITE_URL}/#organization` },
+  },
+];
+
 export function HomePage() {
   return (
     <>
       <Seo
+        title="Website A/B Testing & CRO in Australia"
         path="/"
-        description="Stop guessing what works on your website. We find the leaks, test the fixes and prove the results. Get a free testing plan with three ranked test ideas."
+        description="A/B testing and conversion rate optimisation for Australian small online businesses. We find where you lose sales, test the fixes and prove what works. Free testing plan."
+        jsonLd={homeJsonLd}
       />
 
       {/* HERO */}
       <section className="pb-16 pt-12 sm:pt-16 lg:pb-24 lg:pt-[88px]">
         <Container className="flex flex-col gap-12 lg:flex-row lg:items-center lg:gap-16">
           <div className="flex flex-1 flex-col gap-6 lg:gap-7">
-            <Eyebrow>Find the leaks. Test the fixes. Prove the results.</Eyebrow>
+            <Eyebrow>A/B testing and CRO for Australian online businesses</Eyebrow>
             <h1 className="m-0 text-[2.5rem] font-semibold leading-[1.08] tracking-[-0.01em] sm:text-[3.25rem] lg:text-[3.875rem] lg:leading-[1.05]">
               Stop guessing what works on your website.
             </h1>

@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { Info } from 'lucide-react';
-import { Helmet } from 'react-helmet-async';
 import { Link, useNavigate } from 'react-router-dom';
 
 export function TestResultsCalculator() {
@@ -166,13 +165,6 @@ export function TestResultsCalculator() {
 
   return (
     <div className="bg-gray-900">
-      <Helmet>
-        <title>Test Results Calculator | Experiment Tools</title>
-        <meta
-          name="description"
-          content="Analyze your test results for continuous or binary metrics, calculate p-values, confidence intervals, and determine statistical significance."
-        />
-      </Helmet>
       <div className="max-w-5xl mx-auto px-4 py-8">
         <div className="bg-gray-800 rounded-2xl shadow-lg p-8">
           <h1 className="text-4xl font-bold text-white mb-2">Test Results Calculator</h1>

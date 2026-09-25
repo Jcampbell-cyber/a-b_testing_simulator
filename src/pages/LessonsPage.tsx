@@ -14,7 +14,7 @@ export default function LessonsPage() {
   return (
     <>
       <Seo
-        title="What testing taught us"
+        title="A/B Testing Case Studies: What Testing Taught Us"
         path="/lessons"
         description="Real lessons from real experiments. Each one is a reason not to trust your gut alone."
       />

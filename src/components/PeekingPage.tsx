@@ -4,7 +4,6 @@ import { runPeekingSimulation, type PeekingSimulationResults } from '../utils/pe
 import { calculateMDE } from '../utils/mde';
 import { PeekingTimelineChart } from './PeekingTimelineChart';
 import { PeekingResultsDisplay } from './PeekingResultsDisplay';
-import { Helmet } from "react-helmet-async";
 import { Link } from 'react-router-dom';
 
 export function PeekingPage() {
@@ -56,10 +55,6 @@ export function PeekingPage() {
 
   return (
     <div className="bg-gray-900"> 
-      <Helmet>
-        <title>Peeking Analysis Tool | Your Brand</title>
-        <meta name="description" content="Explore how frequent checking of test results impacts false positive rates and experiment reliability." />
-      </Helmet>
 
       <div className="container mx-auto px-4 py-8">
         <div className="mb-8">

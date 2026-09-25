@@ -1,19 +1,27 @@
 import { Link } from 'react-router-dom';
 import { ArrowRight } from 'lucide-react';
 import { Seo } from '../components/site/Seo';
+import { breadcrumbJsonLd } from '../lib/structuredData';
 import { Breadcrumbs, PlanCallout } from '../components/site/ResourceLayout';
 import { Container } from '../components/site/ui';
 import { getSection, pagesInSection, resourcePath, sectionPath, type SectionId } from '../content/resources';
 import { sectionIcons } from '../content/sectionIcons';
+import { RESOURCES_LABEL } from '../site';
 
 export default function ResourceSectionPage({ sectionId }: { sectionId: SectionId }) {
   const section = getSection(sectionId);
   const Icon = sectionIcons[sectionId];
+  const crumbs = [{ label: RESOURCES_LABEL, to: '/resources' }, { label: section.shortTitle }];
 
   return (
     <>
-      <Seo title={section.title} path={sectionPath(sectionId)} description={section.description} />
-      <Breadcrumbs items={[{ label: 'Resources', to: '/resources' }, { label: section.shortTitle }]} />
+      <Seo
+        title={section.seoTitle}
+        path={sectionPath(sectionId)}
+        description={section.description}
+        jsonLd={[breadcrumbJsonLd(crumbs, sectionPath(sectionId))]}
+      />
+      <Breadcrumbs items={crumbs} />
 
       <section className="pb-12 pt-12 sm:pt-16 lg:pb-16 lg:pt-20">
         <Container className="flex flex-col gap-5">

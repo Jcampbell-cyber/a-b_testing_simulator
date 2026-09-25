@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { Helmet } from 'react-helmet-async';
 
 import { runBootstrapAB } from './bootstrapABSimulation';
 
@@ -39,9 +38,6 @@ export function BootstrapABPage() {
 
   return (
     <div className="bg-gray-900 text-white">
-      <Helmet>
-        <title>A/B Bootstrap (Difference in Means)</title>
-      </Helmet>
 
       <div className="container mx-auto px-4 py-8">
 

@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { GitBranch } from 'lucide-react';
 import { calculateMDE } from '../utils/mde';
-import { Helmet } from 'react-helmet-async';
 import { Link } from 'react-router-dom';
 
 export function ImbalancedFlightsPage() {
@@ -128,13 +127,6 @@ export function ImbalancedFlightsPage() {
 
   return (
     <div className="bg-gray-900">
-<Helmet>
-  <title>Imbalanced Exposure in A/B Tests</title>
-  <meta
-    name="description"
-    content="Understand how imbalanced traffic or user allocation can distort A/B test metrics and learn best practices to prevent misleading results from exposure imbalance."
-  />
-</Helmet>
 
       <div className="container mx-auto px-4 py-8">
         <div className="mb-8">
