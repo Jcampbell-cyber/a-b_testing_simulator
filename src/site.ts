@@ -2,6 +2,7 @@
 export const SITE_NAME = 'AdvancedAB';
 export const SITE_URL = 'https://advancedab.tech';
 export const SITE_TAGLINE = 'Website testing for small online businesses.';
+export const SITE_LOCATION = 'Based in Melbourne, working with businesses across Australia.';
 
 // Preview image for links shared on LinkedIn, Slack, etc. (1200 × 630)
 export const OG_IMAGE = `${SITE_URL}/og-image.png`;
