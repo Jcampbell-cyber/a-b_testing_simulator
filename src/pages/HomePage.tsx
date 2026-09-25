@@ -3,7 +3,7 @@ import { CtaButton } from '../components/site/CtaButton';
 import { CtaBand } from '../components/site/CtaBand';
 import { Seo } from '../components/site/Seo';
 import { Container, Eyebrow, H2, Lead, Section, SectionIntro } from '../components/site/ui';
-import { FREE_PLAN_TURNAROUND } from '../site';
+import { FREE_PLAN_TURNAROUND, LOGO_URL, SITE_NAME, SITE_URL } from '../site';
 import { lessons } from '../content/lessons';
 import { lessonIllustrations } from '../content/lessonIllustrations';
 
@@ -207,12 +207,30 @@ const workSteps = [
   },
 ];
 
+const homeJsonLd = [
+  {
+    '@type': 'Organization',
+    '@id': `${SITE_URL}/#organization`,
+    name: SITE_NAME,
+    url: SITE_URL,
+    logo: LOGO_URL,
+    description: 'Website testing (A/B testing and conversion rate optimisation) for small online businesses.',
+  },
+  {
+    '@type': 'WebSite',
+    name: SITE_NAME,
+    url: SITE_URL,
+    publisher: { '@id': `${SITE_URL}/#organization` },
+  },
+];
+
 export function HomePage() {
   return (
     <>
       <Seo
         path="/"
         description="Stop guessing what works on your website. We find the leaks, test the fixes and prove the results. Get a free testing plan with three ranked test ideas."
+        jsonLd={homeJsonLd}
       />
 
       {/* HERO */}

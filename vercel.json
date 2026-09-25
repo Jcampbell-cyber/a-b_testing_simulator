@@ -1,6 +1,7 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "trailingSlash": false,
+  "cleanUrls": true,
   "redirects": [
     { "source": "/sample-size-calc", "destination": "/resources/calculators/sample-size-calc", "permanent": true },
     { "source": "/test-duration-calc", "destination": "/resources/calculators/test-duration-calc", "permanent": true },
@@ -19,9 +20,6 @@
     { "source": "/bootstrap/ab", "destination": "/resources/advanced-techniques/bootstrap/ab", "permanent": true },
     { "source": "/glossary", "destination": "/resources/glossary", "permanent": true },
     { "source": "/feedback", "destination": "/contact", "permanent": true }
-  ],
-  "rewrites": [
-    { "source": "/(.*)", "destination": "/index.html" }
   ],
   "headers": [
     {

@@ -1,7 +1,6 @@
 import { useState, useMemo } from 'react';
 import { GuardrailsControls, type TestType, type PeekingMode, type GuardrailType } from './GuardrailsControls';
 import { runGuardrailsSimulation, type GuardrailsSimulationResults } from '../utils/guardrailsSimulation';
-import { Helmet } from 'react-helmet-async';
 import { Link } from 'react-router-dom';
 import { calculateMDE } from '../utils/mde';
 import { GuardrailsTimelineChart } from './GuardrailsTimelineChart';
@@ -60,13 +59,6 @@ export function GuardrailsPage() {
 
   return (
     <div className="bg-gray-900">
-<Helmet>
-  <title>Statistical Guardrails for A/B Tests</title>
-  <meta
-    name="description"
-    content="Learn how to set up statistical guardrails in A/B tests to monitor experiment health, reduce false positives, and stop harmful experiments early."
-  />
-</Helmet>
 
       <div className="container mx-auto px-4 py-8">
         <div className="mb-8">

@@ -1,6 +1,5 @@
 import React, { useState, useMemo } from 'react';
 import { Info } from 'lucide-react';
-import { Helmet } from 'react-helmet-async';
 import { Link } from 'react-router-dom';
 import {
   Line,
@@ -162,13 +161,6 @@ const NHSTPage: React.FC = () => {
 
   return (
     <div className="bg-gray-900">
-      <Helmet>
-        <title>Null Hypothesis Significance Testing | Guardrails</title>
-        <meta
-          name="description"
-          content="Interactive visualization of statistical power, Type I & II errors, effect sizes, and how they relate to experimental guardrails."
-        />
-      </Helmet>
 
       <div className="max-w-7xl mx-auto px-4 py-8 sm:px-6 lg:px-8">
         {/* Page Header */}

@@ -1,10 +1,10 @@
 import { Link } from 'react-router-dom';
-import { SITE_NAME, SITE_TAGLINE } from '../../site';
+import { RESOURCES_LABEL, SITE_NAME, SITE_TAGLINE } from '../../site';
 import { Container } from './ui';
 
 const columns = [
   {
-    title: 'Resources',
+    title: RESOURCES_LABEL,
     links: [
       { label: 'Calculators', to: '/resources/calculators' },
       { label: 'Experiment best practices', to: '/resources/best-practices' },
