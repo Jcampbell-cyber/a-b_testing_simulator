@@ -100,14 +100,14 @@ function Arrow({ x }: { x: number }) {
 export function LessonOneIllustration() {
   const baseline = 196;
   const bars = [
-    { x: 6, h: 44, label: 'Worked too', note: 'nobody predicted this' },
+    { x: 6, h: 44, label: 'Regulars signed up', note: 'already trust the brand' },
     { x: 130, h: 5, label: 'Ignored', note: 'busy searching' },
     { x: 254, h: 52, label: 'Sign-ups rose', note: 'close to their goal' },
   ];
   return (
     <Svg
       title="Same sign-up prompt on three pages"
-      desc="Visitors move from the homepage to search results to a product page. The same create-an-account prompt was ignored on search results, raised sign-ups on the product page, and unexpectedly also worked on the homepage."
+      desc="Visitors move from the homepage to search results to a product page. The same create-an-account prompt was ignored on search results, raised sign-ups on the product page, and unexpectedly also worked on the homepage, where returning customers who already trusted the brand signed up."
     >
       <PageFrame x={6} label="Homepage" variant="home" />
       <Arrow x={111} />
@@ -184,43 +184,43 @@ export function LessonTwoIllustration() {
 }
 
 export function LessonThreeIllustration() {
-  const zero = 118; // left panel: 3.5px per percentage point
-  const money = 150; // right panel: 0.09px per dollar
+  const zero = 200; // left panel: 5px per percentage point
+  const money = 170; // right panel: 0.025px per dollar
   const value = { fontSize: 12, fontWeight: 700, fill: C.white, textAnchor: 'middle' as const };
   const category = { fontSize: 11, fill: C.muted, textAnchor: 'middle' as const };
   return (
     <Svg
-      title="Gift cards down 20%, bundles up 10%: the site makes about $600 more a month"
-      desc="Inside the test, gift card sales fell 20% and bundle sales rose 10%. On a site turning over $100,000 a month, where gift cards are 2% of revenue and bundles 10%, that is about $400 lost and $1,000 gained, so about $600 more each month."
+      title="Support emails up 25%, orders up 4%: the site is about $3,500 better off a month"
+      desc="After switching to a single-page checkout, customer support emails rose 25% and orders rose 4%. On a site turning over $100,000 a month, the extra orders are worth about $4,000 and the extra emails cost about $500 in staff time, so the business is about $3,500 better off each month."
     >
       {/* Inside the test: percentage change */}
       <text x="10" y="18" fontSize="12" fontWeight="600" fill={C.white}>Inside the test</text>
-      <text x="10" y="33" fontSize="10.5" fill={C.muted}>change in sales</text>
+      <text x="10" y="33" fontSize="10.5" fill={C.muted}>percentage change</text>
       <line x1="10" y1={zero} x2="150" y2={zero} stroke={C.line} />
-      <rect x="26" y={zero} width="42" height="70" rx="4" fill={C.muted} />
-      <rect x="92" y={zero - 35} width="42" height="35" rx="4" fill={C.blue} />
-      <text x="47" y={zero + 86} {...value}>−20%</text>
-      <text x="113" y={zero - 43} {...value}>+10%</text>
-      <text x="47" y="221" {...category}>Gift cards</text>
-      <text x="113" y="221" {...category}>Bundles</text>
+      <rect x="26" y={zero - 125} width="42" height="125" rx="4" fill={C.muted} />
+      <rect x="92" y={zero - 20} width="42" height="20" rx="4" fill={C.blue} />
+      <text x="47" y={zero - 133} {...value}>+25%</text>
+      <text x="113" y={zero - 28} {...value}>+4%</text>
+      <text x="47" y="216" {...category}>Support emails</text>
+      <text x="113" y="216" {...category}>Orders</text>
 
       <line x1="172" y1="10" x2="172" y2="220" stroke={C.panel} />
 
-      {/* Across the whole site: dollars per month */}
-      <text x="186" y="18" fontSize="12" fontWeight="600" fill={C.white}>Across the whole site</text>
-      <text x="186" y="33" fontSize="10.5" fill={C.muted}>revenue per month, $100k site</text>
+      {/* Across the whole business: dollars per month */}
+      <text x="186" y="18" fontSize="12" fontWeight="600" fill={C.white}>Across the business</text>
+      <text x="186" y="33" fontSize="10.5" fill={C.muted}>dollars per month, $100k site</text>
       <line x1="186" y1={money} x2="352" y2={money} stroke={C.line} />
-      <rect x="190" y={money} width="36" height="36" rx="4" fill={C.muted} />
-      <path d={`M226 ${money + 36} H244`} stroke={C.muted} strokeDasharray="2 3" />
-      <rect x="244" y={money + 36 - 90} width="36" height="90" rx="4" fill={C.blue} />
-      <path d={`M280 ${money - 54} H298`} stroke={C.muted} strokeDasharray="2 3" />
-      <rect x="298" y={money - 54} width="36" height="54" rx="4" fill={C.green} />
-      <text x="208" y={money + 50} {...value}>−$400</text>
-      <text x="262" y={money - 62} {...value}>+$1,000</text>
-      <text x="316" y={money - 62} {...value}>+$600</text>
-      <text x="208" y="221" {...category}>Gift cards</text>
-      <text x="262" y="221" {...category}>Bundles</text>
-      <text x="316" y="221" {...category}>Net</text>
+      <rect x="190" y={money} width="36" height="12.5" rx="3" fill={C.muted} />
+      <path d={`M226 ${money + 12.5} H244`} stroke={C.muted} strokeDasharray="2 3" />
+      <rect x="244" y={money + 12.5 - 100} width="36" height="100" rx="4" fill={C.blue} />
+      <path d={`M280 ${money - 87.5} H298`} stroke={C.muted} strokeDasharray="2 3" />
+      <rect x="298" y={money - 87.5} width="36" height="87.5" rx="4" fill={C.green} />
+      <text x="208" y={money + 27} {...value}>−$500</text>
+      <text x="262" y={money - 95} {...value}>+$4,000</text>
+      <text x="316" y={money - 95} {...value}>+$3,500</text>
+      <text x="208" y="216" {...category}>Support</text>
+      <text x="262" y="216" {...category}>Orders</text>
+      <text x="316" y="216" {...category}>Net</text>
     </Svg>
   );
 }

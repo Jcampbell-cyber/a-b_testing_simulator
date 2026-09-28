@@ -53,7 +53,7 @@ const plans = [
       'Weekly check-ins',
       'Report for every finished test',
       'Monthly summary of learnings and revenue impact',
-      'Cancel any time with 30 days’ notice',
+      '2-month minimum, then cancel any time',
     ],
     button: 'Start ongoing testing',
     featured: true,
@@ -63,7 +63,7 @@ const plans = [
 const faqs = [
   {
     q: 'Why is ongoing testing better value?',
-    a: `A one-off test gives you one answer. Ongoing testing builds on every result, so each test is smarter than the last. For ${PRICES.ongoing} a month, you get a steady pipeline of experiments, with up to 2 running at once, instead of a single test for ${PRICES.oneOff}.`,
+    a: `A one-off test costs ${PRICES.oneOff} and gives you one answer. Most of that cost is the initial setup: installing the testing software, analysing your data and finding where you’re losing sales. With ongoing testing, that setup is done once and every test after builds on it. At ${PRICES.ongoing} a month, less than a single one-off test, you get up to 2 tests running at once, and every result shapes the next.`,
   },
   {
     q: 'How long does a test take?',
@@ -87,7 +87,7 @@ const faqs = [
   },
   {
     q: 'Can I cancel?',
-    a: 'Yes. Ongoing testing has no lock-in contract. Just give 30 days’ notice.',
+    a: 'Yes. Ongoing testing has a 2-month minimum so your first tests have time to finish. After that, cancel any time with 30 days’ notice.',
   },
 ];
 
@@ -97,7 +97,7 @@ export default function PricingPage() {
       <Seo
         title="Pricing"
         path="/pricing"
-        description={`Simple pricing, no lock-in contracts. Start with a free testing plan, run a one-off test for ${PRICES.oneOff}, or get ongoing testing for ${PRICES.ongoing} a month.`}
+        description={`Simple pricing. Start with a free testing plan, run a one-off test for ${PRICES.oneOff}, or get ongoing testing for ${PRICES.ongoing} a month.`}
       />
 
       {/* HEADER */}
@@ -105,7 +105,7 @@ export default function PricingPage() {
         <Container className="flex flex-col items-center gap-[18px] text-center">
           <div className="text-sm font-semibold uppercase tracking-[0.08em] text-blue-400">Pricing</div>
           <h1 className="m-0 max-w-[820px] text-[2.5rem] font-semibold leading-[1.08] sm:text-5xl lg:text-[3.5rem]">
-            Simple pricing. No lock-in contracts.
+            Simple pricing.
           </h1>
           <p className="m-0 max-w-[640px] text-lg leading-normal text-gray-300 lg:text-xl">
             Start free. Try a single test, or get the most from testing with an ongoing programme.

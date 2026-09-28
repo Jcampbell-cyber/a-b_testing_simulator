@@ -17,7 +17,7 @@ export const RESOURCES_LABEL = 'Free resources and calculators';
 export const FORMSPREE_FORM_ID = 'xdakpdye';
 
 export const PRICES = {
-  oneOff: '$1,490',
+  oneOff: '$2,490',
   ongoing: '$1,990',
   currency: 'AUD',
 };
