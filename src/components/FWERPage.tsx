@@ -4,7 +4,6 @@ import { FWERMethodologyExplainer } from './FWERMethodologyExplainer';
 import { FWERControls } from './FWERControls';
 import { FWERResultsDisplay } from './FWERResultsDisplay';
 import { FWERErrorRateChart } from './FWERErrorRateChart';
-import { Helmet } from 'react-helmet-async';
 import { Link } from 'react-router-dom';
 import { runFWERSimulation, type FWERSimulationResults } from '../utils/fwerSimulation';
 
@@ -46,13 +45,6 @@ export function FWERPage() {
 
   return (
     <div className="bg-gray-900">
-<Helmet>
-  <title>FWER Control in A/B Testing</title>
-  <meta
-    name="description"
-    content="Understand Family-Wise Error Rate (FWER) control in A/B testing. Learn how to adjust for multiple comparisons to avoid false positives when testing many variants."
-  />
-</Helmet>
 
       <div className="container mx-auto px-4 py-8">
         <div className="mb-8">

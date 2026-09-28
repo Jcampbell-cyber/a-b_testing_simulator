@@ -5,12 +5,13 @@ import { Logo } from './Logo';
 import { CtaButton } from './CtaButton';
 import { Container } from './ui';
 import { cx } from '../../lib/cx';
+import { RESOURCES_LABEL } from '../../site';
 
 const navItems = [
   { label: 'How it works', to: '/#how' },
   { label: 'Lessons', to: '/lessons' },
   { label: 'Pricing', to: '/pricing' },
-  { label: 'Resources', to: '/resources' },
+  { label: RESOURCES_LABEL, to: '/resources' },
   { label: 'About', to: '/#about' },
 ];
 
@@ -39,14 +40,14 @@ export function SiteHeader() {
       <Container className="flex h-[76px] items-center justify-between gap-6">
         <Logo />
 
-        <nav aria-label="Main" className="hidden items-center gap-8 text-base lg:flex xl:gap-9">
+        <nav aria-label="Main" className="hidden items-center gap-9 text-base xl:flex">
           {navItems.map(item => (
             <Link
               key={item.label}
               to={item.to}
               aria-current={isActive(item.to, pathname) ? 'page' : undefined}
               className={cx(
-                'no-underline hover:text-blue-300',
+                'whitespace-nowrap no-underline hover:text-blue-300',
                 isActive(item.to, pathname) ? 'text-blue-400' : 'text-white'
               )}
             >
@@ -56,7 +57,7 @@ export function SiteHeader() {
           <CtaButton location="header" size="md" />
         </nav>
 
-        <div className="flex items-center gap-3 lg:hidden">
+        <div className="flex items-center gap-3 xl:hidden">
           <CtaButton location="header-mobile" size="sm" className="hidden sm:inline-flex" />
           <button
             type="button"
@@ -72,7 +73,7 @@ export function SiteHeader() {
       </Container>
 
       {open && (
-        <div id="mobile-menu" className="h-[calc(100dvh-76px)] overflow-y-auto border-t border-gray-700 bg-gray-900 lg:hidden">
+        <div id="mobile-menu" className="h-[calc(100dvh-76px)] overflow-y-auto border-t border-gray-700 bg-gray-900 xl:hidden">
           <Container className="flex flex-col gap-1 py-6">
             {navItems.map(item => (
               <Link

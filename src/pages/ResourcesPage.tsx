@@ -5,6 +5,7 @@ import { PlanCallout } from '../components/site/ResourceLayout';
 import { Container } from '../components/site/ui';
 import { pagesInSection, resourcePages, resourcePath, sectionPath, sections } from '../content/resources';
 import { sectionIcons } from '../content/sectionIcons';
+import { RESOURCES_LABEL } from '../site';
 
 export default function ResourcesPage() {
   const glossary = resourcePages.find(p => p.key === 'glossary')!;
@@ -12,14 +13,14 @@ export default function ResourcesPage() {
   return (
     <>
       <Seo
-        title="Resources"
+        title="Free A/B Testing Calculators and Resources"
         path="/resources"
         description="Free testing calculators, interactive simulators on experiment best practices, and advanced techniques used by experienced experimentation teams."
       />
 
       <section className="pb-12 pt-12 sm:pt-16 lg:pb-16 lg:pt-[88px]">
         <Container className="flex flex-col gap-5">
-          <div className="text-sm font-semibold uppercase tracking-[0.08em] text-blue-400">Resources</div>
+          <div className="text-sm font-semibold uppercase tracking-[0.08em] text-blue-400">{RESOURCES_LABEL}</div>
           <h1 className="m-0 max-w-[820px] text-[2.5rem] font-semibold leading-[1.08] sm:text-5xl lg:text-[3.5rem]">
             Free tools for testing properly
           </h1>

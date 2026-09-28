@@ -1,4 +1,3 @@
-import { Helmet } from 'react-helmet-async';
 import {
   LineChart, Line, XAxis, YAxis, Tooltip,
   CartesianGrid, ResponsiveContainer, Legend
@@ -85,13 +84,6 @@ const CustomTooltip = ({ active, payload, label = 0 }: { active?: boolean; paylo
 export function VariabilityVsCoevPage() {
   return (
     <div className="bg-gray-900">
-      <Helmet>
-        <title>Metric Variability & Detectability | Experiment Tools</title>
-        <meta
-          name="description"
-          content="Explore how binary proportions and continuous metrics behave under different levels of variability, and how this affects MDE and experiment runtime."
-        />
-      </Helmet>
 
       <div className="container mx-auto px-4 py-10">
         <div className="flex items-center gap-3 mb-2">

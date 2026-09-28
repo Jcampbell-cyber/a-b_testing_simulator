@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { TrendingUp } from "lucide-react";
-import { Helmet } from 'react-helmet-async';
 import { Link } from 'react-router-dom';
 
 export function CUPEDPage() {
@@ -83,13 +82,6 @@ export function CUPEDPage() {
 
   return (
     <div className="bg-gray-900">
-<Helmet>
-  <title>CUPED Variance Reduction in A/B Testing</title>
-  <meta
-    name="description"
-    content="Learn how CUPED (Controlled Experiments Using Pre-Experiment Data) can reduce variance in A/B tests, allowing faster detection of treatment effects with fewer users."
-  />
-</Helmet>
 
       <div className="container mx-auto px-4 py-8">
         {/* Header */}

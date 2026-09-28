@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { Info } from 'lucide-react';
-import { Helmet } from "react-helmet-async";
 import { Link } from 'react-router-dom';
   
 export function SampleSizeCalculator() {
@@ -120,13 +119,6 @@ export function SampleSizeCalculator() {
 
     return ( 
       <div className="bg-gray-900">
-    <Helmet>
-      <title>Sample Size Calculator for A/B Testing</title>
-      <meta
-        name="description"
-        content="Calculate the required sample size for A/B tests using MDE, power, significance level, and multiple variants."
-      />
-    </Helmet>
 
     <div className="max-w-5xl mx-auto px-4 py-8">
 

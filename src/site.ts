@@ -2,8 +2,16 @@
 export const SITE_NAME = 'AdvancedAB';
 export const SITE_URL = 'https://advancedab.tech';
 export const SITE_TAGLINE = 'Website testing for small online businesses.';
+export const SITE_LOCATION = 'Based in Melbourne, working with businesses across Australia.';
+
+// Preview image for links shared on LinkedIn, Slack, etc. (1200 × 630)
+export const OG_IMAGE = `${SITE_URL}/og-image.png`;
+export const LOGO_URL = `${SITE_URL}/logo.png`;
 
 export const CONTACT_PATH = '/contact';
+
+// On-screen name for the /resources hub (header, footer, breadcrumbs).
+export const RESOURCES_LABEL = 'Free resources and calculators';
 
 // Formspree form that receives contact / free plan requests.
 export const FORMSPREE_FORM_ID = 'xdakpdye';

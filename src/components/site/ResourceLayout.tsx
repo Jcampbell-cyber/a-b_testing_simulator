@@ -1,10 +1,11 @@
 import type { ReactNode } from 'react';
-import { Helmet } from 'react-helmet-async';
 import { Link } from 'react-router-dom';
 import { ChevronRight } from 'lucide-react';
-import { canonical } from '../../site';
+import { canonical, PRICES, RESOURCES_LABEL, SITE_NAME, SITE_URL } from '../../site';
 import { getSection, resourcePath, sectionPath, type ResourcePage } from '../../content/resources';
 import { CtaButton } from './CtaButton';
+import { Seo } from './Seo';
+import { breadcrumbJsonLd } from '../../lib/structuredData';
 import { Container } from './ui';
 
 export function Breadcrumbs({ items }: { items: { label: string; to?: string }[] }) {
@@ -50,7 +51,7 @@ export function PlanCallout({ location }: { location: string }) {
 }
 
 export function ResourceLayout({ page, children }: { page: ResourcePage; children: ReactNode }) {
-  const crumbs: { label: string; to?: string }[] = [{ label: 'Resources', to: '/resources' }];
+  const crumbs: { label: string; to?: string }[] = [{ label: RESOURCES_LABEL, to: '/resources' }];
   if (page.section) {
     const section = getSection(page.section);
     crumbs.push({ label: section.shortTitle, to: sectionPath(section.id) });
@@ -58,11 +59,26 @@ export function ResourceLayout({ page, children }: { page: ResourcePage; childre
   if (page.key === 'bootstrap-ab') crumbs.push({ label: 'Bootstrapping', to: '/resources/advanced-techniques/bootstrap' });
   crumbs.push({ label: page.title });
 
+  const path = resourcePath(page);
+  const jsonLd = [breadcrumbJsonLd(crumbs, path)];
+  // The calculators and simulators are free web tools
+  if (page.section) {
+    jsonLd.push({
+      '@type': 'WebApplication',
+      name: page.seoTitle,
+      description: page.seoDescription,
+      url: canonical(path),
+      applicationCategory: 'BusinessApplication',
+      operatingSystem: 'Any',
+      isAccessibleForFree: true,
+      offers: { '@type': 'Offer', price: '0', priceCurrency: PRICES.currency },
+      provider: { '@type': 'Organization', name: SITE_NAME, url: SITE_URL },
+    });
+  }
+
   return (
     <>
-      <Helmet>
-        <link rel="canonical" href={canonical(resourcePath(page))} />
-      </Helmet>
+      <Seo title={page.seoTitle} description={page.seoDescription} path={path} jsonLd={jsonLd} />
       <Breadcrumbs items={crumbs} />
       {children}
       <PlanCallout location={`resource:${page.key}`} />

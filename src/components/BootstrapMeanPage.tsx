@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { Helmet } from 'react-helmet-async';
 import { Link } from 'react-router-dom';
 
 import { runBootstrapMean } from './bootstrapMeanSimulation';
@@ -38,9 +37,6 @@ export function BootstrapMeanPage() {
 
   return (
     <div className="bg-gray-900 text-white">
-      <Helmet>
-        <title>Bootstrap Mean</title>
-      </Helmet>
 
       <div className="container mx-auto px-4 py-8">
 

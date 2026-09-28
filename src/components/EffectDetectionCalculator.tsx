@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import { Info } from 'lucide-react';
-import { Helmet } from 'react-helmet-async';
 import { Link } from 'react-router-dom';
 
 type MetricType = 'continuous' | 'binary';
@@ -342,13 +341,6 @@ export function EffectDetectionCalculator() {
   };
     return (
     <div className="bg-gray-900">
-      <Helmet>
-        <title>Effect Detection Calculator | Experiment Tools</title>
-        <meta
-          name="description"
-          content="Calculate the minimum detectable effect (MDE) for your experiments, considering sample size, power, significance level, allocation, and multiple comparisons."
-        />
-      </Helmet>
 
       <div className="max-w-5xl mx-auto px-4 py-8">
 

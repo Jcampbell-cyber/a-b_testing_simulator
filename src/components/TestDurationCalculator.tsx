@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { Info } from 'lucide-react';
-import { Helmet } from 'react-helmet-async';
 import { Link } from 'react-router-dom';
 
 export function TestDurationCalculator() {
@@ -136,13 +135,6 @@ export function TestDurationCalculator() {
 
   return (
     <div className="bg-gray-900">
-      <Helmet>
-        <title>Test Duration Calculator for A/B Testing</title>
-        <meta
-          name="description"
-          content="Estimate how long your A/B test needs to run to reach statistical significance. Adjust metric type, MDE, traffic, and flights for accurate test duration calculation."
-        />
-      </Helmet>
       <div className="max-w-5xl mx-auto px-4 py-8">
         <div className="bg-gray-800 rounded-2xl shadow-lg p-8">
           <h1 className="text-4xl font-bold text-white mb-2">Test Duration Calculator</h1>

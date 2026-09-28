@@ -3,7 +3,6 @@ import { WinsorizingControls, type SimulationMode } from './WinsorizingControls'
 import { WinsorizingDistributionChart } from './WinsorizingDistributionChart';
 import { WinsorizingResultsDisplay } from './WinsorizingResultsDisplay';
 import { runWinsorizingSimulation, runABTestSimulation, type WinsorizingResults, type ABTestResults } from '../utils/winsorizingSimulation';
-import { Helmet } from 'react-helmet-async';
 import { Link } from 'react-router-dom';
 
 export function WinsorizingPage() {
@@ -46,13 +45,6 @@ export function WinsorizingPage() {
 
   return (
     <div className="bg-gray-900">
-<Helmet>
-  <title>Winsorising in A/B Testing</title>
-  <meta
-    name="description"
-    content="Learn how Winsorising can reduce the impact of extreme values in your A/B tests, leading to more robust metrics and more reliable experiment results."
-  />
-</Helmet>
       <div className="container mx-auto px-4 py-8">
         <div className="mb-8">
           <h1 className="text-4xl font-bold text-white mb-2">Winsorizing Simulator</h1>
