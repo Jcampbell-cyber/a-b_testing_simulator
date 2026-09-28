@@ -13,7 +13,7 @@ export const lessons: Lesson[] = [
     summary: 'A sign-up prompt was ignored on one page, worked on another, and surprised everyone on a third.',
     paragraphs: [
       'We tested asking visitors to create an account at three points: the homepage, the search results page, and the product page.',
-      'On search results, almost everyone ignored it. They were busy looking for the thing they came for, and anything in the way was noise. On the product page, sign-ups rose: visitors were close to their goal and saw a reason to commit. The homepage also performed well, which nobody predicted and which didn’t fit the neat story we’d built from the other two.',
+      'On search results, almost everyone ignored it. They were busy looking for the thing they came for, and anything in the way was noise. On the product page, sign-ups rose: visitors were close to their goal and saw a reason to commit. The homepage also performed well, which nobody predicted. When we dug in, most of those sign-ups were returning customers who already trusted the brand. For them, an account was an easy yes.',
       'That’s the point. Even experienced teams can’t reliably predict how people will behave. The only way to know is to test.',
     ],
   },
@@ -30,11 +30,12 @@ export const lessons: Lesson[] = [
   {
     id: 'lesson-3',
     title: 'When a big percentage is a small deal',
-    summary: 'A scary drop inside a test can barely register across the whole business. You have to do the maths.',
+    summary: 'A scary jump inside a test can barely register across the whole business. You have to do the maths.',
     paragraphs: [
       'Sometimes a change helps one number and hurts another, and you have to weigh one against the other. Inside an experiment, those shifts can look dramatic.',
-      'Say a new product page layout leads to 20% fewer gift card sales, but 10% more bundle sales. The 20% drop sounds alarming. But if gift cards are only 2% of your revenue and bundles are 10%, the picture changes. On a site turning over $100,000 a month, you’d lose about $400 in gift card sales and gain about $1,000 in bundles. That’s roughly $600 more every month, so the change is worth rolling out.',
-      'We weigh every trade-off in real business terms: what does it do to revenue across the whole site? We also check that both shifts are real, not just noise. Often the scary number turns out to be minor. Sometimes it’s the other way round, and you only know if you do the maths.',
+      'Say you replace a three-step checkout with a single page. Orders rise 4%, but customer support emails jump 25%, mostly from people unsure whether their order went through. The 25% sounds alarming, and top-line revenue can’t tell you whether it matters, because support costs staff time, not sales.',
+      'So you do the maths. On a site turning over $100,000 a month from 1,000 orders, 4% more orders is about $4,000 a month. If you get 300 support emails a month, 75 more at about 10 minutes each is roughly $500 of staff time. That’s about $3,500 better off every month, so the change is worth rolling out. And the emails point to the next fix: a clearer confirmation screen keeps the lift and wins back most of that cost.',
+      'We weigh every trade-off in real business terms: what is it worth across the whole business? We also check that both shifts are real, not just noise. Often the scary number turns out to be minor. Sometimes it’s the other way round, and you only know if you do the maths.',
     ],
   },
 ];

@@ -341,7 +341,7 @@ export function HomePage() {
         <Container className="flex flex-col gap-10 lg:flex-row lg:gap-[72px]">
           <div className="flex flex-col gap-4 lg:w-[380px] lg:flex-none">
             <H2>How we’d work together</H2>
-            <Lead>No lock-in contracts. Start with a free plan and decide from there.</Lead>
+            <Lead>Start with a free plan and decide from there.</Lead>
             <Link to="/pricing" className="text-[17px] font-semibold text-blue-400 no-underline hover:text-blue-300">
               See full pricing and what’s included →
             </Link>

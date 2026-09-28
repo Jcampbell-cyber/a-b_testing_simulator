@@ -9,7 +9,7 @@ export const CONTACT_PATH = '/contact';
 export const FORMSPREE_FORM_ID = 'xdakpdye';
 
 export const PRICES = {
-  oneOff: '$1,490',
+  oneOff: '$2,490',
   ongoing: '$1,990',
   currency: 'AUD',
 };
