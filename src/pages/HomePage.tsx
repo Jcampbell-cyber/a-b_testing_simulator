@@ -17,66 +17,80 @@ function Dots() {
   );
 }
 
-/** Decorative "Version A vs Version B" illustration from the design */
+function Radio({ on }: { on: boolean }) {
+  return (
+    <span
+      className={`flex h-3.5 w-3.5 flex-none items-center justify-center rounded-full border ${on ? 'border-blue-500' : 'border-gray-500'}`}
+    >
+      {on && <span className="h-1.5 w-1.5 rounded-full bg-blue-500" />}
+    </span>
+  );
+}
+
+/** One version of the product card: the only difference is which option starts selected */
+function ProductCard({ version, subscribeDefault }: { version: string; subscribeDefault: boolean }) {
+  const option = (on: boolean) =>
+    `flex items-start gap-2 rounded-md border px-2.5 py-2 ${on ? 'border-blue-600 bg-blue-600/10' : 'border-gray-700'}`;
+  return (
+    <div className={`overflow-hidden rounded-xl bg-gray-800 ${subscribeDefault ? 'border-2 border-blue-600' : 'border border-gray-700'}`}>
+      <div className="flex items-center justify-between border-b border-gray-700 px-3.5 py-2.5">
+        <Dots />
+        <div className={`text-[13px] font-bold ${subscribeDefault ? 'text-blue-400' : 'text-gray-400'}`}>{version}</div>
+      </div>
+      <div className="flex h-[208px] flex-col gap-2.5 p-[18px]">
+        <div className="flex items-center gap-2.5">
+          <div className="h-10 w-8 flex-none rounded bg-gray-700" />
+          <div className="min-w-0">
+            <div className="text-[13px] font-semibold text-white">House Blend 500g</div>
+            <div className="text-[11px] text-gray-400">Chocolate, caramel</div>
+          </div>
+        </div>
+        <div className={option(!subscribeDefault)}>
+          <Radio on={!subscribeDefault} />
+          <div className="flex flex-1 justify-between gap-2 text-xs leading-tight">
+            <span className="text-gray-300">One-time purchase</span>
+            <span className="font-bold text-white">$22</span>
+          </div>
+        </div>
+        <div className={option(subscribeDefault)}>
+          <Radio on={subscribeDefault} />
+          <div className="flex flex-1 justify-between gap-2 text-xs leading-tight">
+            <span className="text-gray-300">
+              Subscribe and save 10%
+              <span className="block text-[11px] text-gray-400">every 4 weeks</span>
+            </span>
+            <span className="font-bold text-white">$19.80</span>
+          </div>
+        </div>
+        <div
+          className={`mt-auto rounded-md py-[7px] text-center text-xs font-semibold text-white ${subscribeDefault ? 'bg-blue-600' : 'bg-gray-600'}`}
+        >
+          Add to cart
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function ResultBar({ label, value, width, color }: { label: string; value: string; width: string; color: string }) {
+  return (
+    <div className="flex items-center gap-3">
+      <div className="w-5 text-[13px] text-gray-400">{label}</div>
+      <div className="h-3 flex-1 rounded-md bg-gray-700">
+        <div className={`h-3 rounded-md ${color}`} style={{ width }} />
+      </div>
+      <div className="w-11 text-right text-[13px] font-semibold text-gray-300">{value}</div>
+    </div>
+  );
+}
+
+/** Decorative "Version A vs Version B" illustration: subscribe and save as the default */
 function HeroVisual() {
   return (
     <div className="flex flex-1 flex-col gap-5" aria-hidden="true">
       <div className="grid grid-cols-1 gap-4 min-[420px]:grid-cols-2 sm:gap-5">
-        {/* Version A */}
-        <div className="overflow-hidden rounded-xl border border-gray-700 bg-gray-800">
-          <div className="flex items-center justify-between border-b border-gray-700 px-3.5 py-2.5">
-            <Dots />
-            <div className="text-[13px] font-bold text-gray-400">Version A</div>
-          </div>
-          <div className="flex h-[236px] flex-col gap-3 p-[18px]">
-            <div className="text-xs font-bold uppercase tracking-[0.06em] text-gray-400">Pricing</div>
-            <div className="flex flex-grow flex-col gap-2 rounded-lg border border-gray-700 bg-gray-900 p-3.5">
-              <div className="text-[13px] font-semibold text-gray-300">Standard</div>
-              <div className="flex items-baseline gap-1">
-                <span className="text-[26px] font-bold text-white">$49</span>
-                <span className="text-xs text-gray-400">/month</span>
-              </div>
-              <div className="h-2 w-[85%] rounded-[3px] bg-gray-700" />
-              <div className="h-2 w-[65%] rounded-[3px] bg-gray-700" />
-              <div className="mt-auto rounded-md bg-gray-600 py-[7px] text-center text-xs font-semibold text-white">Buy now</div>
-            </div>
-          </div>
-        </div>
-
-        {/* Version B */}
-        <div className="overflow-hidden rounded-xl border-2 border-blue-600 bg-gray-800">
-          <div className="flex items-center justify-between border-b border-gray-700 px-3.5 py-2.5">
-            <Dots />
-            <div className="text-[13px] font-bold text-blue-400">Version B</div>
-          </div>
-          <div className="flex h-[236px] flex-col gap-3 p-[18px]">
-            <div className="text-xs font-bold uppercase tracking-[0.06em] text-gray-400">Pricing</div>
-            <div className="flex flex-grow gap-2">
-              <div className="flex min-w-0 flex-1 flex-col gap-2 rounded-lg border border-blue-600 bg-gray-900 p-3">
-                <div className="self-start whitespace-nowrap rounded-full bg-blue-600 px-[7px] py-0.5 text-[10px] font-bold text-white">
-                  Most popular
-                </div>
-                <div className="text-xs font-semibold text-gray-300">Standard</div>
-                <div className="flex items-baseline gap-[3px]">
-                  <span className="text-xl font-bold text-white">$49</span>
-                  <span className="text-[11px] text-gray-400">/mo</span>
-                </div>
-                <div className="mt-auto rounded-md bg-blue-600 py-1.5 text-center text-[11px] font-semibold text-white">Buy now</div>
-              </div>
-              <div className="flex min-w-0 flex-1 flex-col gap-2 rounded-lg border border-gray-700 bg-gray-900 p-3">
-                <div className="text-xs font-semibold text-gray-300">Premium</div>
-                <div className="flex items-baseline gap-[3px]">
-                  <span className="text-xl font-bold text-white">$89</span>
-                  <span className="text-[11px] text-gray-400">/mo</span>
-                </div>
-                <div className="h-2 w-4/5 rounded-[3px] bg-gray-700" />
-                <div className="mt-auto rounded-md border border-gray-600 py-1.5 text-center text-[11px] font-semibold text-gray-300">
-                  Choose
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+        <ProductCard version="Version A" subscribeDefault={false} />
+        <ProductCard version="Version B" subscribeDefault />
       </div>
 
       {/* Result */}
@@ -84,20 +98,24 @@ function HeroVisual() {
         <div className="flex flex-wrap items-center justify-between gap-2">
           <div className="text-sm font-bold text-white">Revenue per visitor</div>
           <div className="rounded-full bg-emerald-400/[0.14] px-2.5 py-1 text-[13px] font-semibold text-emerald-400">
-            B is a real winner, not luck
+            B is a real winner, by day 90
           </div>
         </div>
-        <div className="flex items-center gap-3">
-          <div className="w-[72px] text-[13px] text-gray-400">Version A</div>
-          <div className="h-3.5 flex-1 rounded-[7px] bg-gray-700">
-            <div className="h-3.5 w-[58%] rounded-[7px] bg-gray-600" />
+        <div className="flex flex-col gap-2">
+          <div className="flex justify-between text-xs font-semibold text-gray-400">
+            <span>First order</span>
+            <span className="text-amber-400">B −11%</span>
           </div>
+          <ResultBar label="A" value="$0.83" width="54%" color="bg-gray-500" />
+          <ResultBar label="B" value="$0.74" width="48%" color="bg-gray-500" />
         </div>
-        <div className="flex items-center gap-3">
-          <div className="w-[72px] text-[13px] text-gray-400">Version B</div>
-          <div className="h-3.5 flex-1 rounded-[7px] bg-gray-700">
-            <div className="h-3.5 w-[76%] rounded-[7px] bg-emerald-400" />
+        <div className="flex flex-col gap-2">
+          <div className="flex justify-between text-xs font-semibold text-gray-400">
+            <span>After 90 days</span>
+            <span className="text-emerald-400">B +25%</span>
           </div>
+          <ResultBar label="A" value="$1.11" width="72%" color="bg-gray-500" />
+          <ResultBar label="B" value="$1.39" width="90%" color="bg-emerald-400" />
         </div>
       </div>
     </div>
