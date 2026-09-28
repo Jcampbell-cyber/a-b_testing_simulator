@@ -29,7 +29,7 @@ const plans = [
     blurb: 'One experiment, run end to end. A good way to see how testing works.',
     features: [
       'Opportunity finding: we analyse your data and watch screen recordings of real visitors to find where you’re losing sales',
-      'Testing software and screen recordings included, nothing extra to buy',
+      'Live dashboard, heatmaps, screen recordings and surveys included, nothing extra to buy',
       'Test designed with sample size and duration planned upfront',
       'Setup and monitoring, with safety checks on key metrics',
       'Weekly check-ins',
@@ -49,7 +49,7 @@ const plans = [
       'Everything in the one-off test, running continuously',
       'Up to 2 tests live at a time, as many as your traffic can support',
       'Ongoing opportunity finding and recommendations',
-      'Testing software and screen recordings included, nothing extra to buy',
+      'Live dashboard, heatmaps, screen recordings and surveys included, nothing extra to buy',
       'Weekly check-ins',
       'Report for every finished test',
       'Monthly summary of learnings and revenue impact',
@@ -79,7 +79,7 @@ const faqs = [
   },
   {
     q: 'Do I need to buy any tools?',
-    a: 'No. The testing software and screen recordings are included in every paid plan. We set everything up for you.',
+    a: 'No. Every paid plan includes the testing software, a live dashboard, heatmaps, screen recordings and on-site surveys. We set everything up for you.',
   },
   {
     q: 'Who builds the test versions?',
