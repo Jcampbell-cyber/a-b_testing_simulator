@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom';
 import { CtaButton } from '../components/site/CtaButton';
 import { CtaBand } from '../components/site/CtaBand';
 import { Seo } from '../components/site/Seo';
+import { TestExamples } from '../components/site/TestExamples';
 import { Container, Eyebrow, H2, Lead, Section, SectionIntro } from '../components/site/ui';
 import { FREE_PLAN_TURNAROUND, LOGO_URL, SITE_NAME, SITE_URL } from '../site';
 import { lessons } from '../content/lessons';
@@ -318,6 +319,7 @@ export function HomePage() {
             </li>
           ))}
         </ol>
+        <TestExamples />
       </Section>
 
       {/* RIGOUR */}
