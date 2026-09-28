@@ -30,12 +30,12 @@ export const lessons: Lesson[] = [
   {
     id: 'lesson-3',
     title: 'When a big percentage is a small deal',
-    summary: 'A scary jump inside a test can barely register across the whole business. You have to do the maths.',
+    summary: 'A scary jump inside a test can barely register across the whole business.',
     paragraphs: [
       'Sometimes a change helps one number and hurts another, and you have to weigh one against the other. Inside an experiment, those shifts can look dramatic.',
       'Say you replace a three-step checkout with a single page. Orders rise 4%, but customer support emails jump 25%, mostly from people unsure whether their order went through. The 25% sounds alarming, and top-line revenue can’t tell you whether it matters, because support costs staff time, not sales.',
-      'So you do the maths. On a site turning over $100,000 a month from 1,000 orders, 4% more orders is about $4,000 a month. If you get 300 support emails a month, 75 more at about 10 minutes each is roughly $500 of staff time. That’s about $3,500 better off every month, so the change is worth rolling out. And the emails point to the next fix: a clearer confirmation screen keeps the lift and wins back most of that cost.',
-      'We weigh every trade-off in real business terms: what is it worth across the whole business? We also check that both shifts are real, not just noise. Often the scary number turns out to be minor. Sometimes it’s the other way round, and you only know if you do the maths.',
+      'On a site turning over $100,000 a month from 1,000 orders, 4% more orders is about $4,000 a month. If you get 300 support emails a month, 75 more at about 10 minutes each is roughly $500 of staff time. That’s about $3,500 better off every month, so the change is worth rolling out. And the emails point to the next fix: a clearer confirmation screen keeps the lift and wins back most of that cost.',
+      'We weigh every trade-off in real business terms: what is it worth across the whole business? We also check that both shifts are real, not just noise. Often the scary number turns out to be minor. Sometimes it’s the other way round.',
     ],
   },
 ];

@@ -63,7 +63,7 @@ const plans = [
 const faqs = [
   {
     q: 'Why is ongoing testing better value?',
-    a: `A one-off test costs ${PRICES.oneOff} and gives you one answer. Ongoing testing is ${PRICES.ongoing} a month, less than a single one-off test. For that you get up to 2 tests running at once, and every result shapes the next, so each test is smarter than the last.`,
+    a: `A one-off test costs ${PRICES.oneOff} and gives you one answer. Most of that cost is the initial setup: installing the testing software, analysing your data and finding where you’re losing sales. With ongoing testing, that setup is done once and every test after builds on it. At ${PRICES.ongoing} a month, less than a single one-off test, you get up to 2 tests running at once, and every result shapes the next.`,
   },
   {
     q: 'How long does a test take?',
