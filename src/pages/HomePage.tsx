@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom';
 import { CtaButton } from '../components/site/CtaButton';
 import { CtaBand } from '../components/site/CtaBand';
 import { Seo } from '../components/site/Seo';
+import { TestExamples } from '../components/site/TestExamples';
 import { Container, Eyebrow, H2, Lead, Section, SectionIntro } from '../components/site/ui';
 import { FREE_PLAN_TURNAROUND, LOGO_URL, SITE_NAME, SITE_URL } from '../site';
 import { lessons } from '../content/lessons';
@@ -197,6 +198,50 @@ const rigour = [
   },
 ];
 
+const tools = [
+  {
+    title: 'Live dashboard',
+    body: 'Your key numbers in one place: sales, conversion and every running test, always up to date.',
+    icon: (
+      <svg {...icon}>
+        <rect x="3" y="4" width="18" height="16" rx="2" />
+        <path d="M7 16 V12 M12 16 V8 M17 16 V11" />
+      </svg>
+    ),
+  },
+  {
+    title: 'Heatmaps',
+    body: 'See where visitors click, how far they scroll, and where they give up on every page.',
+    icon: (
+      <svg {...icon}>
+        <circle cx="12" cy="12" r="8" />
+        <circle cx="12" cy="12" r="4.5" />
+        <circle cx="12" cy="12" r="1.2" />
+      </svg>
+    ),
+  },
+  {
+    title: 'Screen recordings',
+    body: 'Watch real visits and see exactly where people get stuck, confused or distracted.',
+    icon: (
+      <svg {...icon}>
+        <rect x="3" y="5" width="18" height="14" rx="2" />
+        <path d="M10.5 9.5 L14.5 12 L10.5 14.5 Z" />
+      </svg>
+    ),
+  },
+  {
+    title: 'Instant surveys',
+    body: 'Ask the visitors who saw a new version one quick question, like “What nearly stopped you buying?”, and hear why it won or lost.',
+    icon: (
+      <svg {...icon}>
+        <path d="M4 5 H20 V16 H10 L6 19.5 V16 H4 Z" />
+        <path d="M8 9.5 H16 M8 12.5 H13" />
+      </svg>
+    ),
+  },
+];
+
 const workSteps = [
   {
     title: 'Get 3 free test ideas',
@@ -209,7 +254,7 @@ const workSteps = [
   },
   {
     title: 'Set up tracking and your dashboard',
-    body: 'Testing software and screen recordings installed, plus a live dashboard of your key numbers. Nothing for you to buy or set up.',
+    body: 'Testing software, heatmaps, screen recordings and surveys installed, plus a live dashboard of your key numbers. Nothing for you to buy or set up.',
   },
   {
     title: 'Find the opportunities',
@@ -318,6 +363,7 @@ export function HomePage() {
             </li>
           ))}
         </ol>
+        <TestExamples />
       </Section>
 
       {/* RIGOUR */}
@@ -372,6 +418,27 @@ export function HomePage() {
               </Link>
             );
           })}
+        </div>
+      </Section>
+
+      {/* TOOLS */}
+      <Section id="tools" alt containerClassName="flex flex-col gap-10 lg:gap-12">
+        <SectionIntro>
+          <Eyebrow>Included in every paid plan</Eyebrow>
+          <H2>See what your customers see.</H2>
+          <Lead>
+            Test results tell you what happened. These tools show you why, so every test teaches you something about your
+            customers.
+          </Lead>
+        </SectionIntro>
+        <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4 lg:gap-6">
+          {tools.map(t => (
+            <div key={t.title} className="flex flex-col gap-3 rounded-[14px] bg-gray-700 p-7">
+              {t.icon}
+              <h3 className="m-0 text-[21px] font-bold text-white">{t.title}</h3>
+              <p className="m-0 text-[17px] leading-normal text-gray-300">{t.body}</p>
+            </div>
+          ))}
         </div>
       </Section>
 

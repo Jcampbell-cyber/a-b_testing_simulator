@@ -50,3 +50,11 @@
     scroll-behavior: auto !important;
   }
 }
+
+/* Horizontal carousels scroll by swipe or arrows, without a visible scrollbar */
+.no-scrollbar {
+  scrollbar-width: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
