@@ -3,7 +3,7 @@ import type { PostHog } from 'posthog-js';
 
 // PostHog is large (~100 KB gzipped), so it loads in the background after the
 // page has rendered instead of blocking the first paint.
-const posthogReady: Promise<PostHog | null> =
+export const posthogReady: Promise<PostHog | null> =
   typeof window === 'undefined'
     ? Promise.resolve(null)
     : import('posthog-js')
@@ -18,7 +18,7 @@ const posthogReady: Promise<PostHog | null> =
         })
         .catch(() => null); // Blocked by an ad blocker, offline, etc. The site works without it.
 
-function capture(event: string, props: Record<string, unknown>) {
+export function capture(event: string, props: Record<string, unknown>) {
   posthogReady.then(ph => ph?.capture(event, props));
 }
 
