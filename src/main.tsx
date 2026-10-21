@@ -5,6 +5,7 @@ import { HelmetProvider } from "react-helmet-async";
 import App from "./App.tsx";
 import "./index.css";
 import "./lib/analytics";
+import "./lib/experiments";
 
 const app = (
   <React.StrictMode>

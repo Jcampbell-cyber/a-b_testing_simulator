@@ -6,6 +6,56 @@
     <meta name="theme-color" content="#111827" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 
+    <!--
+      A/B assignment. The site owns the split; PostHog only records it (see src/lib/experiments.ts).
+      Runs before first paint, so visitors see their variant straight away with no network wait.
+      Each visitor gets a random ID in a first-party cookie, and hashing it with the experiment key
+      gives a stable 50/50 split. Add a key to EXPERIMENTS to start another test.
+      QA: add ?ab-lessons-h1-surprise=test to force a variant (flagged as forced in analytics).
+    -->
+    <script>
+      (function () {
+        var EXPERIMENTS = ['lessons-h1-surprise'];
+        try {
+          var el = document.documentElement;
+          var m = document.cookie.match(/(?:^|; )ab_id=([^;]+)/);
+          var id = m
+            ? m[1]
+            : window.crypto && crypto.randomUUID
+              ? crypto.randomUUID()
+              : Math.random().toString(36).slice(2) + Date.now().toString(36);
+          if (!m) {
+            document.cookie =
+              'ab_id=' + id + '; Max-Age=31536000; Path=/; SameSite=Lax' + (location.protocol === 'https:' ? '; Secure' : '');
+          }
+          var qs = new URLSearchParams(location.search);
+          EXPERIMENTS.forEach(function (key) {
+            // FNV-1a, then a finaliser so every bit is well mixed before taking % 100
+            var s = key + ':' + id;
+            var h = 2166136261;
+            for (var i = 0; i < s.length; i++) {
+              h ^= s.charCodeAt(i);
+              h = Math.imul(h, 16777619);
+            }
+            h ^= h >>> 16;
+            h = Math.imul(h, 0x85ebca6b);
+            h ^= h >>> 13;
+            h = Math.imul(h, 0xc2b2ae35);
+            h ^= h >>> 16;
+            var variant = (h >>> 0) % 100 < 50 ? 'control' : 'test';
+            var forced = qs.get('ab-' + key);
+            if (forced === 'control' || forced === 'test') {
+              variant = forced;
+              el.setAttribute('data-ab-' + key + '-forced', '');
+            }
+            el.setAttribute('data-ab-' + key, variant);
+          });
+        } catch (e) {
+          // Anything goes wrong: no attribute is set, so everyone sees control and no exposure is logged.
+        }
+      })();
+    </script>
+
     <!-- Site-wide sharing tags. Each page adds its own title, description, canonical URL and structured data. -->
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="AdvancedAB" />

@@ -58,3 +58,17 @@
 .no-scrollbar::-webkit-scrollbar {
   display: none;
 }
+
+/*
+  A/B variants (assigned in index.html). Both versions are in the HTML; these rules show the
+  right one before first paint. Control shows by default, so the page is still right without JS.
+*/
+.ab-lessons-h1-surprise-test {
+  display: none;
+}
+html[data-ab-lessons-h1-surprise='test'] .ab-lessons-h1-surprise-control {
+  display: none;
+}
+html[data-ab-lessons-h1-surprise='test'] .ab-lessons-h1-surprise-test {
+  display: inline;
+}

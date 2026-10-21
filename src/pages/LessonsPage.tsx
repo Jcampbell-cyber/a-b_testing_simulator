@@ -7,9 +7,11 @@ import { lessons } from '../content/lessons';
 import { lessonIllustrations } from '../content/lessonIllustrations';
 import { CONTACT_PATH } from '../site';
 import { trackCtaClick, useCta } from '../lib/analytics';
+import { useExposure } from '../lib/experiments';
 
 export default function LessonsPage() {
   const cta = useCta();
+  useExposure('lessons-h1-surprise');
 
   return (
     <>
@@ -23,7 +25,9 @@ export default function LessonsPage() {
         <Container className="flex flex-col gap-5">
           <div className="text-sm font-semibold uppercase tracking-[0.08em] text-blue-400">Lessons</div>
           <h1 className="m-0 max-w-[820px] text-[2.5rem] font-semibold leading-[1.08] sm:text-5xl lg:text-[3.5rem]">
-            What testing taught us
+            {/* A/B test `lessons-h1-surprise`: both shown in the HTML, CSS picks one (see src/lib/experiments.ts) */}
+            <span className="ab-lessons-h1-surprise-control">What testing taught us</span>
+            <span className="ab-lessons-h1-surprise-test">Three tests that surprised us</span>
           </h1>
           <p className="m-0 max-w-[640px] text-lg leading-normal text-gray-300 lg:text-xl">
             Real lessons from real experiments. Each one is a reason not to trust your gut alone.
