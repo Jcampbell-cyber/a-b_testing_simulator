@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://advancedab.tech/sitemap.xml
+Sitemap: https://advancedab.com.au/sitemap.xml
