@@ -1,6 +1,6 @@
 // Brand and business details. Change the name here and it updates everywhere.
 export const SITE_NAME = 'AdvancedAB';
-export const SITE_URL = 'https://advancedab.tech';
+export const SITE_URL = 'https://advancedab.com.au';
 export const SITE_TAGLINE = 'Website testing for small online businesses.';
 export const SITE_LOCATION = 'Based in Melbourne, working with businesses across Australia.';
 
